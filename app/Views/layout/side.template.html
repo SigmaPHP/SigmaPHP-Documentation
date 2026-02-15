@@ -20,28 +20,17 @@
     <input type="text" class="docs-search" placeholder="Search docs..." />
 
     <nav class="docs-nav">
-        <a href="#">Introduction</a>
-        <a href="#">Installation</a>
-
-        <div class="nav-group">
-            <a href="javascript:void(0)" class="nav-toggle">Routing</a>
-            <div class="nav-sub">
-                <a href="#">Basic Routes</a>
-                <a href="#">Route Parameters</a>
-                <a href="#">Middleware</a>
+        {% for $category in $hierarchy %}
+            <div class="nav-group">
+                {% if ($category->parent_id == 0) %}
+                    <a href="javascript:void(0)" class="nav-toggle">{{ $category->name }}</a>
+                {% else %}
+                    <div class="nav-sub">
+                        <a href="/docs/{{ config('app.framework_version') }}/{{ $category->urlName() }}">{{ $category->name }}</a>
+                    </div>
+                {% end_if %}
             </div>
-        </div>
-
-        <div class="nav-group">
-            <a href="javascript:void(0)" class="nav-toggle">Database</a>
-            <div class="nav-sub">
-                <a href="#">Configuration</a>
-                <a href="#">ORM</a>
-                <a href="#">Migrations</a>
-            </div>
-        </div>
-
-        <a href="#">CLI</a>
+        {% end_for %}
     </nav>
 
 </aside>

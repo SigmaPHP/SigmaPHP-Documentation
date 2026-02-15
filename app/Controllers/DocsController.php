@@ -61,6 +61,21 @@ class DocsController extends BaseController
 
         $page = $currentCategory;
 
-        return $this->render('docs', compact('versions', 'categories', 'page'));
+        // organize categories into hierarchy
+        $hierarchy = [];
+
+        foreach (array_filter($categories, function ($category) {
+            return $category->parent_id == 0;
+        }) as $category) {
+            $hierarchy[] = $category;
+
+            foreach (array_filter($categories, function ($sub) use ($category) {
+                return $sub->parent_id == $category->id;
+            }) as $subCategory) {
+                $hierarchy[] = $subCategory;
+            }
+        }
+
+        return $this->render('docs', compact('versions', 'hierarchy', 'page'));
     }
 }
