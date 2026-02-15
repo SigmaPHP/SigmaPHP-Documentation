@@ -35,4 +35,14 @@ class Category extends BaseModel
             'id'
         )[0] ?: null;
     }
+
+    /**
+     * Format URL name.
+     *
+     * @return string
+     */
+    public function urlName()
+    {
+        return str_replace(' ', '_', strtolower($this->name));
+    }
 }

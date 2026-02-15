@@ -16,7 +16,7 @@ class Version extends BaseModel
     {
         return $this->hasRelation(
             Category::class,
-            'category_id',
+            'version_id',
             'id'
         );
     }

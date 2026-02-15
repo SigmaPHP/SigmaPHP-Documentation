@@ -54,9 +54,12 @@ class DocsController extends BaseController
         $currentVersion = $this->versionModel->findBy('name', $version);
 
         $categories = $currentVersion->categories();
-        $currentCategory = $this->versionModel->findBy('name', $category);
+        $currentCategory = array_filter($categories,
+            function ($cat) use ($category) {
+                return $cat->urlName() == $category;
+            });
 
-        $page = $currentCategory->page();
+        $page = $currentCategory;
 
         return $this->render('docs', compact('versions', 'categories', 'page'));
     }
