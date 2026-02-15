@@ -45,6 +45,16 @@ return [
     'upload_path' => env('UPLOADS_PATH', 'storage/uploads'),
 
     /**
+     * HTTP method override.
+     */
+    'allow_http_method_override' => true,
+
+    /**
+     * Static assets route's path.
+     */
+    'static_assets_route' => env('STATIC_ASSETS_ROUTE', 'static/'),
+
+    /**
      * App base path.
      *
      * Do not confuse this option with APP_URL. The APP_URL value defines the
