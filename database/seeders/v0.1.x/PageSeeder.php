@@ -9,13 +9,17 @@ class PageSeeder extends Seeder
      */
     public function run()
     {
-        // $this->insert(
-        //     'pages',
-        //     [
-        //         ['name' => 'Cell Phone', 'price' => 100.00],
-        //         ['name' => 'Laptop', 'price' => 500.00],
-        //         ['name' => 'TV', 'price' => 1000.00],
-        //     ]
-        // );
+        $this->insert(
+            'pages',
+            [
+                [
+                    'category_id' => 9,
+                    'content' => require(
+                        'content/getting_started/introduction.php'
+                    ),
+                    'tags' => ''
+                ],
+            ]
+        );
     }
 }
