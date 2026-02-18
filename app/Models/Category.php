@@ -33,7 +33,7 @@ class Category extends BaseModel
             Page::class,
             'category_id',
             'id'
-        )[0] ?: null;
+        )[0] ?? null;
     }
 
     /**
