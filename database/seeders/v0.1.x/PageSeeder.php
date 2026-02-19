@@ -17,7 +17,7 @@ class PageSeeder extends Seeder
                     'content' => require(
                         'content/getting_started/introduction.php'
                     ),
-                    'tags' => ''
+                    'tags' => 'PHP Framework,MVC Architecture,Dependency Injection,Web Development,Web Development'
                 ],
             ]
         );

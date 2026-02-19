@@ -59,7 +59,9 @@ class DocsController extends BaseController
                 return $cat->urlName() == $category;
             });
 
-        $page = array_values($currentCategory)[0]->page() ?? null;
+        $category = array_values($currentCategory)[0];
+
+        $page = $category->page() ?? null;
 
         // organize categories into hierarchy
         $hierarchy = [];
@@ -76,6 +78,9 @@ class DocsController extends BaseController
             }
         }
 
-        return $this->render('docs', compact('versions', 'hierarchy', 'page'));
+        return $this->render(
+            'docs',
+            compact('versions', 'hierarchy', 'category', 'page')
+        );
     }
 }

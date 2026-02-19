@@ -2,34 +2,8 @@
 
 {% block 'content' %}
 
-<h1>Routing</h1>
-<p>
-    SigmaPHP provides a simple, magic-free router that allows you
-    to define clean and expressive routes for your application.
-</p>
+<h1>{{ $category->name }}</h1>
 
-<div class="code-card">
-    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
-    <pre>
-        <code class="language-php">
-            $router->get('/users', [UserController::class, 'index']);
-            $router->post('/users', [UserController::class, 'store']);
-        </code>
-    </pre>
-</div>
-
-<div class="terminal-card">
-    <pre>
-        <code class="language-bash">
-            $ ./bin/sigma-cli run
-            [Fri Jan  2 10:15:26 2026] PHP 8.2.28 Development Server (http://localhost:8888) started
-        </code>
-    </pre>
-</div>
-
-<p>
-    Routes are matched in the order they are defined, giving you
-    full control over request handling.
-</p>
+{{ $page->content }}
 
 {% end_block %}
