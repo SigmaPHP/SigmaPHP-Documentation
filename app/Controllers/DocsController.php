@@ -53,15 +53,21 @@ class DocsController extends BaseController
         $versions = $this->versionModel->all();
         $currentVersion = $this->versionModel->findBy('name', $version);
 
+        if (empty($currentVersion)) {
+            return $this->render('errors.404', [], 404);
+        }
+
         $categories = $currentVersion->categories();
         $currentCategory = array_filter($categories,
             function ($cat) use ($category) {
                 return $cat->urlName() == $category;
             });
 
-        $category = array_values($currentCategory)[0];
+        if (empty($currentCategory)) {
+            return $this->render('errors.404', [], 404);
+        }
 
-        $page = $category->page() ?? null;
+        $page = array_values($currentCategory)[0]->page() ?? null;
 
         // organize categories into hierarchy
         $hierarchy = [];
@@ -78,9 +84,6 @@ class DocsController extends BaseController
             }
         }
 
-        return $this->render(
-            'docs',
-            compact('versions', 'hierarchy', 'category', 'page')
-        );
+        return $this->render('docs', compact('versions', 'hierarchy', 'page'));
     }
 }
