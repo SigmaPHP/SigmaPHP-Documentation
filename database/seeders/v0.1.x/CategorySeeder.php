@@ -9,10 +9,19 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-        $version = 1;
+        $currentVersion = "'0.1.x'";
+        $versionDetails = $this->fetch(
+            'SELECT * FROM versions WHERE name = ' . $currentVersion
+        );
+
+        if (empty($versionDetails)) {
+            throw new \Exception("Version {$currentVersion} is not found !");
+        }
+
+        $version = $versionDetails['id'];
         $index = 1;
 
-        // Exception for the 80 characters line length !!
+        // Exception for the 80 characters line length rule !!
         $this->insert(
             'categories',
             [
