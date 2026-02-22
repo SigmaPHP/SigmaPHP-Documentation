@@ -1,0 +1,117 @@
+<p>
+    Depending on your server environment, SigmaPHP can be deployed using a
+    compatible web server configuration. Example configuration files are
+    provided to help you quickly route all requests through the framework's
+    front controller.
+</p>
+
+<p>
+    To get started, copy the appropriate server configuration down below
+    into the root of your project and rename it according to your web server
+    requirements.
+</p>
+
+<h3>Apache Deployment</h3>
+
+<p>
+    After copying and configuring the <code>.htaccess</code> file, ensure the
+    web server has the proper permissions to access and write to the project
+    directories.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+
+    <pre>
+        <code class="language-bash">
+sudo chmod -R g+w /var/www/html/my-app
+        </code>
+    </pre>
+
+</div>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+
+    <pre>
+        <code class="language-bash">
+sudo chown -R $USER:www-data /var/www/html/my-app
+        </code>
+    </pre>
+
+</div>
+
+<p>
+    These commands grant the correct group permissions and assign ownership so
+    Apache can properly serve the application and write to required directories
+    such as cache or uploads.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+
+    <pre>
+        <code class="language-bash">
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # If the request is for an existing file or directory, serve it directly
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Front Controller: route everything public/index.php
+    RewriteRule ^ public/index.php [L]
+</IfModule>
+        </code>
+    </pre>
+
+</div>
+
+
+<h3>Nginx Deployment</h3>
+
+<p>
+    When using Nginx, copy the provided Nginx configuration example and include
+    it inside your server block configuration. The important part is ensuring
+    that all requests are forwarded to the application's front controller.
+</p>
+
+<p>
+    Update the <code>root</code> directive and the <code>try_files</code> rule
+    so requests fallback to <code>public/index.php</code>
+</p>
+
+<p>
+    After updating the configuration, reload Nginx to apply the changes and
+    your SigmaPHP application should be accessible through your configured
+    domain.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+
+    <pre>
+        <code class="language-bash">
+# add these lines to /etc/nginx/sites-available/your-app.conf
+
+server {
+    listen 80;
+    server_name my-app.test;
+    root /var/www/html/my-app/public;
+
+    index index.html index.htm index.php;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+}
+
+# or add this line to your nginx config (nginx.conf) :
+location / {
+    try_files $uri $uri/ /public/index.php?$query_string;
+}
+        </code>
+    </pre>
+
+</div>
+

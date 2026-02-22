@@ -68,7 +68,35 @@ class PageSeeder extends Seeder
                     'content' => container('view')->render(
                         'docs/v0_1_x/getting_started/introduction'
                     ),
-                    'tags' => 'php framework,mvc architecture,dependency injection,web development'
+                    'tags' => 'sigmaphp,php framework,mvc architecture,dependency injection,web development'
+                ],
+                [
+                    'category_id' => $this->getCategoryID('installation'),
+                    'content' => container('view')->render(
+                        'docs/v0_1_x/getting_started/installation'
+                    ),
+                    'tags' => 'sigmaphp,php framework,composer,getting started,installation'
+                ],
+                [
+                    'category_id' => $this->getCategoryID('configurations'),
+                    'content' => container('view')->render(
+                        'docs/v0_1_x/getting_started/configurations'
+                    ),
+                    'tags' => 'sigmaphp,php framework,getting started,configurations'
+                ],
+                [
+                    'category_id' => $this->getCategoryID('directory_structure'),
+                    'content' => container('view')->render(
+                        'docs/v0_1_x/getting_started/directory_structure'
+                    ),
+                    'tags' => 'sigmaphp,php framework,getting started,directory_structure'
+                ],
+                [
+                    'category_id' => $this->getCategoryID('deployment'),
+                    'content' => container('view')->render(
+                        'docs/v0_1_x/getting_started/deployment'
+                    ),
+                    'tags' => 'sigmaphp,php framework,getting started,deployment,apache,nginx'
                 ],
             ]
         );

@@ -1,0 +1,162 @@
+<p>
+    Below is the default directory structure of a SigmaPHP application.
+    It provides a clean and organized layout designed to keep application logic,
+    configuration, and runtime resources clearly separated.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+
+    <pre>
+            <code class="language-bash">
+├── app
+│   ├── Controllers
+│   ├── Models
+│   ├── Routes
+│   └── Views
+├── bin
+│   ├── sigma-cli
+│   └── sigma-cli.bat
+├── composer.json
+├── composer.lock
+├── config
+│   ├── app.php
+│   └── database.php
+├── database
+│   ├── migrations
+│   └── seeders
+├── LICENSE
+├── phpunit.xml
+├── phpunit.xml.dist
+├── public
+│   ├── assets
+│   └── index.php
+├── README.md
+├── storage
+│   ├── cache
+│   └── uploads
+├── tests
+│   └── ExampleTest.php
+└── vendor
+            </code>
+        </pre>
+</div>
+
+<h3>app/</h3>
+<p>
+    The main application directory where your business logic lives. This is
+    where developers spend most of their time building features, defining
+    routes, creating controllers, models, and rendering views.
+</p>
+
+<h4>app/Controllers</h4>
+<p>
+    Contains controller classes responsible for handling incoming requests,
+    processing application logic, and returning responses or rendered views.
+    Controllers act as the bridge between routes and the application logic.
+</p>
+
+<h4>app/Models</h4>
+<p>
+    Holds database models used by the ORM layer. Models represent database
+    tables and provide an organized way to interact with application data.
+</p>
+
+<h4>app/Routes</h4>
+<p>
+    Stores route definition files where application endpoints are registered.
+    Routes map URLs to controllers or actions and define how requests are handled.
+</p>
+
+<h4>app/Views</h4>
+<p>
+    Contains template files used to generate HTML responses. Views separate
+    presentation logic from application logic, keeping the codebase clean
+    and maintainable.
+</p>
+
+
+<h3>bin/</h3>
+<p>
+    Includes executable CLI tools provided by SigmaPHP. These utilities help
+    developers run the development server, manage migrations, and perform
+    framework-related tasks directly from the terminal.
+</p>
+
+
+<h3>config/</h3>
+<p>
+    Stores all framework and application configuration files. Each file
+    defines a specific group of settings such as application behavior or
+    database configuration, allowing easy customization across environments.
+</p>
+
+
+<h3>database/</h3>
+<p>
+    Dedicated directory for database-related resources. It contains migration
+    and seeder classes used to manage schema changes and populate initial data.
+</p>
+
+<h4>database/migrations</h4>
+<p>
+    Migration files define incremental database structure changes. They allow
+    version-controlled schema updates that can be applied consistently across
+    different environments.
+</p>
+
+<h4>database/seeders</h4>
+<p>
+    Seeder classes are used to insert sample or required data into the database,
+    making it easier to prepare development or testing environments.
+</p>
+
+
+<h3>public/</h3>
+<p>
+    The public entry point of the application. This directory is intended to be
+    exposed to the web server and contains publicly accessible resources and
+    the front controller responsible for bootstrapping the framework.
+</p>
+
+<h4>public/assets</h4>
+<p>
+    Stores publicly accessible static resources such as stylesheets,
+    JavaScript files, images, and other client-side assets.
+</p>
+
+
+<h3>storage/</h3>
+<p>
+    Used for runtime-generated files created by the application. This includes
+    cached data and uploaded user content that should not be part of the
+    application source code.
+</p>
+
+<h4>storage/cache</h4>
+<p>
+    Contains cached files generated to improve performance, such as compiled
+    templates or temporary application data.
+</p>
+
+<h4>storage/uploads</h4>
+<p>
+    Default location where uploaded files are stored. This directory keeps
+    user-generated content organized and separated from application logic.
+</p>
+
+
+<h3>tests/</h3>
+<p>
+    Holds automated tests for the application. This directory is used to
+    validate functionality and ensure application stability through unit
+    and feature testing.
+</p>
+
+
+<h3>vendor/</h3>
+<p>
+    Contains all Composer dependencies installed for the project, including
+    third-party libraries and framework components. This directory is
+    automatically managed by Composer and should not be modified manually.
+</p>

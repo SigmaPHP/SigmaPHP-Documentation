@@ -1,0 +1,170 @@
+<p>
+    All configuration files in <strong>SigmaPHP</strong> are stored inside the
+    <code>config/</code> directory located at the project root. The configuration
+    system is intentionally simple and predictable — no hidden magic, just
+    clean PHP arrays that you can fully control.
+</p>
+
+<p>
+    The framework ships with two main configuration categories: application
+    configuration and database configuration. You are also free to create
+    your own configuration files and access them using SigmaPHP's dot
+    notation helper.
+</p>
+
+<p>
+    Configuration values can be linked directly to environment variables
+    using the <code>env()</code> helper, allowing different setups for
+    development, staging, or production environments.
+</p>
+
+
+<h3>Configuration Basics</h3>
+
+<ul>
+    <li><strong>App Config</strong> — defines core application behavior and paths.</li>
+    <li><strong>Database Config</strong> — controls migrations, models, and connections.</li>
+    <li><strong>Custom Configs</strong> — create your own files inside <code>config/</code>.</li>
+    <li><strong>Dot Notation</strong> — access values like <code>config('app.name')</code>.</li>
+    <li><strong>Helpers</strong> — use <code>config()</code> and <code>env()</code> anywhere.</li>
+    <li><strong>.env Files</strong> — environment-specific configuration (dev, staging, production).</li>
+</ul>
+
+
+<h3>Application Configuration</h3>
+
+<p>
+    The application configuration defines global settings such as project
+    identity, directory structure, routing behavior, and runtime environment.
+</p>
+
+<h4>name</h4>
+<p>
+    Defines the application display name. This value is commonly used in
+    templates, emails, logs, and system messages.
+</p>
+
+<h4>url</h4>
+<p>
+    The main application URL. It can be used when generating absolute links,
+    API calls, redirects, or external HTTP integrations.
+</p>
+
+<h4>env</h4>
+<p>
+    Determines the current running environment such as
+    <code>production</code>, <code>develop</code>, or <code>testing</code>.
+    This allows environment-specific behavior like debugging or caching.
+</p>
+
+<h4>controllers_path</h4>
+<p>
+    Specifies where controller classes are stored. SigmaPHP automatically
+    loads controllers from this directory.
+</p>
+
+<h4>routes_path</h4>
+<p>
+    Defines the location of route definition files. Organizing routes in a
+    dedicated directory keeps application structure clean and maintainable.
+</p>
+
+<h4>views_path</h4>
+<p>
+    Points to the directory containing template/view files rendered by the
+    template engine.
+</p>
+
+<h4>cache_path</h4>
+<p>
+    Location where compiled templates and cached files are stored to improve
+    performance.
+</p>
+
+<h4>upload_path</h4>
+<p>
+    Directory used to store uploaded files such as images, documents, or
+    user assets.
+</p>
+
+<h4>allow_http_method_override</h4>
+<p>
+    Enables HTTP method overriding, allowing forms to simulate methods like
+    <code>PUT</code>, <code>PATCH</code>, or <code>DELETE</code> even when
+    browsers only support POST requests.
+</p>
+
+<h4>static_assets_route</h4>
+<p>
+    Defines the route prefix used to serve static assets such as CSS,
+    JavaScript, and images through the framework.
+</p>
+
+<h4>base_path</h4>
+<p>
+    Used only when the application runs inside a sub-directory instead of
+    the domain root. This helps SigmaPHP correctly generate internal URLs.
+    Leave empty when the application is served from the root.
+</p>
+
+
+<h3>Database Configuration</h3>
+
+<p>
+    Database configuration controls migrations, seeders, models, and
+    connection credentials. These settings allow SigmaPHP's ORM and CLI
+    tools to operate consistently across environments.
+</p>
+
+<h4>path_to_migrations</h4>
+<p>
+    Defines where migration files are stored. Migrations manage database
+    schema changes in a structured and versioned way.
+</p>
+
+<h4>path_to_seeders</h4>
+<p>
+    Directory containing seed classes used to populate the database with
+    initial or testing data.
+</p>
+
+<h4>path_to_models</h4>
+<p>
+    Specifies the location of application models used by the ORM layer.
+</p>
+
+<h4>logs_table_name</h4>
+<p>
+    Name of the table used to track executed migrations and database history.
+    This prevents migrations from running multiple times.
+</p>
+
+<h4>database_connection</h4>
+<p>
+    Contains the database credentials required to establish a connection.
+    Each value can be overridden using environment variables.
+</p>
+
+<ul>
+    <li><strong>host</strong> — database server hostname or IP address.</li>
+    <li><strong>user</strong> — database username.</li>
+    <li><strong>pass</strong> — database password.</li>
+    <li><strong>name</strong> — database schema name.</li>
+    <li><strong>port</strong> — database service port (default 3306).</li>
+</ul>
+
+
+<h3>Environment Files (.env)</h3>
+
+<p>
+    SigmaPHP reads environment variables from a <code>.env</code> file.
+    You may create multiple versions such as <code>.env.dev</code>,
+    <code>.env.staging</code>, or <code>.env.production</code> to match
+    your deployment workflow.
+</p>
+
+<p>
+    Values defined inside environment files can be accessed anywhere using
+    the <code>env()</code> helper, while application configuration values
+    are retrieved using the <code>config()</code> helper.
+</p>

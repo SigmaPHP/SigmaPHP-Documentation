@@ -294,14 +294,21 @@ footer {
     overflow-x: auto;
 }
 
+.code-card pre {
+    min-height: 100px;
+    max-height: 700px;
+    margin: 0;
+    overflow: scroll;
+}
+
 .code-card pre code {
     border-radius: 8px;
-    padding-bottom: 2em !important;
+    padding-bottom: 1em !important;
 }
 
 .copy-btn {
     position: absolute;
-    top: 20px;
+    top: 30px;
     right: 8px;
     padding: 4px 8px;
     background: #ffa500;
@@ -314,18 +321,6 @@ footer {
 
 .copy-btn:hover {
     opacity: 0.9;
-}
-
-/* Docs Terminal Card */
-.terminal-card {
-    position: relative;
-    border-radius: 8px;
-    overflow-x: auto;
-}
-
-.terminal-card pre code {
-    border-radius: 8px;
-    padding-bottom: 2em !important;
 }
 
 /* Docs Version Selector */
