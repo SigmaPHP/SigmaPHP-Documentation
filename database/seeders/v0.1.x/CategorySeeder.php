@@ -56,12 +56,13 @@ class CategorySeeder extends Seeder
                 ['name' => 'Template Syntax', 'version_id' => $version, 'parent_id' => $index],
                 ['name' => 'Static Assets', 'version_id' => $version, 'parent_id' => $index],
                 ['name' => 'Shared Variables', 'version_id' => $version, 'parent_id' => $index],
-                ['name' => 'Custom Directive', 'version_id' => $version, 'parent_id' => $index],
+                ['name' => 'Custom Directives', 'version_id' => $version, 'parent_id' => $index],
+                ['name' => 'Error Pages', 'version_id' => $version, 'parent_id' => $index],
 
                 // Database
-                ['name' => 'Query Builder', 'version_id' => $version, 'parent_id' => ++$index],
                 ['name' => 'Migrations', 'version_id' => $version, 'parent_id' => $index],
                 ['name' => 'Seeders', 'version_id' => $version, 'parent_id' => $index],
+                ['name' => 'Query Builder', 'version_id' => $version, 'parent_id' => ++$index],
 
                 // ORM
                 ['name' => 'Models', 'version_id' => $version, 'parent_id' => ++$index],
