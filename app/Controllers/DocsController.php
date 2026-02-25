@@ -86,7 +86,7 @@ class DocsController extends BaseController
 
         // !! For Testing Only !!
         $page->content = $this->renderView(
-            'docs/v0_1_x/routing/basic_routes',
+            'docs/v0_1_x/routing/middlewares',
             compact('versions', 'hierarchy', 'page')
         );
 
