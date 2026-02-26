@@ -63,6 +63,7 @@ class PageSeeder extends Seeder
         $this->insert(
             'pages',
             [
+                // Getting Started
                 [
                     'category_id' => $this->getCategoryID('introduction'),
                     'content' => container('view')->render(
@@ -97,6 +98,22 @@ class PageSeeder extends Seeder
                         'docs/v0_1_x/getting_started/deployment'
                     ),
                     'tags' => 'sigmaphp,php framework,getting started,deployment,apache,nginx'
+                ],
+
+                // Routing
+                [
+                    'category_id' => $this->getCategoryID('basic_routes'),
+                    'content' => container('view')->render(
+                        'docs/v0_1_x/routing/basic_routes'
+                    ),
+                    'tags' => 'sigmaphp,php framework,routing,middlewares'
+                ],
+                [
+                    'category_id' => $this->getCategoryID('middlewares'),
+                    'content' => container('view')->render(
+                        'docs/v0_1_x/routing/middlewares'
+                    ),
+                    'tags' => 'sigmaphp,php framework,routing,middlewares'
                 ],
             ]
         );

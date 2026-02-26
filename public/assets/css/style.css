@@ -303,12 +303,11 @@ footer {
 
 .code-card pre code {
     border-radius: 8px;
-    padding-bottom: 1em !important;
 }
 
 .copy-btn {
     position: absolute;
-    top: 30px;
+    top: 15px;
     right: 8px;
     padding: 4px 8px;
     background: #ffa500;

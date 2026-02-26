@@ -21,24 +21,16 @@
 
 <div class="code-card">
     <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
-
-    <pre>
-        <code class="language-bash">
+    <pre><code class="language-bash">
 sudo chmod -R g+w /var/www/html/my-app
-        </code>
-    </pre>
-
+    </code></pre>
 </div>
 
 <div class="code-card">
     <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
-
-    <pre>
-        <code class="language-bash">
+    <pre><code class="language-bash">
 sudo chown -R $USER:www-data /var/www/html/my-app
-        </code>
-    </pre>
-
+    </code></pre>
 </div>
 
 <p>
@@ -49,9 +41,7 @@ sudo chown -R $USER:www-data /var/www/html/my-app
 
 <div class="code-card">
     <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
-
-    <pre>
-        <code class="language-bash">
+    <pre><code class="language-bash">
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
@@ -62,9 +52,7 @@ sudo chown -R $USER:www-data /var/www/html/my-app
     # Front Controller: route everything public/index.php
     RewriteRule ^ public/index.php [L]
 </IfModule>
-        </code>
-    </pre>
-
+    </code></pre>
 </div>
 
 
@@ -89,9 +77,7 @@ sudo chown -R $USER:www-data /var/www/html/my-app
 
 <div class="code-card">
     <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
-
-    <pre>
-        <code class="language-bash">
+    <pre><code class="language-bash">
 # add these lines to /etc/nginx/sites-available/your-app.conf
 
 server {
@@ -110,8 +96,6 @@ server {
 location / {
     try_files $uri $uri/ /public/index.php?$query_string;
 }
-        </code>
-    </pre>
-
+    </code></pre>
 </div>
 

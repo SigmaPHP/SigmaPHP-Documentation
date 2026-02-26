@@ -31,7 +31,7 @@ return [
         'action' => 'profile',
     ],
 ];
-        </code></pre>
+    </code></pre>
 </div>
 
 <p><strong>api.php</strong></p>
@@ -50,7 +50,7 @@ return [
         'action' => 'profileJson',
     ],
 ];
-        </code></pre>
+    </code></pre>
 </div>
 
 <p>
@@ -75,7 +75,7 @@ $routes = [
         'action' => 'userBio',
     ],
 ];
-        </code></pre>
+    </code></pre>
 </div>
 
 <p>
@@ -94,7 +94,7 @@ $routes = [
 print baseUrl();
 
 # http://localhost/
-        </code></pre>
+    </code></pre>
 </div>
 
 
@@ -117,7 +117,7 @@ $routes = [
         'action' => 'profile',
     ],
 ];
-        </code></pre>
+    </code></pre>
 </div>
 
 <p>
@@ -129,7 +129,7 @@ $routes = [
     <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
     <pre><code class="language-php">
 'method' => 'any'
-        </code></pre>
+    </code></pre>
 </div>
 
 <p>
@@ -150,7 +150,7 @@ $routes = [
     <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
     <pre><code class="language-php">
 'path' => '/admin/users/{user_id}/addresses/{address_id}',
-        </code></pre>
+    </code></pre>
 </div>
 
 <div class="code-card">
@@ -159,7 +159,7 @@ $routes = [
 public function getUserAddressDetails($userId, $addressId) {
     ...
 }
-        </code></pre>
+    </code></pre>
 </div>
 
 <p>
@@ -171,7 +171,7 @@ public function getUserAddressDetails($userId, $addressId) {
     <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
     <pre><code class="language-php">
 'path' => '/products/{id?}',
-        </code></pre>
+    </code></pre>
 </div>
 
 <p>
@@ -184,7 +184,7 @@ public function getUserAddressDetails($userId, $addressId) {
 public function list($id = null) {
     ...
 }
-        </code></pre>
+    </code></pre>
 </div>
 
 <p>
@@ -196,7 +196,7 @@ public function list($id = null) {
     <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
     <pre><code class="language-php">
 curl http://localhost/products?page=2&amp;per_page=10
-        </code></pre>
+    </code></pre>
 </div>
 
 
@@ -222,7 +222,7 @@ $routes = [
         ]
     ],
 ];
-        </code></pre>
+    </code></pre>
 </div>
 
 <p>
@@ -327,7 +327,7 @@ class SendEmailController
         // rest of the routes....
     ]
 ]
-        </code></pre>
+    </code></pre>
 </div>
 
 <p>
@@ -384,7 +384,7 @@ $url = url('order.items.details', [
 ]);
 
 # http://localhost/order/5/items/10
-        </code></pre>
+    </code></pre>
 </div>
 <p>
     The router automatically builds the full URL including protocol,
@@ -407,7 +407,7 @@ $url = url('order.items.details', [
     &lt;input type="hidden" name="_method" value="PUT" /&gt;
     &lt;button type="submit"&gt;Save&lt;/button&gt;
 &lt;/form&gt;
-        </code></pre>
+    </code></pre>
 </div>
 
 <p>
@@ -425,7 +425,7 @@ $url = url('order.items.details', [
 * HTTP method override.
 */
 'allow_http_method_override' => true,
-        </code></pre>
+    </code></pre>
 </div>
 
 <p></p>

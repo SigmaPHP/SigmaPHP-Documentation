@@ -69,6 +69,10 @@ class DocsController extends BaseController
 
         $page = array_values($currentCategory)[0]->page() ?? null;
 
+        if (empty($page)) {
+            return $this->render('errors.404', [], 404);
+        }
+
         // organize categories into hierarchy
         $hierarchy = [];
 
@@ -85,10 +89,10 @@ class DocsController extends BaseController
         }
 
         // !! For Testing Only !!
-        $page->content = $this->renderView(
-            'docs/v0_1_x/routing/middlewares',
-            compact('versions', 'hierarchy', 'page')
-        );
+        // $page->content = $this->renderView(
+        //     'docs/v0_1_x/getting_started/installation',
+        //     compact('versions', 'hierarchy', 'page')
+        // );
 
         return $this->render('docs', compact('versions', 'hierarchy', 'page'));
     }
