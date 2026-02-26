@@ -12,6 +12,11 @@
         <main class="docs-content">
             {% show_block 'content' %}
         </main>
+
+        <nav id="toc" class="doc-toc" hidden>
+            <div class="doc-toc-title">On this page</div>
+            <ul id="toc-list"></ul>
+        </nav>
     </div>
 
     {% include 'layout.foot' %}

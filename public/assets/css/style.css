@@ -405,3 +405,70 @@ footer {
     background: #dc3545;
     color: #fff;
 }
+
+/* Back To Top Section */
+.back-to-top {
+    border-top: 2px solid #ffa500;
+    margin-top: 60px;
+    padding: 18px 0;
+    text-align: center;
+    font-family: monospace;
+    color: #ffa500;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.back-to-top .arrow {
+    display: inline-block;
+    margin-right: 8px;
+    font-size: 16px;
+    transition: transform 0.2s ease;
+}
+
+.back-to-top:hover {
+    background: rgba(255, 165, 0, 0.08);
+}
+
+.back-to-top:hover .arrow {
+    transform: translateY(-3px);
+}
+
+/* Table of Content */
+.doc-toc {
+    position: fixed;
+    top: 100px;
+    right: 100px;
+    width: 500px;
+    font-size: 14px;
+}
+
+.doc-toc-title {
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #ffa500;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+}
+
+.doc-toc ul {
+    list-style: none;
+    padding-left: 14px;
+    margin: 0;
+    border-left: 3px solid #ffa500;
+}
+
+.doc-toc li {
+    margin: 6px 0;
+}
+
+.doc-toc a {
+    text-decoration: none;
+    color: #ccc;
+    transition: color 0.2s ease;
+}
+
+.doc-toc a:hover {
+    color: #ffa500;
+}
