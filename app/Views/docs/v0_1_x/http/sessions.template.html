@@ -1,0 +1,162 @@
+<p>
+    Middlewares provide a clean and structured way to execute logic before
+    a route action is performed. In most applications, certain checks must
+    run prior to executing controller logic — such as verifying authentication,
+    validating permissions, or preparing request data. Middlewares allow you
+    to centralize these responsibilities and keep controllers focused only
+    on business logic.
+</p>
+
+<p>
+    SigmaPHP uses class-based middlewares. When attaching a middleware to
+    a route, the router expects both the middleware class name and the
+    method that should be executed.
+</p>
+
+
+<h3>Creating a Middleware</h3>
+
+<p>
+    Creating a middleware is straightforward using the CLI assistant.
+    The following command generates a new middleware class automatically.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+ ./bin/sigma-cli create:middleware Auth
+        </code></pre>
+</div>
+
+<p>
+    This command creates the <code>Middlewares</code> directory inside
+    <code>app/</code> (if it does not already exist) and generates the
+    <code>AuthMiddleware.php</code> file.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+namespace App\Middlewares;
+
+use SigmaPHP\Core\Router\BaseMiddleware;
+
+class AuthMiddleware extends BaseMiddleware
+{
+    /**
+     * Handle the incoming request.
+     *
+     * @return mixed
+     */
+    public function handle()
+    {
+        //
+    }
+}
+        </code></pre>
+</div>
+
+
+<h3>Using a Middleware</h3>
+
+<p>
+    Middlewares are attached directly to routes through the
+    <code>middlewares</code> option. Each middleware is defined as an array
+    containing the class name and the method to execute.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$routes = [
+    [
+        'name' => 'orders.create',
+        'path' => '/orders',
+        'method' => 'post',
+        'middlewares' => [
+            [AuthMiddleware::class, 'handle']
+        ],
+        'controller' => OrderController::class,
+        'action' => 'create'
+    ],
+];
+        </code></pre>
+</div>
+
+<p>
+    When a request matches the route, the middleware runs first. If the
+    middleware allows execution to continue, the controller action will
+    be executed normally. Otherwise, the middleware may return a response
+    such as a redirect or an error.
+</p>
+
+
+<h3>BaseMiddleware Methods</h3>
+
+<p>
+    All middlewares extend <code>BaseMiddleware</code>, which provides a set of
+    built-in methods that can be used directly inside your middleware class.
+    For example, you may verify if a user session exists before allowing access to a protected route.
+</p>
+
+<p>
+    The middleware can perform common tasks such as redirecting the user to a
+    specific URL or route, returning the user to the previous page, accessing
+    and managing sessions, cookies, uploaded files, and retrieving the current
+    request instance. These methods allow you to implement authentication,
+    authorization, and validation logic without manually interacting with low-level
+    HTTP handling.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+public function handle()
+{
+    if (!$this->session()->has('user')) {
+        return $this->redirect('/login');
+    }
+}
+    </code></pre>
+</div>
+
+<p>
+    By centralizing this behavior inside middlewares, access control remains
+    clean, reusable, and consistent across your application while keeping
+    controllers focused only on business logic.
+</p>
+
+<h3>Available BaseMiddleware Methods</h3>
+
+<p>
+    The following methods are available through <code>$this-&gt;</code> inside any middleware extending
+    <code>BaseMiddleware</code>:
+</p>
+
+<ul>
+    <li>
+        <strong>redirect(string $url)</strong> → Redirects the user to a specific URL and returns a response instance.
+    </li>
+    <li>
+        <strong>route(string $routeName, array $parameters = [])</strong> → Redirects the user to a named route,
+        optionally passing route parameters.
+    </li>
+    <li>
+        <strong>back()</strong> → Redirects the user back to the previous URL, typically using the request referrer.
+    </li>
+    <li>
+        <strong>cookie()</strong> → Provides access to the cookie handler for reading, creating, or removing cookies.
+    </li>
+    <li>
+        <strong>session()</strong> → Provides access to the session handler for storing and retrieving session data.
+    </li>
+    <li>
+        <strong>file()</strong> → Provides access to uploaded file handling utilities.
+    </li>
+    <li>
+        <strong>request()</strong> → Returns the current request instance, allowing access to input, headers,
+        parameters, and request metadata.
+    </li>
+</ul>

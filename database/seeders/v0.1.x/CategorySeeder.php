@@ -48,7 +48,7 @@ class CategorySeeder extends Seeder
                 // HTTP
                 ['name' => 'Controllers', 'version_id' => $version, 'parent_id' => ++$index],
                 ['name' => 'Cookies', 'version_id' => $version, 'parent_id' => $index],
-                ['name' => 'Session', 'version_id' => $version, 'parent_id' => $index],
+                ['name' => 'Sessions', 'version_id' => $version, 'parent_id' => $index],
                 ['name' => 'Files', 'version_id' => $version, 'parent_id' => $index],
 
                 // Views

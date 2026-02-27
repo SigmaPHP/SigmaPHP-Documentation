@@ -115,6 +115,36 @@ class PageSeeder extends Seeder
                     ),
                     'tags' => 'sigmaphp,php framework,routing,middlewares'
                 ],
+
+                // HTTP
+                [
+                    'category_id' => $this->getCategoryID('controllers'),
+                    'content' => container('view')->render(
+                        'docs/v0_1_x/http/controllers'
+                    ),
+                    'tags' => 'sigmaphp,php framework,http,controllers,request,response'
+                ],
+                [
+                    'category_id' => $this->getCategoryID('cookies'),
+                    'content' => container('view')->render(
+                        'docs/v0_1_x/http/cookies'
+                    ),
+                    'tags' => 'sigmaphp,php framework,http,cookies'
+                ],
+                [
+                    'category_id' => $this->getCategoryID('sessions'),
+                    'content' => container('view')->render(
+                        'docs/v0_1_x/http/sessions'
+                    ),
+                    'tags' => 'sigmaphp,php framework,http,sessions'
+                ],
+                [
+                    'category_id' => $this->getCategoryID('files'),
+                    'content' => container('view')->render(
+                        'docs/v0_1_x/http/files'
+                    ),
+                    'tags' => 'sigmaphp,php framework,http,files'
+                ],
             ]
         );
     }

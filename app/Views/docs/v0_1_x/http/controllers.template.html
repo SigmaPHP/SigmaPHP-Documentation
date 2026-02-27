@@ -1,0 +1,209 @@
+<p>
+    Controllers are responsible for handling incoming HTTP requests and returning
+    responses to the client. They act as the bridge between the router, business
+    logic, and the presentation layer. In SigmaPHP, controllers help keep your
+    application organized by grouping related actions into a single class.
+</p>
+
+<h3>Creating a Controller</h3>
+
+<p>
+    Creating a new controller is straightforward using the CLI utility:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli create:controller HelloController
+    </code></pre>
+</div>
+
+<p>
+    This command generates a new controller class inside your application's
+    controllers directory, following the framework’s default structure and
+    namespace conventions.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+&lt;?php
+
+namespace App\Controllers;
+
+use SigmaPHP\Core\Controllers\BaseController;
+
+class HelloController extends BaseController
+{
+    /**
+     * Welcome page.
+     *
+     * @param string $name
+     * @return Response
+     */
+    public function index($name = 'anonymous')
+    {
+        return $this->render('app', [
+            'name' => $name,
+        ]);
+    }
+}
+    </code></pre>
+</div>
+
+<h3>Base Controller Methods</h3>
+
+<p>
+    All controllers extend the Base Controller, which provides a set of built-in
+    methods available to child controllers. These methods are inherited and can
+    be accessed directly using <code>$this-&gt;</code> inside any controller action.
+</p>
+
+<ul>
+    <li>
+        <strong>response</strong> — Creates and returns a new HTTP response with
+        custom content, status code, headers, and content type.
+    </li>
+    <li>
+        <strong>json</strong> — Returns a JSON formatted response, commonly used
+        for APIs and AJAX endpoints.
+    </li>
+    <li>
+        <strong>render</strong> — Renders a template and immediately returns it
+        wrapped inside an HTTP response.
+    </li>
+    <li>
+        <strong>renderView</strong> — Renders a template and returns the generated
+        HTML as a string instead of a response object, useful when embedding views
+        inside other content.
+    </li>
+    <li>
+        <strong>redirect</strong> — Redirects the user to a specific URL.
+    </li>
+    <li>
+        <strong>route</strong> — Redirects the user using a route name, automatically
+        generating the correct URL and applying parameters if provided.
+    </li>
+    <li>
+        <strong>back</strong> — Redirects the user back to the previous page.
+    </li>
+    <li>
+        <strong>cookie</strong> — Provides access to cookie handling utilities for
+        reading and writing cookies.
+    </li>
+    <li>
+        <strong>session</strong> — Provides access to session management for storing
+        and retrieving session data.
+    </li>
+    <li>
+        <strong>files</strong> — Handles uploaded files and file-related request
+        operations.
+    </li>
+    <li>
+        <strong>flash</strong> — Stores temporary flash messages that persist for
+        a single request cycle, typically used for success or error notifications.
+    </li>
+    <li>
+        <strong>saveOldValues</strong> — Stores previously submitted input values
+        (GET or POST) so they can be reused after redirects, commonly used when
+        validating forms.
+    </li>
+</ul>
+
+<p>
+    These methods allow controllers to remain concise while still providing full
+    control over responses, redirects, sessions, and rendering behavior, encouraging
+    a clean and expressive workflow throughout your application.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+    /**
+     * Post data
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function postData(Request $request)
+    {
+        if ($request->method() == 'POST') {
+            if ($request->post('value') > 100) {
+                $this->flash('error', 'Invalid Value');
+                $this->saveOldValues();
+
+                return $this->back();
+            } else {
+                $this->flash('success', 'Done');
+
+                return $this->route('index');
+            }
+        }
+
+        return $this->render('form');
+    }
+    </code></pre>
+</div>
+
+<h3>Dependency Injection</h3>
+
+<p>
+    SigmaPHP supports automatic dependency injection directly inside controller
+    methods. Any supported class type hinted in the action method signature will
+    be automatically resolved and injected by the framework at runtime.
+</p>
+
+<p>
+    This allows you to work directly with objects such as the HTTP Request,
+    models, or services without manually creating them. The framework handles
+    object creation and lifecycle management, keeping controllers clean,
+    testable, and focused only on application logic.
+</p>
+
+<p><strong>Constructor Injection</strong></p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+namespace App\Controllers;
+
+use SigmaPHP\Core\Controllers\BaseController;
+use App\Services\UserService;
+
+class MainController extends BaseController
+{
+    /**
+     * @var UserService $userService
+     */
+    private $userService;
+
+    /**
+     * MainController Constructor
+     */
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+}
+    </code></pre>
+</div>
+
+<p><strong>Method Injection</strong></p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+    /**
+     * Receive Request
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function postData(Request $request)
+    {
+        dd($request);
+    }
+    </code></pre>
+</div>
