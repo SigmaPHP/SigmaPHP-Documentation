@@ -262,36 +262,6 @@ $routes = [
     injected depending on the framework configuration.
 </p>
 
-<p>
-    Single Action Controllers are also supported. These controllers are useful
-    when a controller is responsible for only one task, improving readability
-    and reducing unnecessary method definitions.
-</p>
-
-<p>
-    When no <code>action</code> is provided, the router automatically executes
-    the <code>__invoke()</code> method, allowing the controller itself to behave
-    like a callable action.
-</p>
-
-<div class="code-card">
-    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
-    <pre><code class="language-php">
-class SendEmailController
-{
-    public function __invoke()
-    {
-        // send email
-    }
-}
-    </code></pre>
-</div>
-
-<p>
-    This approach is especially helpful for endpoints that represent a single
-    operation, such as sending emails, processing payments, or handling
-    webhooks, keeping the routing layer simple and expressive.
-</p>
 
 <h3>Route Groups</h3>
 

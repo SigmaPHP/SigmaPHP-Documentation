@@ -41,7 +41,7 @@ class HelloController extends BaseController
      * @param string $name
      * @return Response
      */
-    public function index($name = 'anonymous')
+    public function welcome($name = 'anonymous')
     {
         return $this->render('app', [
             'name' => $name,
@@ -51,69 +51,258 @@ class HelloController extends BaseController
     </code></pre>
 </div>
 
-<h3>Base Controller Methods</h3>
-
 <p>
-    All controllers extend the Base Controller, which provides a set of built-in
-    methods available to child controllers. These methods are inherited and can
-    be accessed directly using <code>$this-&gt;</code> inside any controller action.
+    This action can then be linked to a route as shown below:
 </p>
 
-<ul>
-    <li>
-        <strong>response</strong> — Creates and returns a new HTTP response with
-        custom content, status code, headers, and content type.
-    </li>
-    <li>
-        <strong>json</strong> — Returns a JSON formatted response, commonly used
-        for APIs and AJAX endpoints.
-    </li>
-    <li>
-        <strong>render</strong> — Renders a template and immediately returns it
-        wrapped inside an HTTP response.
-    </li>
-    <li>
-        <strong>renderView</strong> — Renders a template and returns the generated
-        HTML as a string instead of a response object, useful when embedding views
-        inside other content.
-    </li>
-    <li>
-        <strong>redirect</strong> — Redirects the user to a specific URL.
-    </li>
-    <li>
-        <strong>route</strong> — Redirects the user using a route name, automatically
-        generating the correct URL and applying parameters if provided.
-    </li>
-    <li>
-        <strong>back</strong> — Redirects the user back to the previous page.
-    </li>
-    <li>
-        <strong>cookie</strong> — Provides access to cookie handling utilities for
-        reading and writing cookies.
-    </li>
-    <li>
-        <strong>session</strong> — Provides access to session management for storing
-        and retrieving session data.
-    </li>
-    <li>
-        <strong>files</strong> — Handles uploaded files and file-related request
-        operations.
-    </li>
-    <li>
-        <strong>flash</strong> — Stores temporary flash messages that persist for
-        a single request cycle, typically used for success or error notifications.
-    </li>
-    <li>
-        <strong>saveOldValues</strong> — Stores previously submitted input values
-        (GET or POST) so they can be reused after redirects, commonly used when
-        validating forms.
-    </li>
-</ul>
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+return [
+    [
+        'name' => 'welcome',
+        'path' => '/welcome/{name?}',
+        'method' => 'get',
+        'controller' => HelloController::class,
+        'action' => 'welcome',
+    ],
+];
+    </code></pre>
+</div>
+
+<div class="alert alert-info">
+    An Action inside a controller represents the method that is executed when a route is matched.
+    It is responsible for handling the incoming request, performing the required business logic, and returning a
+    response back to the client.The term “action” is simply a naming
+    convention used to describe controller methods that are exposed to the router.
+</div>
+
+
+<h3>Request</h3>
 
 <p>
-    These methods allow controllers to remain concise while still providing full
-    control over responses, redirects, sessions, and rendering behavior, encouraging
-    a clean and expressive workflow throughout your application.
+    The Request object represents the current HTTP request and provides a clean,
+    structured way to access incoming data. Instead of interacting directly with
+    PHP super globals such as <code>$_GET</code>, <code>$_POST</code>, or
+    <code>$_FILES</code>, SigmaPHP exposes a unified interface that keeps your
+    controller logic consistent and easier to maintain. The Request instance can
+    be injected directly into controller actions through dependency injection.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+use SigmaPHP\Core\Http\Request;
+
+public function example(Request $request)
+{
+    /*
+    |------------------------------------------------------------
+    | Reading Input Data
+    |------------------------------------------------------------
+    */
+
+    $page = $request->get('page');
+    // Example URL: /products?page=2
+    // Result: 2
+
+    $email = $request->post('email');
+    // Example POST body: email=test@example.com
+    // Result: "test@example.com"
+
+    $avatar = $request->files('avatar');
+    // Example uploaded file input name="avatar"
+    // Result: Uploaded file information array/object
+
+
+    /*
+    |------------------------------------------------------------
+    | Request Information
+    |------------------------------------------------------------
+    */
+
+    $currentUrl = $request->current();
+    // Result: "http://localhost/products?page=2"
+
+    $previousUrl = $request->previous();
+    // Result: "http://localhost/home"
+
+    $method = $request->method();
+    // Result: "GET" or "POST" or "PUT" ...
+
+    $port = $request->port();
+    // Result: "80" or "443"
+
+    $secure = $request->isSecure();
+    // Result: true (HTTPS) or false (HTTP)
+
+
+    /*
+    |------------------------------------------------------------
+    | Headers
+    |------------------------------------------------------------
+    */
+
+    $headers = $request->headers();
+    // Result example:
+    // [
+    //     'host' => 'localhost',
+    //     'user-agent' => 'Mozilla/5.0',
+    //     'accept' => 'text/html'
+    // ]
+
+
+    /*
+    |------------------------------------------------------------
+    | Checking Data Existence
+    |------------------------------------------------------------
+    */
+
+    $hasPage = $request->has('page');
+    // Result: true if exists in GET, POST, or FILES
+
+    $hasAvatar = $request->has('avatar');
+    // Result: true if file was uploaded
+
+
+    /*
+    |------------------------------------------------------------
+    | Typical Usage Example
+    |------------------------------------------------------------
+    */
+
+    if (!$request->has('email')) {
+        return $this->redirect('/register');
+    }
+
+    return $this->json([
+        'page' => $page,
+        'email' => $email,
+        'secure' => $secure
+    ]);
+}
+    </code></pre>
+</div>
+
+
+<h3>Response</h3>
+
+<p>
+    The response methods allow an action to return content to the client in a controlled and standardized way.
+    The <code>response($data, $type, $code, $headers)</code> method creates a custom HTTP response where you can
+    define the body, content type, status code, and headers. For API-style responses,
+    <code>json($data, $code, $headers)</code> automatically formats the output as JSON and sets the appropriate
+    response headers.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+public function show()
+{
+    return $this->response(
+        '<h1>Hello from SigmaPHP</h1>',
+        'text/html',
+        200,
+        ['X-App' => 'SigmaPHP']
+    );
+}
+
+public function api()
+{
+    return $this->json(
+        ['status' => 'success', 'message' => 'Data loaded'],
+        200,
+        ['X-API-Version' => '1.0']
+    );
+}
+    </code></pre>
+</div>
+
+
+<h3>Rendering Views</h3>
+
+<p>
+    Rendering methods simplify returning HTML content from templates. The
+    <code>render($templateName, $variables, $code, $headers)</code> method renders a view and immediately returns
+    it wrapped inside an HTTP response. When you only need the generated HTML as a string, for example to compose
+    partial content, <code>renderView($templateName, $variables)</code> can be used instead.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+public function dashboard()
+{
+    return $this->render(
+        'dashboard',
+        ['title' => 'Admin Panel', 'user' => 'Mohamed'],
+        200,
+        ['Cache-Control' => 'no-cache']
+    );
+}
+
+public function partial()
+{
+    $content = $this->renderView(
+        'partials.stats',
+        ['visits' => 1500, 'sales' => 230]
+    );
+
+    return $this->response($content);
+}
+    </code></pre>
+</div>
+
+
+<h3>Redirecting</h3>
+
+<p>
+    Redirect methods provide a convenient way to navigate users between pages after completing an action.
+    The <code>redirect($url)</code> method sends the user to a specific URL, while
+    <code>route($routeName, $parameters)</code> generates a URL based on a named route before redirecting.
+    Additionally, <code>back()</code> returns the user to the previous page, which is especially useful after
+    form submissions or validation workflows.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+public function store()
+{
+    // ... save data
+
+    return $this->redirect('/users/profile');
+}
+
+public function update()
+{
+    // ... update logic
+
+    return $this->route(
+        'users.profile',
+        ['id' => 5]
+    );
+}
+
+public function cancel()
+{
+    return $this->back();
+}
+    </code></pre>
+</div>
+
+<h3>Base Controller</h3>
+
+<p>
+    All controllers extend the Base Controller, which acts as the foundation for handling HTTP interactions inside
+    your application. It provides essential functionality required by most actions, including creating responses,
+    rendering views, and performing redirects. By centralizing these common operations, controllers remain clean,
+    focused, and easy to maintain while avoiding repetitive boilerplate code. Every action can directly access these
+    features using <code>$this-&gt;</code>, allowing developers to work with requests and responses in a consistent
+    and expressive way.
 </p>
 
 <div class="code-card">
@@ -144,6 +333,60 @@ class HelloController extends BaseController
     }
     </code></pre>
 </div>
+
+<h3>Single Action Controller</h3>
+
+<p>
+    Single Action Controllers are also supported. These controllers are useful
+    when a controller is responsible for only one task, improving readability
+    and reducing unnecessary method definitions.
+</p>
+
+<p>
+    When no <code>action</code> is provided, the router automatically executes
+    the <code>__invoke()</code> method, allowing the controller itself to behave
+    like a callable action.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+namespace App\Controllers;
+
+use SigmaPHP\Core\Controllers\BaseController;
+
+class NotificationController extends BaseController
+{
+    public function __invoke()
+    {
+        // send email
+    }
+}
+    </code></pre>
+</div>
+
+<p>
+    In this case, the <code>action</code> option can be omitted from the route definition:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+[
+    'path' => '/notification',
+    'controller' => NotificationController::class,
+],
+    </code></pre>
+</div>
+
+<p>
+    This approach is especially helpful for endpoints that represent a single
+    operation, such as sending emails, processing payments, or handling
+    webhooks, keeping the routing layer simple and expressive.
+</p>
+
 
 <h3>Dependency Injection</h3>
 
