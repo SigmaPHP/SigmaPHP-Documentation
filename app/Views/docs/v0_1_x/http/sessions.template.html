@@ -1,162 +1,148 @@
+<h3>Basic Usage</h3>
+
 <p>
-    Middlewares provide a clean and structured way to execute logic before
-    a route action is performed. In most applications, certain checks must
-    run prior to executing controller logic — such as verifying authentication,
-    validating permissions, or preparing request data. Middlewares allow you
-    to centralize these responsibilities and keep controllers focused only
-    on business logic.
+    Sessions allow your application to store data on the server and make it available
+    across multiple requests for the same user. SigmaPHP provides a dedicated session
+    manager that simplifies reading, writing, and removing session values without
+    interacting directly with native PHP session functions. This makes state management
+    predictable and easy to use inside controllers.
 </p>
 
 <p>
-    SigmaPHP uses class-based middlewares. When attaching a middleware to
-    a route, the router expects both the middleware class name and the
-    method that should be executed.
-</p>
-
-
-<h3>Creating a Middleware</h3>
-
-<p>
-    Creating a middleware is straightforward using the CLI assistant.
-    The following command generates a new middleware class automatically.
-</p>
-
-<div class="code-card">
-    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
-    <pre><code class="language-bash">
- ./bin/sigma-cli create:middleware Auth
-        </code></pre>
-</div>
-
-<p>
-    This command creates the <code>Middlewares</code> directory inside
-    <code>app/</code> (if it does not already exist) and generates the
-    <code>AuthMiddleware.php</code> file.
+    The session manager is available in every controller through
+    <code>$this-&gt;session()</code>, giving you access to user-related data such as
+    authentication information, preferences, temporary state, and workflow data.
 </p>
 
 <div class="code-card">
     <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
     <pre><code class="language-php">
-&lt;?php
-
-namespace App\Middlewares;
-
-use SigmaPHP\Core\Router\BaseMiddleware;
-
-class AuthMiddleware extends BaseMiddleware
+public function sessionExample()
 {
-    /**
-     * Handle the incoming request.
-     *
-     * @return mixed
-     */
-    public function handle()
-    {
-        //
+    /*
+    |------------------------------------------------------------
+    | Storing Data
+    |------------------------------------------------------------
+    */
+
+    $this->session()->set('user_id', 15);
+
+    // Expected result:
+    // Session now contains user_id = 15
+
+
+    /*
+    |------------------------------------------------------------
+    | Reading Data
+    |------------------------------------------------------------
+    */
+
+    $userId = $this->session()->get('user_id');
+    // Result: 15
+
+
+    /*
+    |------------------------------------------------------------
+    | Checking Existence
+    |------------------------------------------------------------
+    */
+
+    if ($this->session()->has('user_id')) {
+        // true if session value exists
     }
+
+
+    /*
+    |------------------------------------------------------------
+    | Removing Data
+    |------------------------------------------------------------
+    */
+
+    $this->session()->delete('user_id');
+
+    // Session value removed
 }
-        </code></pre>
+    </code></pre>
 </div>
 
 
-<h3>Using a Middleware</h3>
+<h3>Flash Messages</h3>
 
 <p>
-    Middlewares are attached directly to routes through the
-    <code>middlewares</code> option. Each middleware is defined as an array
-    containing the class name and the method to execute.
+    Flash messages are temporary session values that exist for only one request cycle.
+    They are commonly used to display success, warning, or error messages after a
+    redirect. SigmaPHP provides a convenient way to store flash messages from the
+    controller and automatically make them available inside templates.
 </p>
 
 <div class="code-card">
     <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
     <pre><code class="language-php">
-$routes = [
-    [
-        'name' => 'orders.create',
-        'path' => '/orders',
-        'method' => 'post',
-        'middlewares' => [
-            [AuthMiddleware::class, 'handle']
-        ],
-        'controller' => OrderController::class,
-        'action' => 'create'
-    ],
-];
-        </code></pre>
-</div>
-
-<p>
-    When a request matches the route, the middleware runs first. If the
-    middleware allows execution to continue, the controller action will
-    be executed normally. Otherwise, the middleware may return a response
-    such as a redirect or an error.
-</p>
-
-
-<h3>BaseMiddleware Methods</h3>
-
-<p>
-    All middlewares extend <code>BaseMiddleware</code>, which provides a set of
-    built-in methods that can be used directly inside your middleware class.
-    For example, you may verify if a user session exists before allowing access to a protected route.
-</p>
-
-<p>
-    The middleware can perform common tasks such as redirecting the user to a
-    specific URL or route, returning the user to the previous page, accessing
-    and managing sessions, cookies, uploaded files, and retrieving the current
-    request instance. These methods allow you to implement authentication,
-    authorization, and validation logic without manually interacting with low-level
-    HTTP handling.
-</p>
-
-<div class="code-card">
-    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
-    <pre><code class="language-php">
-public function handle()
+public function store()
 {
-    if (!$this->session()->has('user')) {
-        return $this->redirect('/login');
-    }
+    // ... save data
+
+    $this->flash('success', 'Profile updated successfully');
+
+    return $this->redirect('/profile');
 }
     </code></pre>
 </div>
 
 <p>
-    By centralizing this behavior inside middlewares, access control remains
-    clean, reusable, and consistent across your application while keeping
-    controllers focused only on business logic.
+    Inside your template, flash messages can be rendered as follows:
 </p>
 
-<h3>Available BaseMiddleware Methods</h3>
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;ul&gt;
+    &#123;% for $message in $flashMessages %&#125;
+        <li>&#123;&#123; $message &#125;&#125;</li>
+    &#123;% end_for %&#125;
+&lt;/ul&gt;
+    </code></pre>
+</div>
+
+
+<h3>Repopulate Old Input</h3>
 
 <p>
-    The following methods are available through <code>$this-&gt;</code> inside any middleware extending
-    <code>BaseMiddleware</code>:
+    When working with forms, it is often necessary to repopulate previously submitted
+    values after validation fails. The <code>saveOldValues()</code> method stores both
+    GET and POST input values in the session so they can be reused after a redirect,
+    improving user experience by preventing data loss.
 </p>
 
-<ul>
-    <li>
-        <strong>redirect(string $url)</strong> → Redirects the user to a specific URL and returns a response instance.
-    </li>
-    <li>
-        <strong>route(string $routeName, array $parameters = [])</strong> → Redirects the user to a named route,
-        optionally passing route parameters.
-    </li>
-    <li>
-        <strong>back()</strong> → Redirects the user back to the previous URL, typically using the request referrer.
-    </li>
-    <li>
-        <strong>cookie()</strong> → Provides access to the cookie handler for reading, creating, or removing cookies.
-    </li>
-    <li>
-        <strong>session()</strong> → Provides access to the session handler for storing and retrieving session data.
-    </li>
-    <li>
-        <strong>file()</strong> → Provides access to uploaded file handling utilities.
-    </li>
-    <li>
-        <strong>request()</strong> → Returns the current request instance, allowing access to input, headers,
-        parameters, and request metadata.
-    </li>
-</ul>
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+public function submit(Request $request)
+{
+    if (!$request->has('email')) {
+
+        // store previous GET and POST values
+        $this->saveOldValues();
+
+        $this->flash('error', 'Email field is required');
+
+        return $this->redirect('/register');
+    }
+
+    return $this->response('Form submitted successfully');
+}
+    </code></pre>
+</div>
+
+<p>
+    After redirecting, previously entered values can be reused inside the template
+    to automatically refill form inputs, allowing users to correct mistakes without
+    retyping their data.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;input type="email" name="email" value="&#123;&#123; $oldValues['email'] ?? '' &#125;&#125;" /&gt;
+    </code></pre>
+</div>

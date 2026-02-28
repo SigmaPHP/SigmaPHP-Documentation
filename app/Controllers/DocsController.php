@@ -89,10 +89,10 @@ class DocsController extends BaseController
         }
 
         // !! For Testing Only !!
-        $page->content = $this->renderView(
-            'docs/v0_1_x/http/controllers',
-            compact('versions', 'hierarchy', 'page')
-        );
+        // $page->content = $this->renderView(
+        //     'docs/v0_1_x/http/files',
+        //     compact('versions', 'hierarchy', 'page')
+        // );
 
         return $this->render('docs', compact('versions', 'hierarchy', 'page'));
     }

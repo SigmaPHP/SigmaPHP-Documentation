@@ -21,7 +21,7 @@ class CategorySeeder extends Seeder
         $version = $versionDetails['id'];
         $index = 1;
 
-        // Exception for the 80 characters line length rule !!
+        // !! Exception for the 80 characters line length rule !!
         $this->insert(
             'categories',
             [
@@ -52,7 +52,7 @@ class CategorySeeder extends Seeder
                 ['name' => 'Files', 'version_id' => $version, 'parent_id' => $index],
 
                 // Views
-                ['name' => 'Rendering View', 'version_id' => $version, 'parent_id' => ++$index],
+                ['name' => 'Creating Templates', 'version_id' => $version, 'parent_id' => ++$index],
                 ['name' => 'Template Syntax', 'version_id' => $version, 'parent_id' => $index],
                 ['name' => 'Static Assets', 'version_id' => $version, 'parent_id' => $index],
                 ['name' => 'Shared Variables', 'version_id' => $version, 'parent_id' => $index],
@@ -60,9 +60,9 @@ class CategorySeeder extends Seeder
                 ['name' => 'Error Pages', 'version_id' => $version, 'parent_id' => $index],
 
                 // Database
+                ['name' => 'Query Builder', 'version_id' => $version, 'parent_id' => ++$index],
                 ['name' => 'Migrations', 'version_id' => $version, 'parent_id' => $index],
                 ['name' => 'Seeders', 'version_id' => $version, 'parent_id' => $index],
-                ['name' => 'Query Builder', 'version_id' => $version, 'parent_id' => ++$index],
 
                 // ORM
                 ['name' => 'Models', 'version_id' => $version, 'parent_id' => ++$index],
