@@ -52,9 +52,25 @@ public function uploadFile(Request $request)
     </code></pre>
 </div>
 
+<p>
+    You can then connect the action defined above to a form within your view as shown below.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;form action=&quot;&#123;{ url('upload_file') }&#125;&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;
+    &lt;input type=&quot;file&quot; name=&quot;my_file&quot; /&gt;
+    &lt;button type=&quot;submit&quot;&gt;Upload&lt;/button&gt;
+&lt;/form&gt;
+    </code></pre>
+</div>
+
 <div class="alert alert-warning">
-    While working with HTML forms, please don't forget to add the enctype="multipart/form-data"
-    attribute to your form !
+    <p>
+        When working with HTML forms that handle file uploads, make sure to include the
+        <code>enctype="multipart/form-data"</code> attribute in your form.
+    </p>
 </div>
 
 <h3>Checking Uploaded Files</h3>
