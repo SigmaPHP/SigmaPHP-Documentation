@@ -28,6 +28,22 @@
     inside the <code>public</code> folder, allowing uploaded files to be accessed safely.
 </p>
 
+<p>
+    By default, uploaded files are stored inside the <code>uploads</code> directory.
+    This location can be customized through the application configuration by updating
+    the <code>upload_path</code> option in the app config file.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"></button>
+    <pre><code class="language-php">
+/**
+ * Uploaded files path.
+ */
+'upload_path' =&gt; env('UPLOADS_PATH', 'storage/uploads'),
+    </code></pre>
+</div>
+
 
 <h3>Uploading a File</h3>
 
@@ -88,11 +104,11 @@ $this->file->has('docs/book.pdf'); // true/false
 </div>
 
 
-<h3>Returning a File</h3>
+<h3>Accessing Uploaded Files</h3>
 
 <p>
-    Returning a file enables the application to send stored files back to the browser as a response,
-    allowing inline viewing or downloading depending on the response headers.
+    In order to retrieve stored uploads and serve them to the browser as a response,
+    making them available for inline viewing or download depending on the response headers.
 </p>
 
 <div class="code-card">
@@ -109,6 +125,19 @@ public function returnFile()
         ]
     );
 }
+    </code></pre>
+</div>
+
+<p>
+    Uploaded files can be accessed directly inside your views using the global
+    <code>asset</code> directive combined with the <code>uploads</code> directory.
+    This allows you to reference stored files using a clean and consistent URL.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"></button>
+    <pre><code class="language-html">
+&lt;img src="&#123;% asset('uploads/avatar.jpeg') %&#125;" alt="avatar"/&gt;
     </code></pre>
 </div>
 
