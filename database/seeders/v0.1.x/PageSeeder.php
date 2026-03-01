@@ -145,6 +145,50 @@ class PageSeeder extends Seeder
                     ),
                     'tags' => 'sigmaphp,php framework,http,files'
                 ],
+
+                // Views
+                [
+                    'category_id' => $this->getCategoryID('creating_templates'),
+                    'content' => container('view')->render(
+                        'docs/v0_1_x/views/creating_templates'
+                    ),
+                    'tags' => 'sigmaphp,php framework,views,templates,html,creating templates'
+                ],
+                [
+                    'category_id' => $this->getCategoryID('template_syntax'),
+                    'content' => container('view')->render(
+                        'docs/v0_1_x/views/template_syntax'
+                    ),
+                    'tags' => 'sigmaphp,php framework,views,templates,html,templates syntax,for,if,blocks'
+                ],
+                [
+                    'category_id' => $this->getCategoryID('static_assets'),
+                    'content' => container('view')->render(
+                        'docs/v0_1_x/views/static_assets'
+                    ),
+                    'tags' => 'sigmaphp,php framework,views,templates,html,static assets,css,js,javascript,files,images'
+                ],
+                [
+                    'category_id' => $this->getCategoryID('shared_variables'),
+                    'content' => container('view')->render(
+                        'docs/v0_1_x/views/shared_variables'
+                    ),
+                    'tags' => 'sigmaphp,php framework,views,templates,html,shared variables'
+                ],
+                [
+                    'category_id' => $this->getCategoryID('custom_directives'),
+                    'content' => container('view')->render(
+                        'docs/v0_1_x/views/custom_directives'
+                    ),
+                    'tags' => 'sigmaphp,php framework,views,templates,html,custom directives'
+                ],
+                [
+                    'category_id' => $this->getCategoryID('error_pages'),
+                    'content' => container('view')->render(
+                        'docs/v0_1_x/views/error_pages'
+                    ),
+                    'tags' => 'sigmaphp,php framework,views,templates,html,error pages,404,500'
+                ],
             ]
         );
     }
