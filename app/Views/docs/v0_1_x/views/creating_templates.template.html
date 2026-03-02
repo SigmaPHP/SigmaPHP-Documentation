@@ -1,0 +1,103 @@
+<p>
+    The SigmaPHP Template Engine provides a simple yet expressive way to build dynamic user interfaces using
+    familiar HTML enhanced with powerful templating features.
+
+<ul>
+    <li>Print variables and evaluate expressions.</li>
+    <li>Work with conditional statements such as <code>if</code>, <code>else_if</code>, and <code>else</code>.</li>
+    <li>Iterate over data using loops supporting numbers, strings, and arrays.</li>
+    <li>Extend and include templates using relative paths.</li>
+    <li>Organize templates in sub-directories using dot notation.</li>
+    <li>Define variables directly inside templates.</li>
+    <li>Share variables between multiple templates.</li>
+    <li>Structure layouts using reusable blocks.</li>
+    <li>Register custom template directives.</li>
+    <li>Write single-line and multi-line comments.</li>
+    <li>Improve performance through automatic template caching.</li>
+</ul>
+</p>
+
+<p>
+    Templates are regular HTML files using the <code>.template.html</code> extension. The engine parses these files
+    and interprets special directives while keeping the syntax clean and readable. By default, templates are stored
+    inside the <code>app/Views</code> directory, but this location can be customized through the application
+    configuration.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+/**
+ * Views files path.
+ */
+'views_path' => env('VIEWS_PATH', 'app/Views'),
+    </code></pre>
+</div>
+
+<p>
+    Template caching is enabled by default to improve rendering performance. Cache files are stored inside the
+    configured cache directory and can be disabled by setting the cache path to <code>null</code>. Clearing the
+    cache can be done at any time by removing the contents of the <code>storage/cache</code> directory.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+/**
+ * Cache files path.
+ */
+'cache_path' => env('CACHE_PATH', 'storage/cache'),
+    </code></pre>
+</div>
+
+<p>
+    Creating a template is straightforward — simply add a new file inside the views directory. Templates may also
+    be organized into sub-folders to keep large applications structured and maintainable.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+// app/Views/index.template.html
+
+&lt;h1&gt;&#123;&#123; $itemList &#125;&#125;&lt;/h1&gt;
+
+&lt;ul&gt;
+    &#123;% for $item in $items %&#125;
+        &lt;li&gt;&#123;&#123; $item->name &#125;&#125;&lt;/li&gt;
+    &#123;% end_for %&#125;
+&lt;/ul&gt;
+    </code></pre>
+</div>
+
+<p>
+    Rendering templates from controllers is equally simple. The
+    <code>render($templateName, $variables, $code, $headers)</code> method renders a template and immediately
+    returns it as an HTTP response, while <code>renderView($templateName, $variables)</code> returns only the
+    generated HTML string, which is useful when composing partial content.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+public function dashboard()
+{
+    return $this->render(
+        'dashboard',
+        ['title' => 'Admin Panel', 'user' => 'Mohamed'],
+        200,
+        ['Cache-Control' => 'no-cache']
+    );
+}
+
+public function partial()
+{
+    $content = $this->renderView(
+        'partials.stats',
+        ['visits' => 1500, 'sales' => 230]
+    );
+
+    return $this->response($content);
+}
+    </code></pre>
+</div>
