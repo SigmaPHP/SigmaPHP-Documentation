@@ -341,13 +341,22 @@ footer {
 /* Alert Box */
 .alert {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 12px;
     padding: 14px 16px;
     border-radius: 6px;
-    border: 1px solid;
+    border: 1px solid #f5c2c7;
+    background-color: #f8d7da;
+    color: #842029;
     font-family: system-ui, sans-serif;
     margin: 20px 0;
+}
+
+.alert-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
 }
 
 .alert::before {
@@ -360,6 +369,7 @@ footer {
     font-weight: bold;
     font-size: 14px;
     flex-shrink: 0;
+    margin-top: 2px;
 }
 
 .alert p {

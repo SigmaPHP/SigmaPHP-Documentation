@@ -1,0 +1,603 @@
+<h3>Parenthesis &amp; Quotes</h3>
+
+<p>
+    The template engine defines a clear and consistent syntax using three types of bracket pairs.
+    Each pair serves a specific purpose to keep templates readable and structured.
+</p>
+
+<ul>
+    <li>
+        <strong>Double curly brackets</strong> are used for printing variables and evaluating expressions.
+    </li>
+</ul>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&#123;&#123; /* expression or variable goes here */ &#125;&#125;
+    </code></pre>
+</div>
+
+<ul>
+    <li>
+        <strong>Curly brackets with percentage symbols</strong> are used for directives such as conditions,
+        loops, blocks, includes, and extends.
+    </li>
+</ul>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&#123;% /* directives like if, for, block ... etc */ %&#125;
+    </code></pre>
+</div>
+
+<ul>
+    <li>
+        <strong>Curly brackets with double dashes</strong> are used for comments.
+    </li>
+</ul>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&#123;-- /* comments */ --&#125;
+    </code></pre>
+</div>
+
+<p>
+    Both single (<code>'</code>) and double (<code>"</code>) quotes are supported in directives
+    that accept quoted parameters.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&#123;% block '...' %&#125;
+
+&#123;% block "..." %&#125;
+    </code></pre>
+</div>
+
+
+<h3>Printing Variables</h3>
+
+<p>
+    Printing variables is one of the core features of the template engine. Variables passed
+    from the controller can be rendered directly inside templates using double curly brackets.
+    All variables must include the <code>$</code> prefix, similar to PHP.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$this-&gt;render('message', [
+    'name' =&gt; 'Ahmed',
+    'age'  =&gt; 15
+], true);
+    </code></pre>
+</div>
+
+<p><strong>message.template.html</strong></p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;p&gt;&#123;&#123; $name &#125;&#125;&lt;/p&gt;
+&lt;p&gt;&#123;&#123; $age &#125;&#125;&lt;/p&gt;
+
+&lt;p&gt;&#123;&#123; $name . ' ' . $age &#125;&#125;&lt;/p&gt;
+
+&lt;p&gt;&#123;&#123; $name &#125;&#125; &#123;&#123; $age &#125;&#125;&lt;/p&gt;
+    </code></pre>
+</div>
+
+
+<h3>Expression Evaluation</h3>
+
+<p>
+    In addition to printing variables, any valid PHP expression may be evaluated and rendered.
+    Most built-in PHP functions are supported, except unsafe functions.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&#123;&#123; 1 + 2 + 3 &#125;&#125;
+
+&#123;&#123; !empty($foo) ? 'Yes' : 'No' &#125;&#125;
+
+&#123;&#123; date('Y-m-d') &#125;&#125;
+    </code></pre>
+</div>
+
+<p>
+    Variables can also be reassigned inside templates. Assignments do not produce output.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&#123;&#123; $foo = 1 + 2 &#125;&#125;
+
+&#123;&#123; $foo &#125;&#125;
+    </code></pre>
+</div>
+
+
+<h3>Comments</h3>
+
+<p>
+    Comments may span single or multiple lines. Any content wrapped inside comment tags
+    will not be executed or rendered.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&#123;-- &#123;&#123; strtolower('ABC') &#125;&#125; This line will not execute --&#125;
+
+&#123;--
+    Multiple
+    lines
+    comment !
+
+    &#123;% if ($num &gt; 5) %&#125;
+        This condition will never be resolved
+    &#123;% end_if %&#125;
+--&#125;
+    </code></pre>
+</div>
+
+
+<h3>Extend &amp; Include Templates</h3>
+
+<p>
+    To promote reusability and structured layouts, the engine provides directives
+    for extending base templates and including partial templates.
+</p>
+
+<p><strong>base.template.html</strong></p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;div class="main"&gt;
+    &lt;p&gt;Base Template&lt;/p&gt;
+&lt;/div&gt;
+    </code></pre>
+</div>
+
+<p><strong>app.template.html</strong></p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&#123;% extend 'base' %&#125;
+    </code></pre>
+</div>
+
+<p>
+    The <code>extend</code> directive accepts the template name without the
+    <code>.template.html</code> extension.
+</p>
+
+<p>
+    The <code>include</code> directive allows reusing partial templates such as components
+    or reusable UI elements.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;form class="create-post-form"&gt;
+    &lt;input type="text" name="title" /&gt;
+
+    &#123;% include 'submit-button' %&#125;
+&lt;/form&gt;
+    </code></pre>
+</div>
+
+
+<h3>Dot Notation Path</h3>
+
+<p>
+    Templates can be organized inside sub-directories. Dot notation is used to reference
+    templates located in nested folders.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;form class="create-post-form"&gt;
+    &lt;input type="text" name="title" /&gt;
+
+    &#123;% include 'components.submit-button' %&#125;
+&lt;/form&gt;
+
+&#123;% extend 'admin.layouts.master' %&#125;
+    </code></pre>
+</div>
+
+<p>
+    The engine resolves these paths starting from the configured templates root directory:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+components.submit-button  --&gt;  Views/components/submit-button.template.html
+admin.layouts.master      --&gt;  Views/admin/layouts/master.template.html
+    </code></pre>
+</div>
+
+<h3>Relative Path</h3>
+
+<p>
+    When including or extending templates located in the same directory, writing the full
+    dot-notation path can become unnecessarily verbose. SigmaPHP Template provides a
+    relative-path operator to simplify this scenario.
+</p>
+
+<p>
+    Consider the following structure:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+/very/long/path/to/admin/dashboard/default.template.html
+/very/long/path/to/admin/dashboard/_partial.template.html
+    </code></pre>
+</div>
+
+<p>
+    Without relative paths, including the partial would require the full dot notation:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&#123;% include 'very.long.path.to.admin.dashboard._partial' %&#125;
+    </code></pre>
+</div>
+
+<p>
+    Using the relative-path operator <code>./</code>, the engine automatically resolves
+    the template from the current directory:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&#123;% include './_partial' %&#125;
+    </code></pre>
+</div>
+
+<hr>
+
+<h3>Blocks</h3>
+
+<p>
+    Blocks provide a structured way to inject content into base templates. The
+    <code>block</code> directive defines a section, while <code>show_block</code>
+    renders its content.
+</p>
+
+<p><strong>master.template.html</strong></p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;html&gt;
+    &lt;head&gt;
+        &#123;% show_block 'title' %&#125;
+    &lt;/head&gt;
+
+    &lt;body&gt;
+        &#123;% show_block 'content' %&#125;
+    &lt;/body&gt;
+&lt;/html&gt;
+    </code></pre>
+</div>
+
+<p><strong>app.template.html</strong></p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&#123;% extend 'master' %&#125;
+
+&#123;% block 'title' %&#125;Home Page&#123;% end_block %&#125;
+
+&#123;% block 'content' %&#125;
+&lt;article&gt;Page Content&lt;/article&gt;
+&#123;% end_block %&#125;
+    </code></pre>
+</div>
+
+<p>
+    Child blocks override parent blocks. To avoid mandatory implementation,
+    a default block definition may be added in the base template:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&#123;% block 'js' %&#125;&#123;-- Could be empty --&#125;&#123;% end_block %&#125;
+&#123;% show_block 'js' %&#125;
+    </code></pre>
+</div>
+
+<p>
+    Block names may contain letters, numbers, underscores, dots, and dashes.
+    A block name cannot be purely numeric but may start with a number.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&#123;% block 'test1001' %&#125;
+&#123;% block '123test' %&#125;
+&#123;% block 'small_article_container' %&#125;
+&#123;% block 'alert-message' %&#125;
+    </code></pre>
+</div>
+
+<p>
+    Optionally, the block name may also be specified in the closing directive:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&#123;% block 'my-block' %&#125;
+    // block content
+&#123;% end_block 'my-block' %&#125;
+    </code></pre>
+</div>
+
+<hr>
+
+<h3>Defining Variables</h3>
+
+<p>
+    Although defining variables inside templates is generally discouraged,
+    the engine provides a <code>define</code> directive for cases where local
+    transformations or formatting are required.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&#123;% define $x = 100 %&#125;
+
+&#123;&#123; $x &#125;&#125;
+    </code></pre>
+</div>
+
+<p>
+    Variables must follow PHP naming conventions and must always have a default value.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&#123;% define $name = "John Doe" %&#125;
+
+&#123;% define $num = 1 + 2 + 3 %&#125;
+    </code></pre>
+</div>
+
+<p>
+    Variables may reference other variables:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&#123;% define $userAge = $user-&gt;age %&#125;
+&#123;% define $age = $userAge %&#125;
+
+&#123;&#123; "User age : " . $age &#125;&#125;
+    </code></pre>
+</div>
+
+<div class="alert alert-danger">
+    <div class="alert-content">
+        <p>
+            Variables may be redefined. Redefinition is treated as reassignment:
+        </p>
+
+        <div class="code-card">
+            <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+            <pre><code class="language-php">
+&#123;% define $x = 5 %&#125;
+&#123;% define $x = 10 %&#125;
+            </code></pre>
+        </div>
+
+        <p>
+            Variables are globally scoped and cannot be defined inside conditional statements,
+            loops, or blocks. Doing so will result in an exception.
+        </p>
+
+        <div class="code-card">
+            <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+            <pre><code class="language-php">
+&#123;% if (...) %&#125;
+    &#123;% define $x = 5 %&#125;
+&#123;% end_if %&#125;
+
+&#123;% for ... in ... %&#125;
+    &#123;% define $x = 5 %&#125;
+&#123;% end_for %&#125;
+
+&#123;% block 'example' %&#125;
+    &#123;% define $x = 5 %&#125;
+&#123;% end_block %&#125;
+            </code></pre>
+        </div>
+    </div>
+</div>
+
+<h3>Conditions</h3>
+
+<p>
+    To control the flow of your templates, you can use conditional directives to determine which parts should be rendered, hidden, or processed.
+    A condition is a valid PHP expression that evaluates to <code>true</code> or <code>false</code>. It can rely on:
+</p>
+
+<ul>
+    <li>Variables passed to the <code>render()</code> method</li>
+    <li>Variables defined inside the template</li>
+    <li>Any other valid PHP expression</li>
+</ul>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-html">
+&#123;% if ($test1 == 'FOO') %&#125;
+    Test 1 equals : Foo
+&#123;% else_if (1 + 1) %&#125;
+    Test 2
+&#123;% else_if (false) %&#125;
+    Test 3
+&#123;% else %&#125;
+    Do something ...
+&#123;% end_if %&#125;
+    </code></pre>
+</div>
+
+<p>
+    Both <code>if</code> and <code>else_if</code> conditions must be wrapped in parentheses <code>(...)</code>.
+    You may use a full <code>if / else_if / else</code> chain or a simple <code>if / end_if</code> pair.
+    Conditions can also be written inline.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-html">
+&#123;% define $show_block = true %&#125;
+
+&#123;% if ($show_block) %&#125;
+    &#123;% show_block 'list-block' %&#125;
+&#123;% end_if %&#125;
+
+&lt;img src="&#123;%&#123; $imageSrc &#125;%&#125;" class="&#123;% if ($haveClass) %&#125; mx-100 &#123;% end_if %&#125;" /&gt;
+
+&#123;% if (($val &gt; 0) &amp;&amp; ($val &lt; 100)) %&#125;
+    &lt;p&gt;Do something with &#123;%&#123; $val &#125;%&#125;&lt;/p&gt;
+&#123;% else %&#125;
+    Invalid value : %&#123;%&#123; $val &#125;%&#125;
+&#123;% end_if %&#125;
+    </code></pre>
+</div>
+
+<p>Nested conditions are fully supported:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-html">
+&#123;%if (($val &gt; 0) &amp;&amp; ($val &lt; 100)) %&#125;
+    &lt;p&gt;Do something with %&#123;%&#123; $val &#125;%&#125;&lt;/p&gt;
+&#123;%else %&#125;
+    &#123;%if ($val &gt; 100) %&#125;
+        &lt;h1&gt;The value is too large&lt;/h1&gt;
+    &#123;%else_if ($val &lt; 0) %&#125;
+        &lt;h1&gt;The value is too small&lt;/h1&gt;
+    &#123;%else_if ($val == 0) %&#125;
+        &lt;h1&gt;The value can&#39;t be zero&lt;/h1&gt;
+    &#123;%end_if %&#125;
+&#123;%end_if %&#125;
+    </code></pre>
+</div>
+
+
+<h3>Loops</h3>
+
+<p>
+    Looping directives are another type of control statement. Looping is a core feature in any template engine,
+    allowing you to iterate over data and generate dynamic content.
+</p>
+
+<p>
+    SigmaPHP-Template provides a <code>for ... in</code> directive that can iterate over numbers, strings, and arrays.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-html">
+&#123;% for $letter in 'abcd' %&#125;
+    &#123;%&#123; $letter &#125;%&#125;
+&#123;% end_for %&#125;
+
+&#123;% for $num in 5 %&#125;
+    &#123;%&#123; $num &#125;%&#125;
+&#123;% end_for %&#125;
+    </code></pre>
+</div>
+
+<p>Working with arrays and accumulating values:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-html">
+&#123;% define $sum = 0 %&#125;
+
+&#123;% for $i in [1, 2, 3, 4, 5] %&#125;
+    &#123;%&#123; $sum = $sum + $i &#125;%&#125;
+&#123;% end_for %&#125;
+
+&#123;%&#123; $sum &#125;%&#125;
+    </code></pre>
+</div>
+
+<p>Looping through an array of items:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-html">
+&#123;% for $item in $items %&#125;
+    &#123;%&#123; "{$item['id']} : {$item['name']}" &#125;%&#125;
+&#123;% end_for %&#125;
+    </code></pre>
+</div>
+
+<p>
+    The engine also provides <code>break</code> and <code>continue</code> directives to control loop execution.
+    Both directives require a condition.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-html">
+&#123;% for $item in $items %&#125;
+    &#123;% break ($item['id'] == 8) %&#125;
+
+    &#123;%&#123; "{$item['id']} : {$item['name']}" &#125;%&#125;
+&#123;% end_for %&#125;
+
+{-- Print Odd Numbers --}
+&#123;% for $num in 10 %&#125;
+    &#123;% continue ($num % 2 == 0) %&#125;
+
+    &#123;%&#123; $num &#125;%&#125;
+&#123;% end_for %&#125;
+    </code></pre>
+</div>
+
+<p>Nested loops are supported as well:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-html">
+&#123;% for $i in 2 %&#125;
+    &#123;% for $j in 3 %&#125;
+        &#123;% for $k in 4 %&#125;
+            &#123;%&#123; $i * $j * $k &#125;%&#125;
+        &#123;% end_for %&#125;
+    &#123;% end_for %&#125;
+&#123;% end_for %&#125;
+    </code></pre>
+</div>

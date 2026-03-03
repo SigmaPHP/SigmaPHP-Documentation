@@ -35,9 +35,31 @@
 </div>
 
 <p>
+    SigmaPHP Template supports template caching out of the box. When caching is enabled,
+    the engine stores the compiled version of a template inside a cache file. On subsequent
+    requests, the cached version is returned directly, improving performance significantly.
+</p>
+
+<p>
+    The engine automatically detects changes in the template file or in the data passed to it.
+    If modifications are detected, the template is recompiled and the cache is refreshed with
+    the updated result.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+// The engine checks for a cached version first.
+// If not found, the template will be compiled.
+return $this->render('home');
+    </code></pre>
+</div>
+
+<p>
     Template caching is enabled by default to improve rendering performance. Cache files are stored inside the
-    configured cache directory and can be disabled by setting the cache path to <code>null</code>. Clearing the
-    cache can be done at any time by removing the contents of the <code>storage/cache</code> directory.
+    configured cache directory and can be disabled by setting the cache path to <code>null</code>.
 </p>
 
 <div class="code-card">
@@ -47,6 +69,23 @@
  * Cache files path.
  */
 'cache_path' => env('CACHE_PATH', 'storage/cache'),
+    </code></pre>
+</div>
+
+<p>
+    Caching is highly recommended in production environments to improve rendering performance.
+    During development, however, the cache directory may grow over time. It is good practice to
+    periodically clear its contents by removing all generated cache files.
+</p>
+
+<p>
+    On Linux systems, this can be done using the following command:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+rm /path/to/cache/*
     </code></pre>
 </div>
 
@@ -68,6 +107,16 @@
     &#123;% end_for %&#125;
 &lt;/ul&gt;
     </code></pre>
+</div>
+
+<div class="alert alert-info">
+    <div class="alert-content">
+        <p>
+            For the complete syntax reference and a deeper understanding of how templates work,
+            please refer to the <a href="/docs/{{ config('app.framework_version') }}/template_syntax">Template
+                Syntax</a>.
+        </p>
+    </div>
 </div>
 
 <p>
