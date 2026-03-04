@@ -1,0 +1,97 @@
+<p>
+    To share one or more variables across multiple templates, the engine provides the
+    <code>shareTemplateVariable</code> helper. This helper accepts an associative array
+    containing the variables you want to make globally accessible within all templates.
+</p>
+
+<p>
+    This is especially useful for values that should be available application-wide,
+    such as social media links, global settings, feature flags, or authentication state.
+</p>
+
+<h3>Basic Example</h3>
+
+<p>
+    Suppose you want to expose your application&#39;s social media links to every template:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+shareTemplateVariable([
+    &#39;githubLink&#39; =&gt; &#39;https://github.com/agashe/SigmaPHP&#39;,
+    &#39;docsLink&#39; =&gt; &#39;https://www.sigmaphp.com/docs&#39;,
+]);
+    </code></pre>
+</div>
+
+<p>
+    The <code>shareTemplateVariable</code> helper can be used anywhere in your application
+    and may be called multiple times depending on your context or business logic.
+</p>
+
+<h3>Using a Service Provider</h3>
+
+<p>
+    In most cases, it is highly recommended to register shared template variables inside
+    a service provider, typically named <code>AppServiceProvider</code>. This ensures that
+    shared variables are defined in a centralized and structured way during the application boot process.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+namespace App\Providers;
+
+use SigmaPHP\Container\Interfaces\ServiceProviderInterface;
+use SigmaPHP\Container\Container;
+
+/**
+ * App Service Provider Class
+ */
+class AppServiceProvider implements ServiceProviderInterface
+{
+    /**
+     * The boot method will be called after all
+     * dependencies are defined in the container.
+     *
+     * @param Container $container
+     * @return void
+     */
+    public function boot(Container $container)
+    {
+        shareTemplateVariable([
+            &#39;githubLink&#39; =&gt; &#39;https://github.com/agashe/SigmaPHP&#39;,
+            &#39;docsLink&#39; =&gt; &#39;https://www.sigmaphp.com/docs&#39;
+        ]);
+    }
+
+    /**
+     * Add a definition to the container.
+     *
+     * @param Container $container
+     * @return void
+     */
+    public function register(Container $container)
+    {
+        //
+    }
+}
+    </code></pre>
+</div>
+
+<p>
+    By registering shared variables in a service provider, you ensure consistency,
+    maintainability, and proper separation of concerns within your application architecture.
+</p>
+
+<p>
+    To learn more about service providers, their lifecycle, and how they integrate with the dependency injection
+    container, please refer to the <a href="/docs/{{ config('app.framework_version') }}/service_providers">Dependency
+        Injection (DI)</a> documentation page for a deeper understanding of how
+    services are registered and bootstrapped within the application.
+</p>
+
+using them

@@ -1,0 +1,65 @@
+<p>
+    Static assets include all publicly accessible files inside the <code>public</code> directory.
+    This typically covers uploaded files as well as JavaScript, CSS, images, fonts, and other front-end resources.
+</p>
+
+<p>
+    To generate URLs for static assets, use the <code>asset</code> global helper inside your templates:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-html">
+&lt;img src="&#123;% asset('uploads/avatar.jpeg') %&#125;" /&gt;
+
+&lt;script src="&#123;% asset('js/main.js') %&#125;"&gt;&lt;/script&gt;
+    </code></pre>
+</div>
+
+<p>
+    The <code>asset</code> helper automatically generates the correct URL based on your static assets route
+    configuration.
+    For example:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-text">
+http://localhost:8888/static/uploads/avatar.jpeg
+
+http://localhost:8888/static/js/main.js
+    </code></pre>
+</div>
+
+<p>
+    The helper resolves files directly from the <code>public</code> directory.
+    It can also be used outside templates, such as inside controllers or other application layers, whenever a public
+    asset URL is required.
+</p>
+
+<h4>Configuring the Static Assets Route</h4>
+
+<p>
+    The static assets route can be customized from your configuration file:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+/**
+ * Static assets route&#39;s path.
+ */
+&#39;static_assets_route&#39; =&gt; env(&#39;STATIC_ASSETS_ROUTE&#39;, &#39;static/&#39;),
+    </code></pre>
+</div>
+
+
+<div class="alert alert-warning">
+    <div class="alert-content">
+        <p>
+            For security reasons, it is strongly recommended to restrict access to specific directories
+            using proper server permissions and access control rules, depending on your server configuration.
+        </p>
+
+    </div>
+</div>
