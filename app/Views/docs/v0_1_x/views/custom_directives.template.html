@@ -1,0 +1,85 @@
+<p>
+    Sometimes applications require additional logic inside templates, such as formatting currency, handling order
+    statuses, or transforming data before displaying it. SigmaPHP-Template allows you to extend the template language by
+    defining custom directives.
+</p>
+
+<p>
+    Custom directives are registered using the <code>defineCustomTemplateDirective</code> global helper. A directive
+    follows the syntax <code>&#123;% myDirective(...) %&#125;</code>, where the directive name maps to a PHP callback that may
+    accept parameters and return a value to be rendered by the engine.
+</p>
+
+<h3>Registering a Custom Directive</h3>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+defineCustomTemplateDirective('currency', function ($amount) &#123;
+    return '$' . number_format($amount, 2);
+&#125;);
+
+defineCustomTemplateDirective('orderStatus', function ($status) &#123;
+    if ($status === 'paid') &#123;
+        return 'Paid';
+    &#125;
+
+    if ($status === 'pending') &#123;
+        return 'Pending';
+    &#125;
+
+    return 'Unknown';
+&#125;);
+    </code></pre>
+</div>
+
+<h3>Registering Directives in a Service Provider</h3>
+
+<p>
+    Custom directives are typically registered inside a service provider so they are available across the entire
+    application. A common place for this logic is the <code>AppServiceProvider</code>.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+namespace App\Providers;
+
+use SigmaPHP\Container\Interfaces\ServiceProviderInterface;
+use SigmaPHP\Container\Container;
+
+class AppServiceProvider implements ServiceProviderInterface
+&#123;
+    public function boot(Container $container)
+    &#123;
+        defineCustomTemplateDirective('currency', function ($amount) &#123;
+            return '$' . number_format($amount, 2);
+        &#125;);
+    &#125;
+
+    public function register(Container $container)
+    &#123;
+        //
+    &#125;
+&#125;
+    </code></pre>
+</div>
+
+<h3>Using a Custom Directive in Templates</h3>
+
+<p>
+    Once registered, the directive can be used directly inside templates using the directive syntax.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;p&gt;Total: &#123;% currency(199.5) %&#125;&lt;/p&gt;
+
+&lt;p&gt;Order Status: &#123;% orderStatus('paid') %&#125;&lt;/p&gt;
+    </code></pre>
+</div>

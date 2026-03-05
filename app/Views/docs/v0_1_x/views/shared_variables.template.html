@@ -30,7 +30,7 @@ shareTemplateVariable([
     and may be called multiple times depending on your context or business logic.
 </p>
 
-<h3>Using a Service Provider</h3>
+<h3>Registering with Service Provider</h3>
 
 <p>
     In most cases, it is highly recommended to register shared template variables inside
@@ -94,4 +94,16 @@ class AppServiceProvider implements ServiceProviderInterface
     services are registered and bootstrapped within the application.
 </p>
 
-using them
+<h3>Using a Shared Variables</h3>
+
+<p>
+    Once a variable is shared, it becomes automatically available in all templates without needing to pass it through
+    the render method. You can access it like any other template variable and use it directly within your markup.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;a href="&#123;&#123; $githubLink &#125;&#125;"&gt;GitHub&lt;/a&gt;
+    </code></pre>
+</div>

@@ -1,0 +1,83 @@
+<p>
+    SigmaPHP provides built-in support for rendering error pages such as 404 and 500. By default, the framework looks
+    for error templates inside the <code>Views/errors</code> directory. A default <code>404.template.html</code> file is
+    included, and you can create additional templates such as <code>403.template.html</code>,
+    <code>500.template.html</code>, or any other HTTP error page your application may require.
+</p>
+
+<p>
+    These templates behave like regular views and can contain any template directives, variables, or layout structures
+    used throughout the application.
+</p>
+
+<p>
+    For example, the following is the default <code>404</code> error template shipped with SigmaPHP.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;404 - Page Not Found&lt;/title&gt;
+    &lt;style&gt;
+        body {
+            background-color: white;
+            font-family: sans-serif;
+            color: #ffa500;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+        }
+        .main-text {
+            font-size: 10em;
+            font-weight: bold;
+            margin-bottom: -0.1em;
+            line-height: 1;
+        }
+        .secondary-text {
+            font-size: 2em;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="container"&gt;
+        &lt;div class="main-text"&gt;404&lt;/div&gt;
+        &lt;div class="secondary-text"&gt;Page Not Found&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+    </code></pre>
+</div>
+
+<h4>Returning an Error Page</h4>
+
+<p>
+    Returning an error page from a controller action is straightforward. Simply render the appropriate error template
+    and provide the corresponding HTTP status code.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+if (empty($page)) {
+    return $this->render('errors.404', [], 404);
+}
+    </code></pre>
+</div>
+
+<p>
+    In this example, the framework renders the <code>errors.404</code> template and returns it with the HTTP status code
+    <code>404</code>, allowing the browser and search engines to properly recognize the response as a "Page Not Found"
+    error.
+</p>
