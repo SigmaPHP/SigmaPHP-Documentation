@@ -14,7 +14,8 @@ class PageSeeder extends Seeder
      *
      * @param \PDO $dbConnection
      */
-    public function __construct($dbConnection) {
+    public function __construct($dbConnection)
+    {
         parent::__construct($dbConnection);
 
         $currentVersion = "'0.1.x'";
@@ -45,7 +46,8 @@ class PageSeeder extends Seeder
      * @param string $name
      * @return int
      */
-    public function getCategoryID($name) {
+    public function getCategoryID($name)
+    {
         return array_values(
             array_filter($this->categories, function ($category) use ($name) {
                 return $category['name'] ==
@@ -188,6 +190,93 @@ class PageSeeder extends Seeder
                         'docs/v0_1_x/views/error_pages'
                     ),
                     'tags' => 'sigmaphp,php framework,views,templates,html,error pages,404,500'
+                ],
+
+                // Routing
+                [
+                    'category_id' => $this->getCategoryID('basic_routes'),
+                    'content' => container('view')->render(
+                        'docs/v0_1_x/routing/basic_routes'
+                    ),
+                    'tags' => 'sigmaphp,php framework,routing,middlewares'
+                ],
+                [
+                    'category_id' => $this->getCategoryID('middlewares'),
+                    'content' => container('view')->render(
+                        'docs/v0_1_x/routing/middlewares'
+                    ),
+                    'tags' => 'sigmaphp,php framework,routing,middlewares'
+                ],
+
+                // Database
+                [
+                    'category_id' => $this->getCategoryID('query_builder'),
+                    'content' => container('view')->render(
+                        'docs/v0_1_x/database/query_builder'
+                    ),
+                    'tags' => 'sigmaphp,php framework,database,query builder,sql'
+                ],
+
+                [
+                    'category_id' => $this->getCategoryID('migrations'),
+                    'content' => container('view')->render(
+                        'docs/v0_1_x/database/migrations'
+                    ),
+                    'tags' => 'sigmaphp,php framework,database,migrations,schema'
+                ],
+
+                [
+                    'category_id' => $this->getCategoryID('seeders'),
+                    'content' => container('view')->render(
+                        'docs/v0_1_x/database/seeders'
+                    ),
+                    'tags' => 'sigmaphp,php framework,database,seeders,data seeding'
+                ],
+
+
+                // ORM
+                [
+                    'category_id' => $this->getCategoryID('models'),
+                    'content' => container('view')->render(
+                        'docs/v0_1_x/orm/models'
+                    ),
+                    'tags' => 'sigmaphp,php framework,orm,models,active record'
+                ],
+
+                [
+                    'category_id' => $this->getCategoryID('relations'),
+                    'content' => container('view')->render(
+                        'docs/v0_1_x/orm/relations'
+                    ),
+                    'tags' => 'sigmaphp,php framework,orm,relations,model relationships'
+                ],
+
+
+                // Dependency Injection
+                [
+                    'category_id' => $this->getCategoryID('service_providers'),
+                    'content' => container('view')->render(
+                        'docs/v0_1_x/dependency_injection/service_providers'
+                    ),
+                    'tags' => 'sigmaphp,php framework,dependency injection,service providers,container'
+                ],
+
+
+                // Misc
+                [
+                    'category_id' => $this->getCategoryID('helpers'),
+                    'content' => container('view')->render(
+                        'docs/v0_1_x/misc/helpers'
+                    ),
+                    'tags' => 'sigmaphp,php framework,helpers,utility functions'
+                ],
+
+                [
+                    'category_id' => $this->getCategoryID('cli'),
+                    'content' => container('view')->render(
+                        'docs/v0_1_x/misc/cli'
+                    ),
+                    'tags' => 'sigmaphp,php framework,cli,command line,console'
                 ],
             ]
         );
