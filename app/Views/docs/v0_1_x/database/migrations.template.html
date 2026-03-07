@@ -1,0 +1,1018 @@
+<p>
+    Migrations allow you to design, organize, and control your database schema using pure PHP.
+    SigmaPHP provides a powerful migration system with a variety of helper methods that make
+    creating and modifying database structures simple and maintainable.
+</p>
+
+<h3>Creating Migrations</h3>
+
+<p>
+    To create a new migration file, run the following command in your terminal:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli create:migration ProductsTable
+</code></pre>
+</div>
+
+<p>
+    This command will generate a new migration file called <strong>ProductsTableMigration.php</strong>
+    inside the <strong>database/migrations</strong> directory.
+</p>
+
+<p>
+    If you want to change the default location where migration files are stored,
+    open the <strong>database.php</strong> configuration file and update the migrations path:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+/**
+ * Default path for migration files.
+ */
+'path_to_migrations' =&gt; env('PATH_TO_MIGRATIONS', '/database/migrations'),
+</code></pre>
+</div>
+
+<p>
+    After creating the migration file, open <strong>ProductsTableMigration.php</strong>.
+    You will find the default migration class template:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+use SigmaPHP\DB\Migrations\Migration;
+
+class ProductsTableMigration extends Migration
+{
+    /**
+     * @return void
+     */
+    public function up()
+    {
+        // up method
+    }
+
+    /**
+     * @return void
+     */
+    public function down()
+    {
+        // down method
+    }
+}
+</code></pre>
+</div>
+
+<p>
+    All schema creation logic should be written inside the <strong>up()</strong> method.
+    If you need to rollback the migration, the statements required to undo those changes
+    should be written inside the <strong>down()</strong> method.
+</p>
+
+<p>
+    For example, if you create a new table in the <strong>up()</strong> method,
+    you should drop that table inside the <strong>down()</strong> method.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+use SigmaPHP\DB\Migrations\Migration;
+
+class ProductsTableMigration extends Migration
+{
+    /**
+     * @return void
+     */
+    public function up()
+    {
+        $this-&gt;createTable('products', .......);
+    }
+
+    /**
+     * @return void
+     */
+    public function down()
+    {
+        $this-&gt;dropTable('products');
+    }
+}
+</code></pre>
+</div>
+
+<h3>Running Migrations</h3>
+
+<p>
+    To execute your database migrations, run the following command:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+// run all migration files
+./bin/sigma-cli migrate
+
+// run specific migration file
+./bin/sigma-cli migrate ProductsTableMigration
+</code></pre>
+</div>
+
+<p>
+    One unique feature supported by SigmaPHP is <strong>nested directory migrations</strong>.
+    The migration runner automatically scans all sub-directories inside the root migrations path.
+</p>
+
+<p>
+    For example, assume the following migration structure:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+parent-dir
+    |
+    -- sub-dir-1
+        |
+        -- sub-dir-2
+            |
+            -- MyMigration.php
+</code></pre>
+</div>
+
+<p>
+    When running the migration command, SigmaPHP will automatically detect and execute
+    all migration files inside nested directories without requiring additional configuration.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+// MyMigration will be detected and executed
+./bin/sigma-cli migrate
+
+// run a specific migration by providing its relative path
+./bin/sigma-cli migrate parent-dir/sub-dir-1/sub-dir-2/MyMigration
+</code></pre>
+</div>
+
+<p>
+    This section describes the main migration methods provided by SigmaPHP.
+    All of these methods are available inside your migration class and can be accessed using <strong>$this</strong>.
+</p>
+
+
+<h3>Migrations History</h3>
+
+<p> SigmaPHP keeps track of all executed migrations using a dedicated migrations history table. Each time a migration is
+    successfully executed, the framework records its execution details (such as the migration name and execution date)
+    in this table. This allows SigmaPHP to determine which migrations have already been applied and enables safe
+    rollbacks when needed. </p>
+
+<p> By default, the migrations history table is named <code>db_logs</code>. However, this name can be customized through
+    the configuration file. The following configuration option controls the table name used to store the migrations
+    history: </p>
+
+<p> Changing this value allows you to store migration history in a different table if required by your project or
+    database conventions. </p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+/**
+* Default name for migrations history table.
+*/
+'logs_table_name' => env('LOGS_TABLE_NAME', 'db_logs'),
+    </code></pre>
+</div>
+
+<h3>Rollback</h3>
+
+<p> SigmaPHP provides a convenient way to revert previously executed migrations. By default, the rollback command will
+    revert the latest executed migration. The framework reads the migrations history table and calls the corresponding
+    <code>down()</code> method for the most recently applied migration.
+</p>
+<p> You can also rollback migrations up to a specific date. In this case, SigmaPHP will revert all migrations executed
+    after the provided date, processing them in reverse order to safely restore the database to the desired state.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli rollback
+    </code></pre>
+</div>
+
+<p>The command above will rollback the latest executed migration. </p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli rollback 2023-1-20
+    </code></pre>
+</div>
+
+<p>
+    This command will rollback all migrations executed after <code>2023-1-20</code>. The migration execution dates are
+    stored in the migrations history table (by default <code>db_logs</code>), which allows SigmaPHP to determine exactly
+    which migrations should be reverted.
+</p>
+
+<h3>Table Methods</h3>
+
+<h4>Create table</h4>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$this-&gt;createTable(
+    'products',
+    [
+        ['name' =&gt; 'id', 'type' =&gt; 'bigint', 'primary' =&gt; true],
+        ['name' =&gt; 'title', 'type' =&gt; 'varchar', 'size' =&gt; 25],
+        ['name' =&gt; 'price', 'type' =&gt; 'decimal'],
+    ],
+    [
+        'engine' =&gt; 'innodb',
+        'comment' =&gt; 'this is products table'
+    ]
+);
+</code></pre>
+</div>
+
+<p>
+    This method accepts three parameters: the table name, an array describing the fields,
+    and an optional array containing table options.
+</p>
+
+<p>
+    SigmaPHP supports all common MySQL data types. Some of the most frequently used types include:
+</p>
+
+<ul>
+    <li>Strings: char, varchar, text, longtext, enum, blob</li>
+    <li>Numeric: tinyint, bool, smallint, int, bigint, float, decimal</li>
+    <li>Date/Time: date, datetime, timestamp, time, year</li>
+</ul>
+
+<p>
+    For the full list of supported types, please check the official MySQL documentation.
+</p>
+
+
+
+<table border>
+    <thead>
+        <tr>
+            <td>Option</td>
+            <td>Field Type</td>
+            <td>Description</td>
+        </tr>
+    </thead>
+    <tbody>
+
+        <tr>
+            <td>primary</td>
+            <td>All types</td>
+            <td>Select field as primary key</td>
+        </tr>
+
+        <tr>
+            <td>size</td>
+            <td>All types</td>
+            <td>Set the field size for numeric and string types</td>
+        </tr>
+
+        <tr>
+            <td>not_null</td>
+            <td>All types</td>
+            <td>Prevent NULL values</td>
+        </tr>
+
+        <tr>
+            <td>default</td>
+            <td>All types</td>
+            <td>Define a default value for the field</td>
+        </tr>
+
+        <tr>
+            <td>after</td>
+            <td>All types</td>
+            <td>Place column after another column (only works with addColumn)</td>
+        </tr>
+
+        <tr>
+            <td>comment</td>
+            <td>All types</td>
+            <td>Add comment to the column</td>
+        </tr>
+
+        <tr>
+            <td>unsigned</td>
+            <td>Numeric</td>
+            <td>Set numeric field as unsigned</td>
+        </tr>
+
+        <tr>
+            <td>precision</td>
+            <td>Numeric</td>
+            <td>Set numeric precision</td>
+        </tr>
+
+        <tr>
+            <td>scale</td>
+            <td>Numeric</td>
+            <td>Work with precision for numeric fields</td>
+        </tr>
+
+        <tr>
+            <td>values</td>
+            <td>Enum</td>
+            <td>Define allowed ENUM values</td>
+        </tr>
+
+        <tr>
+            <td>auto_update</td>
+            <td>Date and Time</td>
+            <td>
+                Automatically sets CURRENT_TIMESTAMP and updates it on row update.
+                Useful for implementing updated_at fields.
+            </td>
+        </tr>
+
+    </tbody>
+</table>
+
+
+
+<table border>
+    <thead>
+        <tr>
+            <td>Option</td>
+            <td>Description</td>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        <tr>
+            <td>engine</td>
+            <td>Set the table engine (default MySQL engine is innoDB)</td>
+        </tr>
+
+        <tr>
+            <td>collation</td>
+            <td>Define table collation such as utf8mb4_unicode_ci</td>
+        </tr>
+
+        <tr>
+            <td>comment</td>
+            <td>Add a comment to the table</td>
+        </tr>
+
+        <tr>
+            <td>row_format</td>
+            <td>Define table row format (default is DYNAMIC)</td>
+        </tr>
+
+    </tbody>
+</table>
+
+
+
+<p>
+    In addition to the default MySQL data types, SigmaPHP also provides special helper types.
+</p>
+
+<table border>
+    <tbody>
+
+        <tr>
+            <td>UUID</td>
+            <td>
+                Automatically generate unique identifiers for records.
+                Requires MySQL version 8.0.13 or higher.
+            </td>
+        </tr>
+
+        <tr>
+            <td>soft_delete</td>
+            <td>
+                Adds a deleted_at column used with the SoftDelete trait in the ORM.
+            </td>
+        </tr>
+
+        <tr>
+            <td>timestamps</td>
+            <td>
+                Adds created_at and updated_at fields automatically.
+            </td>
+        </tr>
+
+    </tbody>
+</table>
+
+<p>Example:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$this-&gt;createTable(
+    'special_types',
+    [
+        ['name' =&gt; 'id', 'type' =&gt; 'uuid'],
+        ['name' =&gt; 'soft_delete'],
+        ['name' =&gt; 'timestamps']
+    ]
+);
+</code></pre>
+</div>
+
+<h4>Update Table</h4>
+
+<p>
+    Updates the properties of an existing table without modifying its columns. This method can be used to change
+    table-level attributes such as the engine, collation, comment, or row format. To modify the structure of the table
+    columns, you should use the column methods instead.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$this-&gt;updateTable(
+    'products',
+    [
+        'comment' =&gt; 'this is products table'
+    ]
+);
+    </code></pre>
+</div>
+
+
+
+<h4>Rename Table</h4>
+<p>
+    Renames an existing table in the database. This is useful when restructuring your schema or adjusting naming
+    conventions without losing the existing table data.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$this-&gt;renameTable(
+    'old_table_name',
+    'new_table_name'
+);
+    </code></pre>
+</div>
+
+
+
+<h4>Check Table Existence</h4>
+<p>
+    Checks whether a specific table exists in the database. This method is useful when writing conditional migrations or
+    ensuring that certain operations are performed only if the table already exists.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$this-&gt;checkTable('users');
+    </code></pre>
+</div>
+
+
+
+<h4>Change Table Primary Key</h4>
+<p>
+    Changes the primary key of a table by replacing the existing primary key with a new one. This is helpful when
+    modifying the structure of a table where the primary identifier needs to be updated.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$this-&gt;changeTablePrimaryKey(
+    'users',
+    'old_table_primary_key',
+    'new_table_primary_key'
+);
+    </code></pre>
+</div>
+
+
+
+<h4>Drop Table</h4>
+<p>
+    Removes a table completely from the database along with all of its data. This operation is usually placed inside the
+    <code>down()</code> method to roll back tables created in the <code>up()</code> migration.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$this-&gt;dropTable('comments');
+    </code></pre>
+</div>
+
+
+
+<h3>Columns Methods</h3>
+
+
+
+<h4>Add Column</h4>
+<p>
+    Adds a new column to an existing table. You must provide the table name, the column name, and an array describing
+    the column type and options such as size, default value, or nullability.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$this-&gt;addColumn(
+    'users',
+    'phone',
+    [
+        'type' =&gt; 'varchar',
+        'size' =&gt; 25
+    ]
+);
+    </code></pre>
+</div>
+
+
+
+<h4>Update Column</h4>
+<p>
+    Modifies the properties of an existing column such as its size, default value, or nullability. This method allows
+    you to evolve your schema without recreating the entire table.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$this-&gt;updateColumn(
+    'users',
+    'phone',
+    [
+        'size' =&gt; 50,
+        'not_null' =&gt; true
+    ]
+);
+    </code></pre>
+</div>
+
+
+
+<h4>Rename Column</h4>
+<p>
+    Changes the name of an existing column while preserving its data. This is useful when adjusting naming conventions
+    or refactoring database structures.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$this-&gt;renameColumn(
+    'users',
+    'phone',
+    'phone_number'
+);
+    </code></pre>
+</div>
+
+
+
+<h4>Check Column Existence</h4>
+<p>
+    Checks whether a specific column exists in a given table. This is commonly used in conditional migrations to prevent
+    errors when running migrations multiple times.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$this-&gt;checkColumn(
+    'users',
+    'phone'
+);
+    </code></pre>
+</div>
+
+<h4>Drop Column</h4>
+
+<p>
+    Removes a column from a table along with all data stored in that column. This operation is typically used when
+    cleaning up obsolete fields in the database schema.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$this-&gt;dropColumn(
+    'users',
+    'phone'
+);
+    </code></pre>
+</div>
+
+<h3>Index Methods</h3>
+
+<h4>Add Index</h4>
+<p>
+    Creates a new index on one or more columns in a table. Indexes improve query performance by allowing the database
+    engine to locate rows more efficiently. SigmaPHP supports multiple index types such as normal, unique, fulltext, and
+    descending indexes.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$this-&gt;addIndex(
+    'table_name',
+    'index_name',
+    ['columns' .....],
+    'index_type',
+    ['fields_order']
+);
+    </code></pre>
+</div>
+
+<table border>
+    <tbody>
+        <tr>
+            <td>table_name</td>
+            <td>The table where the index will be created.</td>
+        </tr>
+        <tr>
+            <td>index_name</td>
+            <td>The name assigned to the index.</td>
+        </tr>
+        <tr>
+            <td>columns</td>
+            <td>The column or columns included in the index.</td>
+        </tr>
+        <tr>
+            <td>index_type</td>
+            <td>The type of index such as normal, unique, fulltext, or descending.</td>
+        </tr>
+        <tr>
+            <td>order</td>
+            <td>Defines the sorting order for each indexed column.</td>
+        </tr>
+    </tbody>
+</table>
+
+
+
+<p>Example:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$this-&gt;addIndex(
+    'users',
+    'user_index',
+    ['name', 'email'],
+    'normal',
+    [
+        'name' =&gt; 'desc',
+        'email' =&gt; 'asc'
+    ]
+);
+    </code></pre>
+</div>
+
+
+
+<h4>Check Index</h4>
+<p>
+    Checks whether a specific index exists on a table. This method helps prevent duplicate indexes and allows safer
+    schema updates.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$this-&gt;checkIndex(
+    'users',
+    'user_index'
+);
+    </code></pre>
+</div>
+
+
+
+<h4>Drop Index</h4>
+<p>
+    Removes an existing index from a table. This can be useful when optimizing queries or restructuring database
+    indexes.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$this-&gt;dropIndex(
+    'users',
+    'user_index'
+);
+    </code></pre>
+</div>
+
+
+
+<h3>Foreign Key Methods</h3>
+
+
+
+<h4>Add Foreign Key</h4>
+
+<p>
+    Creates a foreign key constraint between two tables. Foreign keys enforce referential integrity by ensuring that
+    values in the local table correspond to valid records in the referenced table.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$this-&gt;addForeignKey(
+    'constraint',
+    'localTable',
+    ['localIds' ......],
+    'referenceTable',
+    ['foreignIds' ......],
+    ['options']
+);
+    </code></pre>
+</div>
+
+<table border>
+    <tbody>
+        <tr>
+            <td>constraint</td>
+            <td>The name of the foreign key constraint.</td>
+        </tr>
+        <tr>
+            <td>localTable</td>
+            <td>The table where the foreign key will be created.</td>
+        </tr>
+        <tr>
+            <td>localIds</td>
+            <td>The column or columns in the local table that reference another table.</td>
+        </tr>
+        <tr>
+            <td>referenceTable</td>
+            <td>The table that the foreign key references.</td>
+        </tr>
+        <tr>
+            <td>foreignIds</td>
+            <td>The referenced columns in the foreign table.</td>
+        </tr>
+        <tr>
+            <td>options</td>
+            <td>Additional options such as actions on delete or update.</td>
+        </tr>
+    </tbody>
+</table>
+
+
+
+<p>Example:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$this-&gt;addForeignKey(
+    'test_foreign_key',
+    'test',
+    'id',
+    'test2',
+    'id',
+    [
+        'on_delete' =&gt; 'NO ACTION',
+        'on_update' =&gt; 'NO ACTION',
+    ]
+);
+    </code></pre>
+</div>
+
+
+
+<h4>Check Foreign Key</h4>
+
+<p>
+    Checks whether a foreign key constraint exists on a specific table. This method is useful when writing safe
+    migrations that may run multiple times.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$this-&gt;checkForeignKey(
+    'users',
+    'user_foreign_key'
+);
+    </code></pre>
+</div>
+
+
+
+<h4>Drop Foreign Key</h4>
+<p>
+    Removes an existing foreign key constraint from a table. This may be required when restructuring relationships
+    between tables.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$this-&gt;dropForeignKey(
+    'users',
+    'user_foreign_key'
+);
+    </code></pre>
+</div>
+
+
+
+
+<h3>Default Migration Templates</h3>
+
+<p>
+    The SigmaPHP CLI tool provides built-in migration templates for the most common database operations, such as
+    creating new tables and adding columns to existing tables. To take advantage of these templates, simply name your
+    migration file according to the predefined template naming pattern.
+</p>
+
+<h4>Create Table Migration Template</h4>
+
+<p>
+    SigmaPHP can automatically generate a migration template for creating a new table.
+    To use this feature, simply name your migration using the pattern
+    <strong>CreateXXXXXXXXTable</strong>, where <strong>XXXXXXXX</strong> represents the table name.
+</p>
+
+<p>
+    For example, to generate a migration template for creating a <strong>posts</strong> table, run the following
+    command:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli create:migration CreatePostsTable
+</code></pre>
+</div>
+
+<p>
+    This command will generate a new migration file named
+    <strong>CreatePostsTableMigration.php</strong> with the following default structure:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+use SigmaPHP\DB\Migrations\Migration;
+
+class CreatePostsTableMigration extends Migration
+{
+    /**
+     * @return void
+     */
+    public function up()
+    {
+        $this-&gt;createTable(
+            'posts',
+            [
+                ['name' =&gt; 'id', 'type' =&gt; 'bigint', 'primary' =&gt; true],
+                /**
+                 * add your columns !
+                 */
+                ['name' =&gt; 'timestamps']
+            ]
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function down()
+    {
+        $this-&gt;dropTable('posts');
+    }
+}
+</code></pre>
+</div>
+
+<p>
+    The generated template already includes a basic table structure and a rollback implementation.
+    You can simply add your desired columns inside the <strong>createTable()</strong> method.
+</p>
+
+<h4>Add Column Migration Template</h4>
+
+<p>
+    SigmaPHP can also generate a migration template for adding a new column to an existing table.
+    To use this feature, follow the naming pattern
+    <strong>AddColumnXXXXXXXXToYYYYYYYYTable</strong>, where
+    <strong>XXXXXXXX</strong> represents the column name and
+    <strong>YYYYYYYY</strong> represents the table name.
+</p>
+
+<p>
+    For example, to add a <strong>size</strong> column to the <strong>post_images</strong> table, run:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli create:migration AddColumnSizeToPostImagesTable
+</code></pre>
+</div>
+
+<p>
+    This command will generate the file <strong>AddColumnSizeToPostImagesTableMigration.php</strong>
+    with the following default template:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+use SigmaPHP\DB\Migrations\Migration;
+
+class AddColumnSizeToPostImagesTableMigration extends Migration
+{
+    /**
+     * @return void
+     */
+    public function up()
+    {
+        $this-&gt;addColumn(
+            'post_images',
+            'size',
+            [
+                'type' =&gt; 'SET_COLUMN_TYPE',
+                // other options
+            ]
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function down()
+    {
+        $this-&gt;dropColumn('post_images', 'size');
+    }
+}
+</code></pre>
+</div>

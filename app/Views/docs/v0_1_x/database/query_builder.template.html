@@ -1,0 +1,443 @@
+<p>
+    For developers who prefer communicating directly with the database instead of using an ORM, SigmaPHP provides a fast
+    and lightweight Query Builder. It converts simple PHP method calls into SQL statements that run directly on your
+    database and return the result.
+</p>
+
+<p>
+    To start using the Query Builder, simply retrieve an instance from the container using
+    <code>container('query_builder')</code>.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$queryBuilder = container('query_builder');
+
+$queryBuilder-&gt;table('users')
+    -&gt;select(['name', 'age'])
+    -&gt;get();
+</code></pre>
+</div>
+
+<p>
+    SigmaPHP Query Builder returns results as associative arrays. For example, the query above would return a structure
+    similar to the following:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+[
+    'name' =&gt; 'john doe',
+    'age' =&gt; 30
+]
+</code></pre>
+</div>
+
+<p>Below is the list for all available methods:</p>
+
+<h4>table(string $tableName)</h4>
+
+<p>
+    The <code>table</code> method defines the table on which the query will be executed. Every query should start by
+    specifying the target table. You can also define an alias for the table if needed.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+// getting all users
+$queryBuilder-&gt;table('users')-&gt;getAll();
+
+// setting a table alias
+$queryBuilder-&gt;table('users as u')-&gt;getAll();
+</code></pre>
+</div>
+
+
+<h4>select(array $fields)</h4>
+
+<p>
+    The <code>select</code> method defines the columns to be returned by the query. Fields may also include aliases or
+    aggregate functions.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+// select specific fields
+$queryBuilder
+    -&gt;table('users')
+    -&gt;select(['name', 'email'])
+    -&gt;getAll();
+
+// alias fields
+$queryBuilder
+    -&gt;table('users')
+    -&gt;select([
+        'name as n',
+        'email as e'
+    ])
+    -&gt;getAll();
+
+// aggregate functions
+$queryBuilder
+    -&gt;table('users')
+    -&gt;select(['count(*) as users_count'])
+    -&gt;get();
+
+$queryBuilder
+    -&gt;table('users')
+    -&gt;select(['avg(age) as users_age_avg'])
+    -&gt;get();
+</code></pre>
+</div>
+
+
+<h4>where(string $column, string $operator, string $value)</h4>
+
+<p>
+    The <code>where</code> method adds a condition to the query. Only one base <code>where</code> clause can be used,
+    while additional conditions should be chained using <code>andWhere</code> or <code>orWhere</code>.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+// basic condition
+$queryBuilder
+    -&gt;table('users')
+    -&gt;select(['name', 'email', 'address'])
+    -&gt;where('id', '=', 5)
+    -&gt;get();
+
+// numeric condition
+$queryBuilder
+    -&gt;table('users')
+    -&gt;where('age', '&gt;=', 18)
+    -&gt;getAll();
+
+// like condition
+$queryBuilder
+    -&gt;table('users')
+    -&gt;where('name', 'like', '%test%')
+    -&gt;getAll();
+
+// null condition
+$queryBuilder
+    -&gt;table('users')
+    -&gt;where('address', 'is not', 'null')
+    -&gt;getAll();
+
+// date condition
+$queryBuilder
+    -&gt;table('users')
+    -&gt;where(
+        'date(joined_at)', '=', 'date_sub(now(),interval 3 year)'
+    )
+    -&gt;getAll();
+</code></pre>
+</div>
+
+
+<h4>andWhere(string $column, string $operator, string $value)</h4>
+
+<p>
+    Adds an additional condition to the query using the logical AND operator.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$queryBuilder
+    -&gt;table('users')
+    -&gt;select(['name', 'email', 'address'])
+    -&gt;where('age', '&gt;=', 18)
+    -&gt;andWhere('address', 'is not', 'null')
+    -&gt;getAll();
+</code></pre>
+</div>
+
+
+<h4>orWhere(string $column, string $operator, string $value)</h4>
+
+<p>
+    Adds an additional condition using the logical OR operator.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$queryBuilder
+    -&gt;table('users')
+    -&gt;select(['name', 'email', 'address'])
+    -&gt;where('address', 'is not', 'null')
+    -&gt;orWhere('city', '=', 'test')
+    -&gt;getAll();
+</code></pre>
+</div>
+
+
+<h4>whereBetween(string $column, int $min, int $max)</h4>
+
+<p>
+    Filters results where a column value falls between two numbers.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$queryBuilder
+    -&gt;table('users')
+    -&gt;whereBetween('age', 10, 15)
+    -&gt;getAll();
+</code></pre>
+</div>
+
+
+<h4>whereIn(string $column, array $values)</h4>
+
+<p>
+    Filters records where the column value matches one of the provided values.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$queryBuilder
+    -&gt;table('users')
+    -&gt;select(['name', 'email'])
+    -&gt;whereIn('city', ['test1', 'test2'])
+    -&gt;getAll();
+</code></pre>
+</div>
+
+
+<h4>having(string $column, string $operator, string $value)</h4>
+
+<p>
+    Adds a HAVING clause to filter grouped results, usually used with aggregate functions.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$queryBuilder
+    -&gt;table('users')
+    -&gt;select(['name', 'email', 'avg(age) as age_avg'])
+    -&gt;having('age_avg', '&lt;', '20')
+    -&gt;getAll();
+</code></pre>
+</div>
+
+
+<h4>distinct()</h4>
+
+<p>
+    Removes duplicated records from the result set.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$queryBuilder
+    -&gt;table('users')
+    -&gt;select(['name'])
+    -&gt;distinct()
+    -&gt;getAll();
+</code></pre>
+</div>
+
+
+<h4>limit(int $count, int $offset)</h4>
+
+<p>
+    Limits the number of records returned. You can optionally provide an offset to control where the results start.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+// fetch first 5 users
+$queryBuilder
+    -&gt;table('users')
+    -&gt;select(['name', 'email'])
+    -&gt;limit(5)
+    -&gt;getAll();
+
+// fetch 10 users starting from offset 15
+$queryBuilder
+    -&gt;table('users')
+    -&gt;select(['name', 'email'])
+    -&gt;limit(10, 15)
+    -&gt;getAll();
+</code></pre>
+</div>
+
+
+<h4>orderBy(array $columns)</h4>
+
+<p>
+    Sorts results based on one or more columns in ascending or descending order.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$queryBuilder
+    -&gt;table('users')
+    -&gt;orderBy(['id asc', 'name desc'])
+    -&gt;getAll();
+</code></pre>
+</div>
+
+
+<h4>groupBy(array $columns)</h4>
+
+<p>
+    Groups records by one or more columns.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$queryBuilder
+    -&gt;table('users')
+    -&gt;groupBy(['id', 'name'])
+    -&gt;getAll();
+</code></pre>
+</div>
+
+
+<h4>union(QueryBuilder $query, bool $all)</h4>
+
+<p>
+    Combines the result of two queries. The second parameter controls whether duplicate values are included.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$query1 = new QueryBuilder($connection);
+
+$query1
+    -&gt;table('customers')
+    -&gt;select(['id', 'name']);
+
+$query2 = new QueryBuilder($connection);
+
+$query2
+    -&gt;table('users')
+    -&gt;select(['id', 'name'])
+    -&gt;union($query1, true)
+    -&gt;getAll();
+</code></pre>
+</div>
+
+
+<h4>join(string $table, string $column1, string $operator, string $column2, string $type)</h4>
+
+<p>
+    Joins multiple tables together. The default join type is INNER JOIN, but other join types can be specified using the
+    <code>$type</code> parameter.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$this-&gt;queryBuilder
+    -&gt;table('users')
+    -&gt;select(['users.name as username', 'roles.name as role'])
+    -&gt;join('roles', 'users.role_id', '=', 'roles.id')
+    -&gt;getAll();
+
+$this-&gt;queryBuilder
+    -&gt;table('users as u')
+    -&gt;select(['u.name', 'r.name'])
+    -&gt;join('roles as r', 'u.role_id', '=', 'r.id')
+    -&gt;getAll();
+</code></pre>
+</div>
+
+
+<h4>get()</h4>
+
+<p>
+    Fetches a single record from the query.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$queryBuilder-&gt;table('users')-&gt;get();
+</code></pre>
+</div>
+
+
+<h4>getAll()</h4>
+
+<p>
+    Fetches all matching records from the query.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$queryBuilder-&gt;table('users')-&gt;getAll();
+</code></pre>
+</div>
+
+
+<h4>print()</h4>
+
+<p>
+    The <code>print</code> method outputs the SQL query that will be executed. This is useful for debugging, testing, or
+    optimizing queries.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+echo $queryBuilder-&gt;table('users')-&gt;print();
+
+// output example
+SELECT * FROM test;
+</code></pre>
+</div>

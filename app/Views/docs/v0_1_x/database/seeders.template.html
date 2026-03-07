@@ -1,0 +1,244 @@
+<p>
+    After creating your database schema using Migrations, you will usually need to populate your tables with initial
+    data so you can start working on your application. This is where Seeders come into play.
+</p>
+
+<p>
+    A seeder is a class responsible for inserting data into database tables. Seeders are commonly used for tasks such as
+    creating roles and permissions, defining product categories, or inserting initial users that can log into the
+    system.
+</p>
+
+<h3>Creating new Seeder</h3>
+
+<p>
+    To create a new seeder file, run the following command in your terminal. Note that you do not need to include the
+    word "Seeder" in the name, as it will be automatically appended by SigmaPHP.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli create:seeder Products
+    </code></pre>
+</div>
+
+<p>
+    This command will generate a new file called <strong>ProductsSeeder.php</strong> inside the default seeders
+    directory:
+</p>
+
+<p>
+    <code>database/seeders</code>
+</p>
+
+<p>
+    If you want to customize the location where seeder files are stored, you can change the path in the
+    <code>database.php</code> configuration file. For more details, please refer to the Configurations section.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+/**
+ * Default path for seeders.
+ */
+'path_to_seeders' => env('PATH_TO_SEEDERS', '/database/seeders'),
+    </code></pre>
+</div>
+
+<p>
+    After opening the generated seeder file, you will notice the default template which contains the <code>run()</code>
+    method. All seeding logic should be written inside this method.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+use SigmaPHP\DB\Seeders\Seeder;
+
+class ProductsSeeder extends Seeder
+{
+    /**
+    * @return void
+    */
+    public function run()
+    {
+        // your instructions
+    }
+}
+    </code></pre>
+</div>
+
+<h3>Running Seeders</h3>
+
+<p>
+    Once your seeders are ready, you can execute them using the SigmaPHP CLI tool.
+</p>
+
+<p>
+    To run all seeders:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+// run all seeders
+./bin/sigma-cli seed
+    </code></pre>
+</div>
+
+<p>
+    You can also execute a specific seeder by providing its class name:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+// run specific seeder
+./bin/sigma-cli seed ProductsSeeder
+    </code></pre>
+</div>
+
+<h3>Available Methods</h3>
+
+<h4>Insert Data</h4>
+
+<p>
+    The <code>insert()</code> method allows you to insert one or multiple rows into a database table.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+use SigmaPHP\DB\Seeders\Seeder;
+
+class ProductsSeeder extends Seeder
+{
+    /**
+    * @return void
+    */
+    public function run()
+    {
+        $this->insert(
+            'products',
+            [
+                ['name' => 'Cell Phone', 'price' => 100.00],
+                ['name' => 'Laptop', 'price' => 500.00],
+                ['name' => 'TV', 'price' => 1000.00],
+            ]
+        );
+    }
+}
+    </code></pre>
+</div>
+
+<h4>Update Data</h4>
+
+<p>
+    The <code>update()</code> method updates existing rows in a table based on a given condition.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+use SigmaPHP\DB\Seeders\Seeder;
+
+class ProductsSeeder extends Seeder
+{
+    /**
+    * @return void
+    */
+    public function run()
+    {
+        $this->update(
+            'products',
+            ['price' => 200.00], // update values
+            ['name' => 'Cell Phone'] // search condition
+        );
+    }
+}
+    </code></pre>
+</div>
+
+<h4>Delete Data</h4>
+
+<p>
+    The <code>delete()</code> method removes records from a table based on a specified condition.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+use SigmaPHP\DB\Seeders\Seeder;
+
+class ProductsSeeder extends Seeder
+{
+    /**
+    * @return void
+    */
+    public function run()
+    {
+        $this->delete(
+            'products',
+            ['name' => 'Cell Phone'] // search condition
+        );
+    }
+}
+    </code></pre>
+</div>
+
+<p>
+    <strong>Note:</strong> The condition parameter can be omitted. However, doing so will delete all records from the
+    specified table.
+</p>
+
+<h3>Using the Query Builder</h3>
+
+<p>
+    SigmaPHP-DB also provides a Query Builder that can be used directly inside seeders when more advanced database
+    operations are required.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+use SigmaPHP\DB\Seeders\Seeder;
+
+class ProductsSeeder extends Seeder
+{
+    /**
+    * @return void
+    */
+    public function run()
+    {
+        $category = $this->queryBuilder
+            ->table('product_categories')
+            ->where('id', '=', 5)
+            ->get();
+
+        $this->update(
+            'products',
+            [
+                'category' => $category['name']
+            ]
+        );
+    }
+}
+    </code></pre>
+</div>
+
+<p>
+    To learn more about the query builder and its available features, please refer to the <a
+        href="/docs/{{ config('app.framework_version') }}/query_builder">Query Builder</a> Documentation.
+</p>
