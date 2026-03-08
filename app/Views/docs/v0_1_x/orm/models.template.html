@@ -1,0 +1,386 @@
+<p>
+    SigmaPHP framework provides an ORM that allows you to interact with and control your database data without writing
+    SQL queries. Instead, you work with plain PHP objects. The ORM maps your database table columns to model properties,
+    allowing you to read, update, and manipulate data using simple object-oriented syntax.
+</p>
+
+<h3>Creating Models</h3>
+
+<p>
+    For convenience, the SigmaPHP CLI tool provides a command to generate a new model automatically.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+./bin/sigma-cli create:model Product
+    </code></pre>
+</div>
+
+<p>
+    The command above will create new Model <code>Product</code> inside the <code>app/Models</code> directory.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+namespace App\Models;
+
+use SigmaPHP\Core\Models\BaseModel;
+
+class Product extends BaseModel
+{
+// The ORM will automatically determine the table name and columns
+}
+    </code></pre>
+</div>
+
+<p>
+    This command will also generate a corresponding migration file to create the database table associated with the
+    model. Both the model and the migration file will be placed in their default directories.
+</p>
+
+<p>
+    To customize these paths, open the <code>database.php</code> configuration file and update the following settings:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+ /**
+   * Default path for migration files.
+   */
+'path_to_migrations' => env('PATH_TO_MIGRATIONS', '/database/migrations'),
+
+...
+
+/**
+  * Default path for migrations files.
+  */
+'path_to_models' => env('PATH_TO_MODELS', '/app/Models'),
+    </code></pre>
+</div>
+
+<p>
+    By default, the ORM automatically determines the table name and retrieves its fields. It assumes the table name is
+    the plural form of the model class name. For example, a model named <code>Product</code> will correspond to a table
+    named <code>products</code>.
+</p>
+
+<p>
+    The default primary key is <code>id</code>. If you need to customize the table name, primary key, or fields, you can
+    override the corresponding properties in your model.
+</p>
+
+<div class="alert alert-info">
+    <div class="alert-content">
+        <p>
+            Additionally, if you want to use UUIDv4 as the primary key, you can enable this by setting the
+            <code>$uuid</code>
+            property to <code>true</code>. Make sure the primary key column in your migration uses a compatible data
+            type such
+            as <code>CHAR</code>, <code>BINARY</code>, or the custom <code>uuid</code> type.
+        </p>
+    </div>
+</div>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+namespace App\Models;
+
+use SigmaPHP\Core\Models\BaseModel;
+
+class User extends BaseModel
+{
+protected $table = 'users_table';
+
+protected $primary = 'user_id';
+
+protected $uuid = true;
+
+protected $fields = ['user_id', 'name', 'age'];
+```
+
+} </code></pre>
+
+</div>
+
+<h3>Working with Models</h3>
+
+<p>
+    There are two main ways to create a new instance of a model: using the <code>create()</code> method or the
+    <code>save()</code> method.
+</p>
+
+<h4>Using the create Method</h4>
+
+<p>
+    The <code>create()</code> method accepts an array of data and returns a new model instance.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$userModel = new User();
+
+$newUser = $userModel->create([
+'name' => 'John Doe',
+'age' => 35
+]);
+
+echo $newUser->name;
+    </code></pre>
+</div>
+
+<h4>Using the save Method</h4>
+
+<p>
+    The <code>save()</code> method can be used for both creating and updating models. In this case, you assign the field
+    values manually before saving.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$newUser = new User();
+
+$newUser->name = 'John Doe';
+$newUser->age = 35;
+
+$newUser->save();
+
+echo $newUser->name;
+    </code></pre>
+</div>
+
+<h3>Retrieve Models Data</h3>
+
+<p>
+    The ORM provides several methods to retrieve data from the database.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+// fetch single model
+$user = $userModel->first();
+
+// fetch all models
+$users = $userModel->all();
+
+// count all models
+$usersCount = $userModel->count();
+
+// find by primary key
+$user = $userModel->find(5);
+
+// find by field
+$user = $userModel->findBy('age', 35); </code></pre>
+
+</div>
+
+<p>
+    You can also build more advanced queries using conditional methods.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+// basic where
+$user = $userModel
+    ->where('email', 'like', '%@testing.com')
+    ->first();
+
+// and where
+$usersCount = $userModel
+    ->where('age', '>=', 35)
+    ->andWhere('gender', '=', 'male')
+    ->count();
+
+// or where
+$users = $userModel
+    ->where('name', 'like', '%test%')
+    ->orWhere('role', 'in', '("super admin", "admin")')
+    ->all();
+
+// search by relation
+$user = $userModel
+    ->whereHas('posts', 'published_at', 'is', 'null')
+    ->first();
+
+// check if relation exists
+$users = $userModel
+    ->whereHas('posts')
+    ->all();
+    </code></pre>
+</div>
+
+<h3>Update Model</h3>
+
+<p>
+    To update a model, retrieve it first, modify its properties, then call the <code>save()</code> method.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$user = $userModel->find(15);
+
+$user->name = 'Mohamed';
+
+$user->save();
+    </code></pre>
+</div>
+
+<h3>Delete Model</h3>
+
+<p>
+    Deleting a model is straightforward. Simply retrieve the model and call the <code>delete()</code> method.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$user = $userModel->find(15);
+
+$user->delete();
+    </code></pre>
+</div>
+
+<h3>Soft Delete</h3>
+
+<p>
+    The ORM supports soft deletion, which allows records to be marked as deleted without being permanently removed from
+    the database.
+</p>
+
+<div class="alert alert-success">
+    <div class="alert-content">
+        <p>
+            To enable this feature, your table must contain a <code>deleted_at</code> column. Which you can add using migrations:
+        </p>
+
+        <div class="code-card">
+            <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+            <pre><code class="language-php">
+    $this-&gt;createTable(
+        'products',
+        [
+            ['name' =&gt; 'id', 'type' =&gt; 'uuid'],
+            ...
+            ['name' =&gt; 'soft_delete'],
+            ['name' =&gt; 'timestamps']
+        ]
+    );
+            </code></pre>
+        </div>
+    </div>
+</div>
+
+<p>
+    You can then enable soft deletes by using the <code>SoftDelete</code> trait in your model.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+namespace App\Models;
+
+use SigmaPHP\Core\Models\BaseModel;
+use SigmaPHP\DB\Traits\SoftDelete;
+
+class Product extends BaseModel
+{
+use SoftDelete;
+}
+    </code></pre>
+</div>
+
+<p>
+    After enabling the trait, calling <code>delete()</code> will update the <code>deleted_at</code> field instead of
+    permanently removing the record.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$product = $productModel->find(7);
+
+$product->delete();
+    </code></pre>
+</div>
+
+<p>
+    The SoftDelete trait also provides several additional helper methods.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+// include soft deleted models
+$allProducts = $productModel->withTrashed()->all();
+
+// check if a model is soft deleted
+$isDeleted = $product->isTrashed();
+
+// restore a soft deleted model
+$product->restore();
+
+// fetch only soft deleted models
+$onlyTrashedProducts = $productModel->onlyTrashed()->all();
+
+// permanently delete a soft deleted model by
+// setting $forceHardDelete parameter to true
+$product->delete(true);
+    </code></pre>
+</div>
+
+<p>
+    You can also configure the model to always include soft-deleted records in queries by setting the
+    <code>$fetchTrashed</code> property to <code>true</code>.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+namespace App\Models;
+
+use SigmaPHP\Core\Models\BaseModel;
+use SigmaPHP\DB\Traits\SoftDelete;
+
+class Product extends BaseModel
+{
+use SoftDelete;
+
+```
+protected $fetchTrashed = true;
+```
+
+}
+    </code></pre>
+</div>

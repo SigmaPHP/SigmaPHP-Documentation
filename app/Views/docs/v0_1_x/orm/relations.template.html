@@ -1,0 +1,147 @@
+<p>
+    The ORM supports relationships between models using the <code>hasRelation()</code> method. This method retrieves
+    related models based on a foreign key and primary key relationship between two tables.
+</p>
+
+<p>
+    In relational databases, relationships are usually established by storing the primary key of one table
+    inside another table as a foreign key. The <code>hasRelation()</code> method simply uses this principle to
+    automatically retrieve related records by matching those keys.
+</p>
+
+<p>
+    For example, if a <code>User</code> model has many <code>Post</code> models, you can define the relationship in the
+    User model as follows:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+namespace App\Models;
+
+use SigmaPHP\Core\Models\BaseModel;
+
+class User extends BaseModel
+{
+    public function posts()
+    {
+        return $this->hasRelation(
+            Post::class,
+            'user_id',
+            'id'
+        );
+    }
+}
+    </code></pre>
+</div>
+
+<p>
+    In this example, the ORM will retrieve all records from the <code>posts</code> table where the
+    <code>user_id</code> column matches the current user's <code>id</code>. Internally, this is equivalent to a query
+    similar to:
+</p>
+
+<pre><code>
+SELECT * FROM posts WHERE user_id = {user.id}
+</code></pre>
+
+<p>
+    The <code>hasRelation()</code> method accepts three parameters:
+</p>
+
+<table border>
+    <tr>
+        <td>$model</td>
+        <td>The related model class</td>
+    </tr>
+    <tr>
+        <td>$foreignKey</td>
+        <td>The foreign key in the related table</td>
+    </tr>
+    <tr>
+        <td>$localKey</td>
+        <td>The local key used to match the foreign key</td>
+    </tr>
+</table>
+
+<p>
+    You can then retrieve the related models by calling the relationship method.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$user = $userModel->findBy('name', 'test');
+
+$posts = $user->posts();
+</code></pre>
+</div>
+
+<p>
+    In this case, the relationship represents a <strong>one-to-many</strong> association: one user can have many posts.
+</p>
+
+<p>
+    For the reverse relation, which in our example means retrieving the author of a post, the same
+    <code>hasRelation()</code> method can be used again. However, this time the relationship is reversed,
+    so the <code>$localKey</code> and <code>$foreignKey</code> must be swapped.
+</p>
+
+<p>
+    This works because the ORM simply compares the two values. When retrieving posts from a user,
+    we match:
+</p>
+
+<pre><code>
+posts.user_id = users.id
+</code></pre>
+
+<p>
+    But when retrieving the user from a post, the comparison becomes:
+</p>
+
+<pre><code>
+users.id = posts.user_id
+</code></pre>
+
+<p>
+    Since the comparison direction is reversed, the keys must also be reversed when calling
+    <code>hasRelation()</code>.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+namespace App\Models;
+
+use SigmaPHP\Core\Models\BaseModel;
+
+class Product extends BaseModel
+{
+    public function author()
+    {
+        return $this->hasRelation(
+            User::class,
+            'id',
+            'user_id',
+        );
+    }
+}
+    </code></pre>
+</div>
+
+<p>
+    In this case, the ORM will retrieve the <code>User</code> whose <code>id</code> matches the
+    <code>user_id</code> stored in the current post record.
+</p>
+
+<p>
+    Using the same method for both directions keeps the API simple while still allowing you to
+    define different types of relationships depending on how the keys are mapped between models.
+</p>
