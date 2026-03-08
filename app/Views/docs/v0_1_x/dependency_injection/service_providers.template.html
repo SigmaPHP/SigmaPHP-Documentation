@@ -1,0 +1,216 @@
+<p>
+    SigmaPHP uses a <strong>Service Container</strong> to manage application dependencies and enable
+    <strong>Dependency Injection (DI)</strong>. Instead of manually creating and passing objects throughout
+    your application, the container acts as a central registry that knows how to build and provide
+    the services your application requires.
+</p>
+
+<p>
+    A <strong>service</strong> can be any reusable object in your application such as database connections,
+    loggers, mailers, configuration loaders, or any custom component you define.
+    By registering these services in the container, SigmaPHP can resolve and inject them wherever
+    they are needed.
+</p>
+
+<h3>What is the Container?</h3>
+
+<p>
+    The <code>Container</code> is responsible for storing and resolving service definitions.
+    Whenever a class or component requires a dependency, the container will create or return
+    the appropriate instance.
+</p>
+
+<p>
+    This approach keeps your application loosely coupled and makes components easier to maintain,
+    test, and extend.
+</p>
+
+<h3>How the Kernel Glues Everything Together</h3>
+
+<p>
+    During the application bootstrap process, the <strong>Kernel</strong> initializes the framework and
+    loads all configured service providers. The kernel creates a container instance and then
+    executes each provider in two stages: <code>register</code> and <code>boot</code>.
+</p>
+
+<p>
+    This lifecycle ensures that all services are first defined and registered inside the container
+    before any service attempts to interact with another dependency.
+</p>
+
+<p>
+    In short, the process looks like this:
+</p>
+
+<pre><code>
+Kernel starts
+      ↓
+Container is created
+      ↓
+All Service Providers → register()
+      ↓
+All Service Providers → boot()
+      ↓
+Application is ready
+</code></pre>
+
+<div class="alert alert-success">
+    <div class="alert-content">
+        <p>
+            Once services are registered in the container, SigmaPHP can automatically inject them into controllers and
+            action
+            methods. This means you do not need to manually create objects or manage their dependencies—the container
+            will
+            resolve and provide them when needed. For example, if a controller requires a <code>Logger</code> service,
+            you can
+            simply type-hint it in the constructor and the container will automatically supply the correct instance when
+            the
+            controller is created.
+        </p>
+
+        <div class="code-card">
+            <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+            <pre><code class="language-php">
+&lt;?php
+
+namespace App\Controllers;
+
+use App\Services\Logger;
+
+class UserController
+{
+    protected $logger;
+
+    public function __construct(Logger $logger)
+    {
+        $this->logger = $logger;
+    }
+
+    public function index()
+    {
+        $this->logger->info('Users page visited');
+    }
+}
+            </code></pre>
+        </div>
+
+        <p>
+            The container detects the <code>Logger</code> dependency, resolves it from the registered services,
+            and injects it automatically when the controller is instantiated.
+        </p>
+    </div>
+</div>
+
+<h3>Service Providers</h3>
+
+<p>
+    Service Providers are the main place where services are registered inside the container.
+    They allow you to organize your application's dependencies in a clear and structured way.
+</p>
+
+<p>
+    Each provider must implement the <code>ServiceProviderInterface</code>.
+    This interface requires two methods to be implemented.
+</p>
+
+<h3>Creating a Service Provider</h3>
+
+<p>
+    SigmaPHP provides a CLI command that can generate a new service provider automatically.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli create:service-provider AppServiceProvider
+</code></pre>
+</div>
+
+<p>
+    This command will create a new provider class inside your application's providers directory.
+</p>
+
+<h3>Using Service Providers</h3>
+
+<p>
+    The <code>ServiceProviderInterface</code> requires two methods to be implemented in your service provider:
+</p>
+
+<ul>
+    <li>
+        <strong>register(Container $container): void</strong><br>
+        The register method has access to the current instance of the container. It is used to
+        define and register dependencies that do not perform any operations or depend on other
+        services during initialization.
+    </li>
+
+    <li>
+        <strong>boot(Container $container): void</strong><br>
+        The boot method is similar to the register method, but it is executed only after all
+        services have been registered in the container. This makes it the ideal place to perform
+        operations that rely on other services.
+    </li>
+</ul>
+
+<h3>Example Service Provider</h3>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+namespace App\Providers;
+
+use SigmaPHP\Container\Interfaces\ServiceProviderInterface;
+use SigmaPHP\Container\Container;
+
+/**
+ * App Service Provider Class
+ */
+class AppServiceProvider implements ServiceProviderInterface
+{
+    /**
+     * The boot method , will be called after all
+     * dependencies were defined in the container.
+     *
+     * @param Container $container
+     * @return void
+     */
+    public function boot(Container $container)
+    {
+        shareTemplateVariable([
+            'githubLink' => 'https://github.com/agashe/SigmaPHP',
+            'docsLink' => 'https://www.sigmaphp.com/docs'
+        ]);
+    }
+
+    /**
+     * Add a definition to the container.
+     *
+     * @param Container $container
+     * @return void
+     */
+    public function register(Container $container)
+    {
+        //
+    }
+}
+</code></pre>
+</div>
+
+<p>
+    In this example, the provider uses the <code>boot()</code> method to share global variables with
+    the template engine after the application has been fully initialized.
+</p>
+
+<p>
+    As your application grows, you may create multiple service providers to organize different
+    parts of your system such as database services, authentication, caching, or third-party
+    integrations.
+</p>
+
+<p>
+    Using service providers together with the container allows SigmaPHP to maintain a clean
+    architecture where dependencies are defined in one place and resolved automatically
+    throughout the application.
+</p>

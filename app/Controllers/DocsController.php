@@ -90,7 +90,7 @@ class DocsController extends BaseController
 
         // !! For Testing Only !!
         $page->content = $this->renderView(
-            'docs/v0_1_x/orm/relations',
+            'docs/v0_1_x/dependency_injection/service_providers',
             compact('versions', 'hierarchy', 'page')
         );
 
