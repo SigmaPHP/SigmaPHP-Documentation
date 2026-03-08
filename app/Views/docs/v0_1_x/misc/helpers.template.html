@@ -1,0 +1,179 @@
+<p>
+    SigmaPHP provides a set of global helper functions that simplify common tasks across the framework.
+    These helpers are available everywhere in your application, including controllers, models, services,
+    and even inside views and templates.
+</p>
+
+<p>
+    They are designed to reduce boilerplate code and provide quick access to frequently used framework
+    features such as the container, configuration, routing utilities, and debugging tools.
+</p>
+
+<h4>d(...)</h4>
+
+<p>
+    A simple debugging helper that prints the contents of a variable in a readable format.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+d($user);
+</code></pre>
+</div>
+
+<h4>dd(...)</h4>
+
+<p>
+    Debug and terminate execution. This helper prints the variable and immediately stops the script.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+dd($users);
+</code></pre>
+</div>
+
+<h4>version()</h4>
+
+<p>
+    Returns the current SigmaPHP framework version.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+echo version();
+</code></pre>
+</div>
+
+<h4>container()</h4>
+
+<p>
+    Access the service container or retrieve a specific service from it.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$router = container('query_builder');
+</code></pre>
+</div>
+
+<h4>env()</h4>
+
+<p>
+    Retrieve environment variables defined in the application's environment configuration.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$env = env('APP_ENV', 'production');
+</code></pre>
+</div>
+
+<h4>config()</h4>
+
+<p>
+    Retrieve configuration values from the application's configuration files.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$timezone = config('app.name');
+</code></pre>
+</div>
+
+<h4>root_path()</h4>
+
+<p>
+    Generate an absolute path relative to the root directory of the application.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$logs = root_path('storage/logs');
+</code></pre>
+</div>
+
+<h4>url()</h4>
+
+<p>
+    Generate a URL for a named route with optional parameters.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$url = url('user.profile', ['id' => 5]);
+</code></pre>
+</div>
+
+<h4>baseUrl()</h4>
+
+<p>
+    Return the base URL of the current application.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+echo baseUrl();
+</code></pre>
+</div>
+
+<h4>encrypt()</h4>
+
+<p>
+    Encrypt a string using the application secret key defined in the environment configuration.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$token = encrypt('user-id-15');
+</code></pre>
+</div>
+
+<h4>decrypt()</h4>
+
+<p>
+    Decrypt a previously encrypted string using the same application secret key.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$id = decrypt($token);
+</code></pre>
+</div>
+
+<h4>shareTemplateVariable()</h4>
+
+<p>
+    Share variables globally across all templates so they can be accessed in any view.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+shareTemplateVariable(['siteName' => 'SigmaPHP']);
+</code></pre>
+</div>
+
+<h4>defineCustomTemplateDirective()</h4>
+
+<p>
+    Register a custom directive that can be used inside the template engine.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+defineCustomTemplateDirective('upper', fn($text) => strtoupper($text));
+</code></pre>
+</div>

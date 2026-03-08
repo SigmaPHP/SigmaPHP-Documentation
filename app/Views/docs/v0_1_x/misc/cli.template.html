@@ -1,0 +1,301 @@
+<p>
+    SigmaPHP includes a built-in Command Line Interface (CLI) that helps automate many common
+    development tasks such as generating application components, running migrations, seeding
+    databases, and managing caches.
+</p>
+
+<p>
+    The CLI tool helps speed up development by reducing repetitive tasks and ensuring that
+    files follow the framework's recommended structure.
+</p>
+
+<p>
+    All commands can be executed using the <code>sigma-cli</code> executable located inside
+    the <code>bin</code> directory.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli help
+</code></pre>
+</div>
+
+<h4>Windows Users</h4>
+
+<p>
+    If you are using Windows, you can execute the CLI commands using the
+    <code>sigma-cli.bat</code> file instead.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+.\bin\sigma-cli.bat help
+</code></pre>
+</div>
+
+<h4>Available Commands</h4>
+
+<h4>clear:cache</h4>
+
+<p>
+    Clear the cached compiled views.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli clear:cache
+</code></pre>
+</div>
+
+<h4>create:controller {controller name}</h4>
+
+<p>
+    Generate a new controller class.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli create:controller UserController
+</code></pre>
+</div>
+
+<h4>create:middleware {middleware name}</h4>
+
+<p>
+    Generate a new middleware class.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli create:middleware AuthMiddleware
+</code></pre>
+</div>
+
+<h4>create:migration {migration name}</h4>
+
+<p>
+    Generate a new migration file used for managing database schema changes.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli create:migration create_users_table
+</code></pre>
+</div>
+
+<h4>create:model {model name}</h4>
+
+<p>
+    Create a new model class. This command will also automatically generate
+    a corresponding migration file for the model.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli create:model User
+</code></pre>
+</div>
+
+<h4>create:secret-key</h4>
+
+<p>
+    Generate a new application secret key and automatically save it into the
+    <code>.env</code> file.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli create:secret-key
+</code></pre>
+</div>
+
+<h4>create:seeder {seeder name}</h4>
+
+<p>
+    Generate a database seeder class used to populate tables with sample or initial data.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli create:seeder UserSeeder
+</code></pre>
+</div>
+
+<h4>create:service-provider {service provider name}</h4>
+
+<p>
+    Generate a new service provider used to register dependencies and services
+    inside the container.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli create:service-provider AppServiceProvider
+</code></pre>
+</div>
+
+<h4>create:uploads</h4>
+
+<p>
+    Create the uploads directory used to store uploaded files.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli create:uploads
+</code></pre>
+</div>
+
+<h4>create:view {view name}</h4>
+
+<p>
+    Generate a new view template file.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli create:view users/index
+</code></pre>
+</div>
+
+<h4>drop</h4>
+
+<p>
+    Drop all tables in the configured database.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli drop
+</code></pre>
+</div>
+
+<h4>fresh</h4>
+
+<p>
+    Drop all tables in the database, then run all migrations and seed the database again.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli fresh
+</code></pre>
+</div>
+
+<h4>help</h4>
+
+<p>
+    Display all available CLI commands.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli help
+</code></pre>
+</div>
+
+<h4>migrate {migration name}</h4>
+
+<p>
+    Run one or multiple migration files.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli migrate
+</code></pre>
+</div>
+
+<h4>rollback {date}</h4>
+
+<p>
+    Rollback the latest migration or rollback to a specific migration date.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli rollback
+</code></pre>
+</div>
+
+<h4>run</h4>
+
+<p>
+    Run the application using PHP's built-in development server on port 8888.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli run
+</code></pre>
+</div>
+
+<h4>seed {seeder name}</h4>
+
+<p>
+    Run one or more database seeders.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli seed UserSeeder
+</code></pre>
+</div>
+
+<h4>test</h4>
+
+<p>
+    Execute the application's unit tests.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli test
+</code></pre>
+</div>
+
+<h4>truncate</h4>
+
+<p>
+    Delete all data from every table in the database without removing the table structure.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli truncate
+</code></pre>
+</div>
+
+<h4>version</h4>
+
+<p>
+    Display the current version of the SigmaPHP framework.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli version
+</code></pre>
+</div>
