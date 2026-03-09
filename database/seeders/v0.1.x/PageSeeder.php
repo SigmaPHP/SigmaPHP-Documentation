@@ -50,8 +50,8 @@ class PageSeeder extends Seeder
     {
         return array_values(
             array_filter($this->categories, function ($category) use ($name) {
-                return $category['name'] ==
-                    ucwords(str_replace('_', ' ', $name));
+                return strtolower($category['name']) ==
+                    str_replace('_', ' ', $name);
             })
         )[0]['id'] ?? null;
     }
