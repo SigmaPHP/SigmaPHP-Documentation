@@ -58,6 +58,32 @@ class DocsController extends BaseController
         }
 
         $categories = $currentVersion->categories();
+
+        // handle search
+        if ($category == 'search') {
+            $categoryIds = array_map(function ($cat) {
+                return $cat->id;
+            }, $categories);
+
+
+            $results = [];
+
+            // SELECT id, title,
+            //        MATCH(title, content) AGAINST(? IN NATURAL LANGUAGE MODE) AS score
+            // FROM docs
+            // WHERE MATCH(title, content) AGAINST(? IN NATURAL LANGUAGE MODE)
+            // ORDER BY score DESC
+            // LIMIT 20;
+            $statement = container('db')->query(
+                "SELECT * FROM pages " .
+                "WHERE category_id IN (" . implode(',', $categoryIds) . ")"
+            );
+
+            $results = $statement->fetchAll();
+
+            var_dump($results);
+        }
+
         $currentCategory = array_filter($categories,
             function ($cat) use ($category) {
                 return $cat->urlName() == $category;
