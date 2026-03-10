@@ -6,6 +6,8 @@ use App\Models\Category;
 use App\Models\Version;
 use App\Models\Page;
 use SigmaPHP\Core\Controllers\BaseController;
+use SigmaPHP\Core\Http\Request;
+use SigmaPHP\Core\Http\Response;
 
 class DocsController extends BaseController
 {
@@ -44,11 +46,12 @@ class DocsController extends BaseController
     /**
      * Docs pages.
      *
+     * @param Request $request
      * @param string $version
      * @param string $category
      * @return Response
      */
-    public function __invoke($version, $category)
+    public function __invoke(Request $request, $version, $category)
     {
         $versions = $this->versionModel->all();
         $currentVersion = $this->versionModel->findBy('name', $version);
@@ -59,29 +62,49 @@ class DocsController extends BaseController
 
         $categories = $currentVersion->categories();
 
+        // organize categories into hierarchy
+        $hierarchy = [];
+
+        foreach (array_filter($categories, function ($category) {
+            return $category->parent_id == 0;
+        }) as $parentCat) {
+            $hierarchy[] = $parentCat;
+
+            foreach (array_filter($categories, function ($sub) use ($parentCat)
+            {
+                return $sub->parent_id == $parentCat->id;
+            }) as $subCategory) {
+                $hierarchy[] = $subCategory;
+            }
+        }
+
         // handle search
         if ($category == 'search') {
+            if (!$request->has('keyword')) {
+                return $this->render('errors.404', [], 404);
+            }
+
             $categoryIds = array_map(function ($cat) {
                 return $cat->id;
             }, $categories);
 
 
             $results = [];
+            $categoryIds = rtrim(implode(',', $categoryIds), ',');
+            $keyword = $request->get('keyword');
 
-            // SELECT id, title,
-            //        MATCH(title, content) AGAINST(? IN NATURAL LANGUAGE MODE) AS score
-            // FROM docs
-            // WHERE MATCH(title, content) AGAINST(? IN NATURAL LANGUAGE MODE)
-            // ORDER BY score DESC
-            // LIMIT 20;
-            $statement = container('db')->query(
-                "SELECT * FROM pages " .
-                "WHERE category_id IN (" . implode(',', $categoryIds) . ")"
-            );
+            $statement = container('db')->query(<<<QUERY
+                SELECT c.name AS title, LEFT(p.content, 200) AS description,
+                    MATCH(p.content) AGAINST('$keyword') AS score
+                FROM pages AS p
+                JOIN categories AS c ON c.id = p.category_id
+                WHERE category_id IN ($categoryIds)
+                ORDER BY score DESC;
+            QUERY);
 
-            $results = $statement->fetchAll();
+            $searchResults = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-            var_dump($results);
+            return $this->render('search', compact('versions', 'hierarchy', 'searchResults'));
         }
 
         $currentCategory = array_filter($categories,
@@ -97,21 +120,6 @@ class DocsController extends BaseController
 
         if (empty($page)) {
             return $this->render('errors.404', [], 404);
-        }
-
-        // organize categories into hierarchy
-        $hierarchy = [];
-
-        foreach (array_filter($categories, function ($category) {
-            return $category->parent_id == 0;
-        }) as $category) {
-            $hierarchy[] = $category;
-
-            foreach (array_filter($categories, function ($sub) use ($category) {
-                return $sub->parent_id == $category->id;
-            }) as $subCategory) {
-                $hierarchy[] = $subCategory;
-            }
         }
 
         // !! For Testing Only !!

@@ -1,0 +1,18 @@
+{% extend 'layout/docs_base' %}
+
+{% block 'content' %}
+
+<h1>Search Results</h1>
+
+{% for $searchResult in $searchResults %}
+    <a href=""><h2>{{ $searchResult['title'] }}</h2></a>
+    <p>{{ $searchResult['description'] }}</p>
+{% end_for %}
+
+<!-- Back To Top -->
+<div class="back-to-top" id="back-to-top">
+    <span class="arrow">↑</span>
+    <span>Back to top</span>
+</div>
+
+{% end_block %}
