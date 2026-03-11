@@ -238,8 +238,28 @@ footer {
     margin-bottom: 20px;
 }
 
+.docs-search-wrapper {
+    position: relative;
+}
+
 .docs-search::placeholder {
     color: #888;
+}
+
+.search-btn {
+    position: absolute;
+    right: 6px;
+    top: 2px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #888;
+    font-size: 16px;
+    padding: 4px;
+}
+
+.search-btn:hover {
+    color: var(--brand);
 }
 
 .docs-nav a {

@@ -94,17 +94,23 @@ class DocsController extends BaseController
             $keyword = $request->get('keyword');
 
             $statement = container('db')->query(<<<QUERY
-                SELECT c.name AS title, LEFT(p.content, 200) AS description,
+                SELECT DISTINCT
+                    c.name AS title,
+                    LEFT(p.content, 200) AS description,
                     MATCH(p.content) AGAINST('$keyword') AS score
                 FROM pages AS p
                 JOIN categories AS c ON c.id = p.category_id
-                WHERE category_id IN ($categoryIds)
+                WHERE category_id IN ($categoryIds) AND
+                MATCH(p.content) AGAINST('$keyword') >= 1
                 ORDER BY score DESC;
             QUERY);
 
             $searchResults = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-            return $this->render('search', compact('versions', 'hierarchy', 'searchResults'));
+            return $this->render(
+                'search',
+                compact('versions', 'hierarchy', 'searchResults')
+            );
         }
 
         $currentCategory = array_filter($categories,

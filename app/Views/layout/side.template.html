@@ -17,7 +17,12 @@
         </select>
     </div>
 
-    <input type="text" class="docs-search" placeholder="Search docs..." />
+    <form id="docs-search-form" action="/docs/{{ config('app.framework_version') }}/search" method="GET" role="search">
+         <div class="docs-search-wrapper">
+            <input type="text" class="docs-search" id="docs-search" name="keyword" placeholder="Search docs..." aria-label="Search documentation"/>
+            <button type="submit" class="search-btn" id="search-btn" aria-label="Search">🔍</button>
+        </div>
+    </form>
 
     <nav class="docs-nav">
         {% for $category in $hierarchy %}

@@ -6,7 +6,7 @@
 
 {% for $searchResult in $searchResults %}
     <a href=""><h2>{{ $searchResult['title'] }}</h2></a>
-    <p>{{ $searchResult['description'] }}</p>
+    <p>{{ strip_tags($searchResult['description']) }}...</p>
 {% end_for %}
 
 <!-- Back To Top -->

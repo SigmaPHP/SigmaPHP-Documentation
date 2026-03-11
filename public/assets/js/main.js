@@ -26,7 +26,22 @@ document.getElementById('version').addEventListener('change', function() {
 });
 
 // Smooth scroll to top
-document.getElementById('back-to-top').addEventListener('click', function () {
+const btn = document.getElementById('back-to-top');
+
+function checkPageHeight() {
+
+    if (document.documentElement.scrollHeight <= window.innerHeight) {
+        btn.style.display = 'none';
+    } else {
+        btn.style.display = 'block';
+    }
+
+}
+
+checkPageHeight();
+window.addEventListener('resize', checkPageHeight);
+
+btn.addEventListener('click', function () {
     window.scrollTo({
         top: 0,
         behavior: 'smooth'
@@ -64,4 +79,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Show TOC
     toc.hidden = false;
+});
+
+/* Search */
+
+document.getElementById('docs-search').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+        const query = this.value.trim();
+
+        if (query.length >= 3) {
+            document.getElementById('docs-search-form').submit();
+        }
+    }
+});
+
+document.getElementById('search-btn').addEventListener('click', function (e) {
+    if (e.key === 'Enter') {
+        const query = this.value.trim();
+
+        if (query.length >= 3) {
+            document.getElementById('docs-search-form').submit();
+        }
+    }
 });
