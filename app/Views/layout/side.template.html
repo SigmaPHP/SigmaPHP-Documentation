@@ -20,7 +20,9 @@
     <form id="docs-search-form" action="/docs/{{ config('app.framework_version') }}/search" method="GET" role="search">
          <div class="docs-search-wrapper">
             <input type="text" class="docs-search" id="docs-search" name="keyword" placeholder="Search docs..." aria-label="Search documentation"/>
-            <button type="submit" class="search-btn" id="search-btn" aria-label="Search">🔍</button>
+            <button type="submit" class="search-btn" id="search-btn" title="Search" aria-label="Search">
+                <i class="bi bi-search"></i>
+            </button>
         </div>
     </form>
 

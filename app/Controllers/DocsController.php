@@ -80,16 +80,19 @@ class DocsController extends BaseController
 
         // handle search
         if ($category == 'search') {
+            $searchResults = [];
+
             if (!$request->has('keyword')) {
-                return $this->render('errors.404', [], 404);
+                return $this->render(
+                    'search',
+                    compact('versions', 'hierarchy', 'searchResults')
+                );
             }
 
             $categoryIds = array_map(function ($cat) {
                 return $cat->id;
             }, $categories);
 
-
-            $results = [];
             $categoryIds = rtrim(implode(',', $categoryIds), ',');
             $keyword = $request->get('keyword');
 
@@ -101,7 +104,7 @@ class DocsController extends BaseController
                 FROM pages AS p
                 JOIN categories AS c ON c.id = p.category_id
                 WHERE category_id IN ($categoryIds) AND
-                MATCH(p.content) AGAINST('$keyword') >= 1
+                MATCH(p.content) AGAINST('$keyword') >= 0.9
                 ORDER BY score DESC;
             QUERY);
 

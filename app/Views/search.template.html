@@ -4,10 +4,14 @@
 
 <h1>Search Results</h1>
 
-{% for $searchResult in $searchResults %}
-    <a href=""><h2>{{ $searchResult['title'] }}</h2></a>
-    <p>{{ strip_tags($searchResult['description']) }}...</p>
-{% end_for %}
+{% if (empty($searchResults)) %}
+    <p>No results were found !</p>
+{% else %}
+    {% for $searchResult in $searchResults %}
+        <a href=""><h2>{{ $searchResult['title'] }}</h2></a>
+        <p>{{ strip_tags($searchResult['description']) }}...</p>
+    {% end_for %}
+{% end_if %}
 
 <!-- Back To Top -->
 <div class="back-to-top" id="back-to-top">

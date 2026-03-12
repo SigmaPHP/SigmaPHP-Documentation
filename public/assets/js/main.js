@@ -82,8 +82,10 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /* Search */
+const searchText = document.getElementById('docs-search');
+const searchBtn = document.getElementById('search-btn');
 
-document.getElementById('docs-search').addEventListener('keydown', function (e) {
+searchText.addEventListener('keydown', function (e) {
     if (e.key === 'Enter') {
         const query = this.value.trim();
 
@@ -93,12 +95,11 @@ document.getElementById('docs-search').addEventListener('keydown', function (e) 
     }
 });
 
-document.getElementById('search-btn').addEventListener('click', function (e) {
-    if (e.key === 'Enter') {
-        const query = this.value.trim();
+searchBtn.addEventListener('click', function (e) {
+    e.preventDefault();
+    const query = searchText.value.trim();
 
-        if (query.length >= 3) {
-            document.getElementById('docs-search-form').submit();
-        }
+    if (query.length >= 3) {
+        document.getElementById('docs-search-form').submit();
     }
 });
