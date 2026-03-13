@@ -7,6 +7,10 @@
 
 <body>
     <div class="docs-layout">
+        <button class="menu-toggle" id="menu-toggle" aria-label="Open menu">
+            <i id="menu-icon" class="bi bi-list"></i>
+        </button>
+
         {% include 'layout.side' %}
 
         <main class="docs-content">
@@ -14,8 +18,10 @@
         </main>
 
         <nav id="toc" class="doc-toc" hidden>
-            <div class="doc-toc-title">On this page</div>
-            <ul id="toc-list"></ul>
+            <div class="doc-toc-content">
+                <div class="doc-toc-title">On this page</div>
+                <ul id="toc-list"></ul>
+            </div>
         </nav>
     </div>
 

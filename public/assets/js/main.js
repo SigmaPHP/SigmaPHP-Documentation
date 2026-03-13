@@ -103,3 +103,41 @@ searchBtn.addEventListener('click', function (e) {
         document.getElementById('docs-search-form').submit();
     }
 });
+
+/* Toggle Responsive Sidebar */
+
+const toggle = document.getElementById("menu-toggle");
+const sidebar = document.querySelector(".docs-sidebar");
+
+toggle.addEventListener("click", () => {
+    sidebar.classList.toggle("open");
+});
+
+document.addEventListener("click", (e) => {
+    if (!sidebar.contains(e.target) && !toggle.contains(e.target)) {
+        sidebar.classList.remove("open");
+    }
+});
+
+document.addEventListener("touchstart", (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+});
+
+document.addEventListener("touchend", (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+});
+
+function handleSwipe() {
+    const swipeDistance = touchEndX - touchStartX;
+
+    // swipe right → open menu
+    if (swipeDistance > 80) {
+        sidebar.classList.add("open");
+    }
+
+    // swipe left → close menu
+    if (swipeDistance < -80) {
+        sidebar.classList.remove("open");
+    }
+}
