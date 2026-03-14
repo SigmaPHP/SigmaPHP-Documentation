@@ -102,10 +102,15 @@ class DocsController extends BaseController
                     REPLACE(LOWER(c.name), ' ', '_') AS slug,
                     LEFT(p.content, 200) AS description,
                     MATCH(p.content) AGAINST('$keyword') AS score
-                FROM pages AS p
-                JOIN categories AS c ON c.id = p.category_id
-                WHERE category_id IN ($categoryIds)
-                ORDER BY score DESC;
+                FROM
+                    pages AS p
+                JOIN
+                    categories AS c ON c.id = p.category_id
+                WHERE
+                    category_id IN ($categoryIds) AND
+                    MATCH(p.content) AGAINST('$keyword') >= 0.9
+                ORDER BY
+                    score DESC;
             QUERY);
 
             $searchResults = $statement->fetchAll(\PDO::FETCH_ASSOC);
