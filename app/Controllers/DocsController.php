@@ -85,7 +85,7 @@ class DocsController extends BaseController
             if (!$request->has('keyword')) {
                 return $this->render(
                     'search',
-                    compact('versions', 'hierarchy', 'searchResults')
+                    compact('version', 'versions', 'hierarchy', 'searchResults')
                 );
             }
 
@@ -99,12 +99,12 @@ class DocsController extends BaseController
             $statement = container('db')->query(<<<QUERY
                 SELECT DISTINCT
                     c.name AS title,
+                    REPLACE(LOWER(c.name), ' ', '_') AS slug,
                     LEFT(p.content, 200) AS description,
                     MATCH(p.content) AGAINST('$keyword') AS score
                 FROM pages AS p
                 JOIN categories AS c ON c.id = p.category_id
-                WHERE category_id IN ($categoryIds) AND
-                MATCH(p.content) AGAINST('$keyword') >= 0.9
+                WHERE category_id IN ($categoryIds)
                 ORDER BY score DESC;
             QUERY);
 
@@ -112,7 +112,7 @@ class DocsController extends BaseController
 
             return $this->render(
                 'search',
-                compact('versions', 'hierarchy', 'searchResults')
+                compact('version', 'versions', 'hierarchy', 'searchResults')
             );
         }
 
@@ -134,9 +134,12 @@ class DocsController extends BaseController
         // !! For Testing Only !!
         // $page->content = $this->renderView(
         //     'docs/v0_1_x/misc/cli',
-        //     compact('versions', 'hierarchy', 'page')
+        //     compact('version', 'versions', 'hierarchy', 'page')
         // );
 
-        return $this->render('docs', compact('versions', 'hierarchy', 'page'));
+        return $this->render(
+            'docs',
+            compact('version', 'versions', 'hierarchy', 'page')
+        );
     }
 }

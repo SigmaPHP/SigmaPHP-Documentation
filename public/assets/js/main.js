@@ -22,7 +22,7 @@ document.querySelectorAll('.copy-btn').forEach(btn => {
 
 // Version selector handler
 document.getElementById('version').addEventListener('change', function() {
-    // only 0.1.x is available currently
+    window.location.href = `/docs/${this.value.trim()}/introduction`;
 });
 
 // Smooth scroll to top
@@ -105,7 +105,6 @@ searchBtn.addEventListener('click', function (e) {
 });
 
 /* Toggle Responsive Sidebar */
-
 const toggle = document.getElementById("menu-toggle");
 const sidebar = document.querySelector(".docs-sidebar");
 

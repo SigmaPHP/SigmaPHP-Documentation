@@ -8,7 +8,7 @@
     <p>No results were found !</p>
 {% else %}
     {% for $searchResult in $searchResults %}
-        <a href=""><h2>{{ $searchResult['title'] }}</h2></a>
+        <a href="/docs/{{ $version . '/' . $searchResult['slug'] }}"><h2>{{ $searchResult['title'] }}</h2></a>
         <p>{{ strip_tags($searchResult['description']) }}...</p>
     {% end_for %}
 {% end_if %}
