@@ -103,7 +103,22 @@
 </code></pre>
 </div>
 
-<h4>create:secret-key</h4>
+<h4>create:provider {service provider name}</h4>
+
+<p>
+    Generate a new service provider used to register dependencies and services
+    inside the container.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli create:provider AppServiceProvider
+</code></pre>
+</div>
+
+
+<h4>create:secret</h4>
 
 <p>
     Generate a new application secret key and automatically save it into the
@@ -113,7 +128,7 @@
 <div class="code-card">
     <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
     <pre><code class="language-bash">
-./bin/sigma-cli create:secret-key
+./bin/sigma-cli create:secret
 </code></pre>
 </div>
 
@@ -127,20 +142,6 @@
     <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
     <pre><code class="language-bash">
 ./bin/sigma-cli create:seeder UserSeeder
-</code></pre>
-</div>
-
-<h4>create:service-provider {service provider name}</h4>
-
-<p>
-    Generate a new service provider used to register dependencies and services
-    inside the container.
-</p>
-
-<div class="code-card">
-    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
-    <pre><code class="language-bash">
-./bin/sigma-cli create:service-provider AppServiceProvider
 </code></pre>
 </div>
 
