@@ -81,7 +81,8 @@ return [
         </p>
 
         <p>
-            The term “action” is simply a naming convention used to describe controller methods that are exposed to the router.
+            The term “action” is simply a naming convention used to describe controller methods that are exposed to the
+            router.
         </p>
     </div>
 </div>
@@ -298,6 +299,36 @@ public function cancel()
 {
     return $this->back();
 }
+    </code></pre>
+</div>
+
+<h3>Abort Execution</h3>
+
+<p> In certain scenarios, it is necessary to immediately terminate the execution flow within a controller and return an
+    appropriate error response. This can be useful for handling invalid states, unauthorized access, or unexpected
+    conditions. </p>
+<p> The framework provides a dedicated <strong>error</strong> method to simplify this process. When invoked, it stops
+    further execution and triggers the appropriate error handling mechanism, such as rendering an error page or
+    returning a JSON response. </p>
+
+<p> Call the <strong>error</strong> method from within your controller whenever you need to halt execution and return a
+    specific HTTP error code. </p>
+
+<p> For example, you might use it when a requested resource is not found or when access is denied. </p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy">
+        <i class="bi bi-copy"></i>
+    </button>
+    <pre><code class="language-php">
+public function show($id)
+&#123;
+    if (!$this-&gt;userCanAccessResource($id)) &#123;
+        $this-&gt;error(401);
+    &#125;
+
+    ...
+&#125;
     </code></pre>
 </div>
 

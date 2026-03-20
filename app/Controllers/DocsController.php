@@ -138,7 +138,7 @@ class DocsController extends BaseController
 
         // !! For Testing Only !!
         $page->content = $this->renderView(
-            'docs/v0_1_x/misc/cli',
+            'docs/v0_1_x/http/controllers',
             compact('version', 'versions', 'hierarchy', 'page')
         );
 
