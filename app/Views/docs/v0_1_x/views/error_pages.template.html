@@ -68,10 +68,8 @@
 <div class="code-card">
     <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
     <pre><code class="language-php">
-&lt;?php
-
 if (empty($page)) {
-    return $this->render('errors.404', [], 404);
+    return $this->error(404);
 }
     </code></pre>
 </div>
