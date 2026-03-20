@@ -63,8 +63,7 @@ class AuthMiddleware extends BaseMiddleware
 
 <p>
     Middlewares are attached directly to routes through the
-    <code>middlewares</code> option. Each middleware is defined as an array
-    containing the class name and the method to execute.
+    <code>middlewares</code> option.
 </p>
 
 <div class="code-card">
@@ -76,7 +75,8 @@ $routes = [
         'path' => '/orders',
         'method' => 'post',
         'middlewares' => [
-            [AuthMiddleware::class, 'handle']
+            AuthMiddleware::class,
+            UserCanCreateOrderMiddleware::class,
         ],
         'controller' => OrderController::class,
         'action' => 'create'
