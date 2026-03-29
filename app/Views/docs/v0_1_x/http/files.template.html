@@ -74,7 +74,7 @@ public function uploadFile(Request $request)
 
 <div class="code-card">
     <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
-    <pre><code class="language-php">
+    <pre><code class="language-html">
 &lt;form action=&quot;&#123;{ url('upload_file') }&#125;&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;
     &lt;input type=&quot;file&quot; name=&quot;my_file&quot; /&gt;
     &lt;button type=&quot;submit&quot;&gt;Upload&lt;/button&gt;
@@ -101,7 +101,7 @@ public function uploadFile(Request $request)
 <div class="code-card">
     <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
     <pre><code class="language-php">
-$this->file->has('docs/book.pdf'); // true/false
+$this->file->has('docs/book.pdf'); // true or false
     </code></pre>
 </div>
 

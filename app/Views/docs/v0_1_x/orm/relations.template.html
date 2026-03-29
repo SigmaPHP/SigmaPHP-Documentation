@@ -43,9 +43,12 @@ class User extends BaseModel
     similar to:
 </p>
 
-<pre><code>
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
 SELECT * FROM posts WHERE user_id = {user.id}
-</code></pre>
+    </code></pre>
+</div>
 
 <p>
     The <code>hasRelation()</code> method accepts three parameters:
@@ -96,17 +99,23 @@ $posts = $user->posts();
     we match:
 </p>
 
-<pre><code>
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
 posts.user_id = users.id
-</code></pre>
+    </code></pre>
+</div>
 
 <p>
     But when retrieving the user from a post, the comparison becomes:
 </p>
 
-<pre><code>
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
 users.id = posts.user_id
-</code></pre>
+    </code></pre>
+</div>
 
 <p>
     Since the comparison direction is reversed, the keys must also be reversed when calling
