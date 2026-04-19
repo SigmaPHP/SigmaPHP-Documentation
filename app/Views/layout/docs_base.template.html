@@ -25,7 +25,14 @@
         </nav>
     </div>
 
+
     {% include 'layout.foot' %}
+
+    {% if (env('APP_ENV') == 'production') %}
+        <script src="{% asset('assets/js/main.min.js') %}"></script>
+    {% else %}
+        <script src="{% asset('assets/js/main.js') %}"></script>
+    {% end_if %}
 </body>
 
 </html>
