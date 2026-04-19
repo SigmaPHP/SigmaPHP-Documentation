@@ -55,9 +55,9 @@ class DocsController extends BaseController
     {
         $versions = $this->versionModel->all();
         $currentVersion = $this->versionModel->findBy('name', $version);
-
+        //  dd($currentVersion);
         if (empty($currentVersion)) {
-            return $this->render('errors.404', [], 404);
+            return $this->error(404);
         }
 
         $categories = $currentVersion->categories();
@@ -127,13 +127,13 @@ class DocsController extends BaseController
             });
 
         if (empty($currentCategory)) {
-            return $this->render('errors.404', [], 404);
+            return $this->error(404);
         }
 
         $page = array_values($currentCategory)[0]->page() ?? null;
 
         if (empty($page)) {
-            return $this->render('errors.404', [], 404);
+            return $this->error(404);
         }
 
         // !! For Testing Only !!

@@ -150,12 +150,9 @@ $routes = [
     <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
     <pre><code class="language-php">
 'path' => '/admin/users/{user_id}/addresses/{address_id}',
-    </code></pre>
-</div>
 
-<div class="code-card">
-    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
-    <pre><code class="language-php">
+// will connect to the action:
+
 public function getUserAddressDetails($userId, $addressId) {
     ...
 }
@@ -393,9 +390,7 @@ $url = url('order.items.details', [
 <div class="code-card">
     <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
     <pre><code class="language-html">
-...
-
-//**
+/**
 * HTTP method override.
 */
 'allow_http_method_override' => true,

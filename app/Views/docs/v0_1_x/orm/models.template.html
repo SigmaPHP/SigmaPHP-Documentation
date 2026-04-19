@@ -32,7 +32,7 @@ use SigmaPHP\Core\Models\BaseModel;
 
 class Product extends BaseModel
 {
-// The ORM will automatically determine the table name and columns
+    // The ORM will automatically determine the table name and columns
 }
     </code></pre>
 </div>
@@ -97,13 +97,13 @@ use SigmaPHP\Core\Models\BaseModel;
 
 class User extends BaseModel
 {
-protected $table = 'users_table';
+    protected $table = 'users_table';
 
-protected $primary = 'user_id';
+    protected $primary = 'user_id';
 
-protected $uuid = true;
+    protected $uuid = true;
 
-protected $fields = ['user_id', 'name', 'age'];
+    protected $fields = ['user_id', 'name', 'age'];
 ```
 
 } </code></pre>
@@ -375,12 +375,11 @@ use SigmaPHP\DB\Traits\SoftDelete;
 
 class Product extends BaseModel
 {
-use SoftDelete;
+    use SoftDelete;
 
-```
-protected $fetchTrashed = true;
-```
+    protected $fetchTrashed = true;
 
+    ...
 }
     </code></pre>
 </div>
