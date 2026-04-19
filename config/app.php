@@ -20,6 +20,16 @@ return [
     'env' => env('APP_ENV', 'develop'),
 
     /**
+     * Application port.
+     */
+    'port' => env('APP_PORT', 8888),
+
+    /**
+     * Application timezone.
+     */
+    'timezone' => env('APP_TIMEZONE', 'UTC'),
+
+    /**
      * Controller files path.
      */
     'controllers_path' => env('CONTROLLERS_PATH', 'app/Controllers'),
