@@ -1,5 +1,7 @@
 {% extend 'layout/docs_base' %}
 
+{% block 'title' %}{{ $page->category()->name }} -{% end_block %}
+
 {% block 'content' %}
 
 <h1>{{ $page->category()->name }}</h1>
