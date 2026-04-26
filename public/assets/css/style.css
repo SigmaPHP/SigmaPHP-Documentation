@@ -37,6 +37,7 @@ header {
     align-items: center;
     padding: 20px 40px;
     border-bottom: 1px solid var(--border);
+    position: relative;
 }
 
 .brand {
@@ -51,9 +52,23 @@ header {
     height: 40px;
 }
 
-nav a {
-    margin-left: 20px;
+#main-nav {
+    display: flex;
+    gap: 20px;
+}
+
+#main-nav a {
     font-weight: 600;
+    text-decoration: none;
+}
+
+#main-nav-toggle {
+    display: none;
+    font-size: 24px;
+    background: none;
+    border: none;
+    color: var(--brand);
+    cursor: pointer;
 }
 
 section {
@@ -552,5 +567,61 @@ footer {
     .menu-toggle {
         display: block;
         z-index: 0;
+    }
+
+    header {
+        flex-direction: row;
+        align-items: center;
+        position: relative;
+        min-height: 70px;
+        padding: 20px;
+    }
+
+    .brand {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    #main-nav {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    #main-nav a {
+        margin: 5px 0;
+    }
+
+    section {
+        padding: 40px 20px;
+    }
+
+    #main-nav-toggle {
+        display: block;
+    }
+
+    #main-nav {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 70px;
+
+        left: 50%;
+        transform: translateX(-50%);
+
+        background: var(--bg);
+        border: 1px solid var(--brand);
+        padding: 15px;
+        border-radius: 8px;
+        min-width: 150px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    }
+
+    #main-nav.show {
+        display: flex;
+    }
+
+    .hero h1 {
+        font-size: 2.2rem;
     }
 }

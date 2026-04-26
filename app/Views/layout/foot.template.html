@@ -10,3 +10,14 @@
   "logo": "{% asset('assets/images/SigmaPHP-Logo.png') %}"
 }
 </script>
+
+<script>
+    const navToggle = document.getElementById('main-nav-toggle');
+    const nav = document.getElementById('main-nav');
+
+    if (navToggle) {
+        navToggle.addEventListener('click', () => {
+            nav.classList.toggle('show');
+        });
+    }
+</script>

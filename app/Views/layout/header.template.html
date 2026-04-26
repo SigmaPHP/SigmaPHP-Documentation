@@ -3,7 +3,12 @@
         <img src="{% asset('/assets/images/SigmaPHP-Logo.png') %}" alt="SigmaPHP Logo" />
         SigmaPHP
     </div>
-    <nav>
+
+    <button id="main-nav-toggle" aria-label="Open menu">
+        <i id="menu-icon" class="bi bi-list"></i>
+    </button>
+
+    <nav id="main-nav">
         <a href="/">Home</a>
         <a href="/docs/{{ config('app.framework_version') }}/introduction">Documentation</a>
         <a href="https://github.com/SigmaPHP/SigmaPHP/releases" target="_blank">Release Notes</a>
