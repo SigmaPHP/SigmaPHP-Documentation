@@ -4,13 +4,93 @@
     defining custom directives.
 </p>
 
+<h3>Available Directives</h3>
+
+<h4>current</h4>
 <p>
-    Custom directives are registered using the <code>defineCustomTemplateDirective</code> global helper. A directive
-    follows the syntax <code>&#123;% myDirective(...) %&#125;</code>, where the directive name maps to a PHP callback that may
-    accept parameters and return a value to be rendered by the engine.
+    Returns the current request URL. This helper is useful when you need to access or display the active route within
+    your templates.
 </p>
 
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&#123;% current() %&#125;
+    </code></pre>
+</div>
+
+<h4>previous</h4>
+<p>
+    Retrieves the previous request URL. Commonly used for navigation purposes, such as creating “back” links or
+    redirecting users to their last visited page.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&#123;% previous() %&#125;
+    </code></pre>
+</div>
+
+<h4>cookie</h4>
+<p>
+    Fetches the value of a cookie by its name. This helper simplifies accessing client-stored data directly within your
+    templates.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&#123;% cookie('user_preference') %&#125;
+    </code></pre>
+</div>
+
+<h4>session</h4>
+<p>
+    Retrieves a value from the session using the provided key. Useful for accessing user-specific data such as
+    authentication details or temporary messages.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&#123;% session('user_id') %&#125;
+    </code></pre>
+</div>
+
+<h4>method</h4>
+<p>
+    Generates a hidden input field used to spoof HTTP methods in HTML forms. This is particularly useful when working
+    with methods such as PUT, PATCH, or DELETE, which are not natively supported by standard HTML forms.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&#123;% method('PUT') %&#125;
+    </code></pre>
+</div>
+
+<h4>asset</h4>
+<p>
+    Generates a full URL for a static asset based on the configured assets route.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&#123;% asset('css/app.css') %&#125;
+    </code></pre>
+</div>
+
 <h3>Registering a Custom Directive</h3>
+
+<p>
+    Custom directives are registered using the <code>defineCustomTemplateDirective</code> global helper. A directive
+    follows the syntax <code>&#123;% myDirective(...) %&#125;</code>, where the directive name maps to a PHP callback
+    that may
+    accept parameters and return a value to be rendered by the engine.
+</p>
 
 <div class="code-card">
     <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
