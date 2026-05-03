@@ -1,6 +1,8 @@
 {% extend 'layout/docs_base' %}
 
-{% block 'title' %}{{ $page->category()->name }} -{% end_block %}
+{% define $title = $page->category()->name %}
+{% define $description = substr(str_replace(["\r", "\n"], '', strip_tags($page->content)), 0, 300) . '...' %}
+{% define $keywords = $page->tags %}
 
 {% block 'content' %}
 

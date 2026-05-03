@@ -1,31 +1,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="canonical" href="{% current() %}" />
 
-{% block 'seo' %}
-    <meta name="description" content="SigmaPHP is a modern, lightweight PHP framework designed for clarity, performance, and full developer control. Built for engineers who value simplicity, clean architecture, and zero magic." />
-    <meta name="keywords" content="SigmaPHP, PHP framework, lightweight PHP framework, modern PHP framework, clean architecture PHP, simple PHP framework, high performance PHP, developer control PHP framework, minimal PHP framework, MVC PHP framework, backend PHP framework, zero magic framework" />
-{% end_block %}
+<meta name="description" content="{{ $description }}" />
+<meta name="keywords" content="{{ $keywords }}" />
 
-{% show_block 'seo' %}
-
-<meta property="og:title" content="SigmaPHP Framework" />
-<meta property="og:description" content="SigmaPHP is a modern, lightweight PHP framework built for clarity, performance, and full developer control. No magic, just clean architecture." />
+<meta property="og:title" content="{% if (isset($title)) %} {{ $title . ' -' }} {% end_if %} SigmaPHP Framework" />
+<meta property="og:description" content="{{ $description }}" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://sigmaphp.com" />
 <meta property="og:site_name" content="SigmaPHP" />
 <meta property="og:image" content="{% asset('assets/images/SigmaPHP-Logo.png') %}" />
 
+<meta name="twitter:title" content="{% if (isset($title)) %} {{ $title . ' -' }} {% end_if %} SigmaPHP Framework" />
+<meta name="twitter:description" content="{{ $description }}" />
 <meta name="twitter:card" content="{% asset('assets/images/SigmaPHP-Logo.png') %}" />
-<meta name="twitter:title" content="SigmaPHP Framework" />
-<meta name="twitter:description" content="A modern PHP framework focused on clarity, performance, and developer control. Built with zero magic and clean architecture." />
 <meta name="twitter:image" content="{% asset('assets/images/SigmaPHP-Logo.png') %}" />
 <meta name="twitter:site" content="@sigmaphp" />
 
+<link rel="canonical" href="{% current() %}" />
+
 {% if (env('APP_ENV') == 'production') %}
-    <link rel="stylesheet" href="https://sigmaphp.com/assets/css/style.min.css">
+<link rel="stylesheet" href="https://sigmaphp.com/assets/css/style.min.css">
 {% else %}
-    <link rel="stylesheet" href="{% asset('assets/css/style.css') %}">
+<link rel="stylesheet" href="{% asset('assets/css/style.css') %}">
 {% end_if %}
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.css">
@@ -33,6 +30,4 @@
 
 <link rel="shortcut icon" href="{% asset('assets/images/SigmaPHP-Logo.png') %}" type="image/x-icon">
 
-<title>
-    {% show_block 'title' %} SigmaPHP Framework
-</title>
+<title>{% if (isset($title)) %}{{ $title . ' - ' }}{% end_if %}SigmaPHP Framework</title>
