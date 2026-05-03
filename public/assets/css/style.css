@@ -343,14 +343,15 @@ footer {
 .code-card {
     position: relative;
     border-radius: 8px;
-    overflow-x: auto;
+    overflow-x: hidden;
 }
 
 .code-card pre {
     min-height: 50px;
     max-height: 700px;
     margin: 0;
-    overflow: scroll;
+    overflow: hidden;
+    overflow-y: scroll;
 }
 
 .code-card pre code {
@@ -360,7 +361,7 @@ footer {
 .copy-btn {
     position: absolute;
     top: 15px;
-    right: 8px;
+    right: 15px;
     padding: 4px 8px;
     background: var(--brand);
     border: none;
@@ -540,6 +541,25 @@ footer {
 
 .doc-toc a:hover {
     color: var(--brand);
+}
+
+/* Scroll Bar for Chrome, Edge, Safari */
+::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(120, 120, 120, 0.4);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(120, 120, 120, 0.7);
 }
 
 /* Responsive */
