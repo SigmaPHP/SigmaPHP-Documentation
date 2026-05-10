@@ -20,7 +20,7 @@
 <link rel="canonical" href="{% current() %}" />
 
 {% if (env('APP_ENV') == 'production') %}
-<link rel="stylesheet" href="https://sigmaphp.com/assets/css/style.min.css">
+<link rel="stylesheet" href="{% asset('assets/css/style.min.css') %}">
 {% else %}
 <link rel="stylesheet" href="{% asset('assets/css/style.css') %}">
 {% end_if %}
