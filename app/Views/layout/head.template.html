@@ -30,4 +30,4 @@
 
 <link rel="shortcut icon" href="{% asset('assets/images/SigmaPHP-Logo.png') %}" type="image/x-icon">
 
-<title>{% if (isset($title)) %}{{ $title . ' - ' }}{% end_if %}SigmaPHP Framework</title>
+<title>{% if (isset($title) && !empty($title)) %}{{ $title . ' - ' }}{% end_if %}SigmaPHP Framework</title>
