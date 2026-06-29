@@ -1,0 +1,1623 @@
+<p>
+    The <strong>Collection</strong> library provides a powerful and flexible implementation for working with arrays in PHP.
+    It introduces a rich set of utility functions that help developers manipulate, transform, and manage array-based data
+    structures more efficiently.
+</p>
+
+<p>
+    Since almost everything in PHP can be represented as an array, handling complex data operations can become challenging,
+    especially when relying heavily on the built-in <code>array_*()</code> family of functions such as
+    <code>array_map()</code> and <code>array_filter()</code>.
+</p>
+
+<p>
+    <strong>SigmaPHP-Collections</strong> solves this problem by providing a dedicated <strong>Collection</strong>
+    data structure that enables developers to work with arrays using a clean object-oriented approach.
+    It supports fluent method chaining and provides powerful operations such as mapping, filtering, grouping,
+    chunking, and iteration without requiring repetitive manual logic.
+</p>
+
+<h3>Supported Data Types</h3>
+
+<p>
+    The <strong>Collection</strong> class supports all common PHP array structures and can contain:
+</p>
+
+<ul>
+    <li>Numeric arrays</li>
+    <li>Associative arrays</li>
+    <li>Objects</li>
+    <li>Nested Collection instances</li>
+</ul>
+
+<h3>Mutability Behavior</h3>
+
+<p>
+    By default, <strong>Collection</strong> is mutable, meaning most operations will modify the underlying collection
+    directly.
+</p>
+
+<p>
+    However, the following methods are immutable and will always return a new <strong>Collection</strong> instance
+    without modifying the original collection:
+</p>
+
+<ul>
+    <li><code>where</code></li>
+    <li><code>chunk</code></li>
+    <li><code>groupBy</code></li>
+    <li><code>pluck</code></li>
+    <li><code>diff</code></li>
+    <li><code>reverse</code></li>
+    <li><code>flatten</code></li>
+    <li><code>partition</code></li>
+    <li><code>zip</code></li>
+    <li><code>unique</code></li>
+    <li><code>map</code></li>
+    <li><code>filter</code></li>
+    <li><code>slice</code></li>
+</ul>
+
+<p>
+    Keep this behavior in mind when working with collections to ensure predictable results and avoid unintended
+    mutations.
+</p>
+
+<h3>Basic Usage Example</h3>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+use SigmaPHP\Collections\Collection;
+
+$products = new Collection([
+    [
+        'name' =&gt; 'Laptop',
+        'price' =&gt; 1200,
+        'discount' =&gt; 200,
+    ],
+    [
+        'name' =&gt; 'Phone',
+        'price' =&gt; 800,
+        'discount' =&gt; 0,
+    ],
+    [
+        'name' =&gt; 'Tablet',
+        'price' =&gt; 600,
+        'discount' =&gt; 100,
+    ],
+]);
+
+$discountedProducts = $products
+    -&gt;filter(function ($product) {
+        return $product['discount'] &gt; 0;
+    })
+    -&gt;map(function ($product) {
+        $product['price'] -= $product['discount'];
+
+        return $product;
+    });
+</code></pre>
+</div>
+
+<h3>Available Methods</h3>
+
+You can find below the complete list of available methods, along with an example for each one.
+
+<table border="1">
+    <tr>
+        <td><a href="#all">all</a></td>
+        <td><a href="#count">count</a></td>
+        <td><a href="#get">get</a></td>
+        <td><a href="#take">take</a></td>
+        <td><a href="#first">first</a></td>
+        <td><a href="#last">last</a></td>
+        <td><a href="#set">set</a></td>
+        <td><a href="#has">has</a></td>
+        <td><a href="#hasKey">hasKey</a></td>
+        <td><a href="#keys">keys</a></td>
+    </tr>
+    <tr>
+        <td><a href="#values">values</a></td>
+        <td><a href="#remove">remove</a></td>
+        <td><a href="#clear">clear</a></td>
+        <td><a href="#every">every</a></td>
+        <td><a href="#contains">contains</a></td>
+        <td><a href="#partition">partition</a></td>
+        <td><a href="#where">where</a></td>
+        <td><a href="#push">push</a></td>
+        <td><a href="#pop">pop</a></td>
+        <td><a href="#unique">unique</a></td>
+    </tr>
+    <tr>
+        <td><a href="#getIterator">getIterator</a></td>
+        <td><a href="#orderBy">orderBy</a></td>
+        <td><a href="#sort">sort</a></td>
+        <td><a href="#map">map</a></td>
+        <td><a href="#filter">filter</a></td>
+        <td><a href="#reduce">reduce</a></td>
+        <td><a href="#merge">merge</a></td>
+        <td><a href="#shuffle">shuffle</a></td>
+        <td><a href="#toJson">toJson</a></td>
+        <td><a href="#slice">slice</a></td>
+    </tr>
+    <tr>
+        <td><a href="#range">range</a></td>
+        <td><a href="#times">times</a></td>
+        <td><a href="#isEmpty">isEmpty</a></td>
+        <td><a href="#isNotEmpty">isNotEmpty</a></td>
+        <td><a href="#avg">avg</a></td>
+        <td><a href="#max">max</a></td>
+        <td><a href="#min">min</a></td>
+        <td><a href="#sum">sum</a></td>
+        <td><a href="#random">random</a></td>
+        <td><a href="#chunk">chunk</a></td>
+    </tr>
+    <tr>
+        <td><a href="#each">each</a></td>
+        <td><a href="#groupBy">groupBy</a></td>
+        <td><a href="#pluck">pluck</a></td>
+        <td><a href="#diff">diff</a></td>
+        <td><a href="#reverse">reverse</a></td>
+        <td><a href="#toString">toString</a></td>
+        <td><a href="#make">make</a></td>
+        <td><a href="#flatten">flatten</a></td>
+        <td><a href="#pad">pad</a></td>
+        <td><a href="#zip">zip</a></td>
+    </tr>
+</table>
+
+<h4>all</h4>
+
+<p>
+    Returns all items stored inside the collection.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    'apple',
+    'banana',
+    'orange'
+]);
+
+$result = $collection-&gt;all();
+
+print_r($result);
+
+/*
+Array
+(
+    [0] =&gt; apple
+    [1] =&gt; banana
+    [2] =&gt; orange
+)
+*/</code></pre>
+</div>
+
+<h4>count</h4>
+
+<p>
+    Returns the total number of elements stored inside the collection.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    'apple',
+    'banana',
+    'orange'
+]);
+
+$result = $collection-&gt;count();
+
+var_dump($result);
+
+// int(3)</code></pre>
+</div>
+
+<h4>get</h4>
+
+<p>
+    Retrieves an item from the collection using a specific key.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    'name' =&gt; 'Ahmed',
+    'age' =&gt; '15'
+]);
+
+$result = $collection-&gt;get('name');
+
+var_dump($result);
+
+// string(7) "Ahmed"</code></pre>
+</div>
+
+<h4>take</h4>
+
+<p>
+    Returns a specific number of items from the collection.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    'apple',
+    'banana',
+    'orange',
+    'grape'
+]);
+
+$result = $collection-&gt;take(2);
+
+print_r($result);
+
+/*
+Array
+(
+    [0] =&gt; apple
+    [1] =&gt; banana
+)
+*/</code></pre>
+</div>
+
+<h4>first</h4>
+
+<p>
+    Returns the first item from the collection.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    'apple',
+    'banana',
+    'orange'
+]);
+
+$result = $collection-&gt;first();
+
+var_dump($result);
+
+// string(5) "apple"</code></pre>
+</div>
+
+<h4>last</h4>
+
+<p>
+    Returns the last item from the collection.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    'apple',
+    'banana',
+    'orange'
+]);
+
+$result = $collection-&gt;last();
+
+var_dump($result);
+
+// string(6) "orange"</code></pre>
+</div>
+
+<h4>set</h4>
+
+<p>
+    Assigns a value to the collection using the provided key.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([]);
+
+$collection-&gt;set('name', 'Ahmed');
+
+$result = $collection-&gt;all();
+
+print_r($result);
+
+/*
+Array
+(
+    [name] =&gt; Ahmed
+)
+*/</code></pre>
+</div>
+
+<h4>has</h4>
+
+<p>
+    Checks whether a specific value exists inside the collection.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    'apple',
+    'banana',
+    'orange'
+]);
+
+$result = $collection-&gt;has('banana');
+
+var_dump($result);
+
+// bool(true)</code></pre>
+</div>
+
+<h4>hasKey</h4>
+
+<p>
+    Checks whether a specific key exists inside the collection.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    'name' =&gt; 'Ahmed',
+    'age' =&gt; '15'
+]);
+
+$result = $collection-&gt;hasKey('age');
+
+var_dump($result);
+
+// bool(true)</code></pre>
+</div>
+
+<h4>keys</h4>
+
+<p>
+    Returns all keys stored inside the collection.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    'name' =&gt; 'Ahmed',
+    'age' =&gt; '15'
+]);
+
+$result = $collection-&gt;keys();
+
+print_r($result);
+
+/*
+Array
+(
+    [0] =&gt; name
+    [1] =&gt; age
+)
+*/</code></pre>
+</div>
+
+<h4>values</h4>
+
+<p>
+    Returns all values stored inside the collection.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    'name' =&gt; 'Ahmed',
+    'age' =&gt; '15'
+]);
+
+$result = $collection-&gt;values();
+
+print_r($result);
+
+/*
+Array
+(
+    [0] =&gt; Ahmed
+    [1] =&gt; 15
+)
+*/</code></pre>
+</div>
+
+<h4>remove</h4>
+
+<p>
+    Removes an item from the collection using a specific key.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    'name' =&gt; 'Ahmed',
+    'age' =&gt; '15'
+]);
+
+$collection-&gt;remove('age');
+
+$result = $collection-&gt;all();
+
+print_r($result);
+
+/*
+Array
+(
+    [name] =&gt; Ahmed
+)
+*/</code></pre>
+</div>
+
+<h4>clear</h4>
+
+<p>
+    Removes all items from the collection.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    'apple',
+    'banana',
+    'orange'
+]);
+
+$collection-&gt;clear();
+
+$result = $collection-&gt;all();
+
+print_r($result);
+
+/*
+Array
+(
+)
+*/</code></pre>
+</div>
+
+<h4>every</h4>
+
+<p>
+    Checks whether all items in the collection satisfy a given condition.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    2,
+    4,
+    6
+]);
+
+$result = $collection-&gt;every(function ($item, $key) {
+    return $item % 2 === 0;
+});
+
+var_dump($result);
+
+// bool(true)</code></pre>
+</div>
+
+<h4>contains</h4>
+
+<p>
+    Checks whether at least one item in the collection satisfies a given condition.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    1,
+    3,
+    5,
+    8
+]);
+
+$result = $collection-&gt;contains(function ($item, $key) {
+    return $item % 2 === 0;
+});
+
+var_dump($result);
+
+// bool(true)</code></pre>
+</div>
+
+<h4>partition</h4>
+
+<p>
+    Splits the collection into two groups based on a given condition.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    1,
+    2,
+    3,
+    4,
+    5
+]);
+
+$result = $collection-&gt;partition(function ($item, $key) {
+    return $item % 2 === 0;
+});
+
+print_r($result[0]-&gt;all());
+print_r($result[1]-&gt;all());
+
+/*
+Array
+(
+    [1] =&gt; 2
+    [3] =&gt; 4
+)
+
+Array
+(
+    [0] =&gt; 1
+    [2] =&gt; 3
+    [4] =&gt; 5
+)
+*/</code></pre>
+</div>
+
+<h4>where</h4>
+
+<p>
+    Returns all items that match a specific condition using a comparison operator.
+</p>
+
+<p>
+    Supported operators:
+</p>
+
+<ul>
+    <li><code>=</code></li>
+    <li><code>!=</code></li>
+    <li><code>&gt;</code></li>
+    <li><code>&lt;</code></li>
+    <li><code>&gt;=</code></li>
+    <li><code>&lt;=</code></li>
+    <li><code>===</code></li>
+    <li><code>!==</code></li>
+</ul>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    [
+        'name' =&gt; 'Ahmed',
+        'age' =&gt; 25
+    ],
+    [
+        'name' =&gt; 'John',
+        'age' =&gt; 30
+    ],
+    [
+        'name' =&gt; 'Ali',
+        'age' =&gt; 20
+    ]
+]);
+
+$result = $collection-&gt;where('age', '&gt;=', 25);
+
+print_r($result-&gt;all());
+
+/*
+Array
+(
+    [0] =&gt; Array
+    (
+        [name] =&gt; Ahmed
+        [age] =&gt; 25
+    )
+
+    [1] =&gt; Array
+    (
+        [name] =&gt; John
+        [age] =&gt; 30
+    )
+)
+*/</code></pre>
+</div>
+
+<h4>push</h4>
+
+<p>
+    Adds a new item to the end of the collection.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    'apple',
+    'banana'
+]);
+
+$collection-&gt;push('orange');
+
+$result = $collection-&gt;all();
+
+print_r($result);
+
+/*
+Array
+(
+    [0] =&gt; apple
+    [1] =&gt; banana
+    [2] =&gt; orange
+)
+*/</code></pre>
+</div>
+
+<h4>pop</h4>
+
+<p>
+    Removes the last item from the collection.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    'apple',
+    'banana',
+    'orange'
+]);
+
+$collection-&gt;pop();
+
+$result = $collection-&gt;all();
+
+print_r($result);
+
+/*
+Array
+(
+    [0] =&gt; apple
+    [1] =&gt; banana
+)
+*/</code></pre>
+</div>
+
+<h4>unique</h4>
+
+<p>
+    Returns a new collection containing only unique items.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    'apple',
+    'banana',
+    'apple',
+    'orange'
+]);
+
+$result = $collection-&gt;unique();
+
+print_r($result-&gt;all());
+
+/*
+Array
+(
+    [0] =&gt; apple
+    [1] =&gt; banana
+    [3] =&gt; orange
+)
+*/</code></pre>
+</div>
+
+<h4>orderBy</h4>
+
+<p>
+    Orders the items stored inside the collection.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    30,
+    10,
+    20
+]);
+
+$collection-&gt;orderBy();
+
+$result = $collection-&gt;all();
+
+print_r($result);
+
+/*
+Array
+(
+    [1] =&gt; 10
+    [2] =&gt; 20
+    [0] =&gt; 30
+)
+*/</code></pre>
+</div>
+
+<h4>sort</h4>
+
+<p>
+    Sorts the collection using a custom comparison callback.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    'banana',
+    'apple',
+    'orange'
+]);
+
+$collection-&gt;sort(function ($a, $b) {
+    return strlen($a) &lt;=&gt; strlen($b);
+});
+
+$result = $collection-&gt;all();
+
+print_r($result);
+
+/*
+Array
+(
+    [1] =&gt; apple
+    [0] =&gt; banana
+    [2] =&gt; orange
+)
+*/</code></pre>
+</div>
+
+<h4>map</h4>
+
+<p>
+    Applies a transformation callback to every item in the collection.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    1,
+    2,
+    3
+]);
+
+$result = $collection-&gt;map(function ($item) {
+    return $item * 10;
+});
+
+print_r($result-&gt;all());
+
+/*
+Array
+(
+    [0] =&gt; 10
+    [1] =&gt; 20
+    [2] =&gt; 30
+)
+*/</code></pre>
+</div>
+
+<h4>filter</h4>
+
+<p>
+    Filters collection items using a custom callback function.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    1,
+    2,
+    3,
+    4,
+    5
+]);
+
+$result = $collection-&gt;filter(function ($item) {
+    return $item % 2 === 0;
+});
+
+print_r($result-&gt;all());
+
+/*
+Array
+(
+    [1] =&gt; 2
+    [3] =&gt; 4
+)
+*/</code></pre>
+</div>
+
+<h4>reduce</h4>
+
+<p>
+    Reduces all items in the collection into a single final value.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    10,
+    20,
+    30
+]);
+
+$result = $collection-&gt;reduce(function ($acc, $item) {
+    return $acc + $item;
+});
+
+var_dump($result);
+
+// int(60)</code></pre>
+</div>
+
+<h4>merge</h4>
+
+<p>
+    Adds multiple items into the collection.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    'name' =&gt; 'Ahmed'
+]);
+
+$collection-&gt;merge([
+    'age' =&gt; 15
+]);
+
+$result = $collection-&gt;all();
+
+print_r($result);
+
+/*
+Array
+(
+    [name] =&gt; Ahmed
+    [age] =&gt; 15
+)
+*/</code></pre>
+</div>
+
+<h4>shuffle</h4>
+
+<p>
+    Randomly changes the order of items inside the collection.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    'apple',
+    'banana',
+    'orange'
+]);
+
+$collection-&gt;shuffle();
+
+$result = $collection-&gt;all();
+
+print_r($result);
+
+/*
+Example output:
+
+Array
+(
+    [0] =&gt; orange
+    [1] =&gt; apple
+    [2] =&gt; banana
+)
+*/</code></pre>
+</div>
+
+<h4>toJson</h4>
+
+<p>
+    Converts the collection into a JSON formatted string.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    'name' =&gt; 'Ahmed',
+    'age' =&gt; 15
+]);
+
+$result = $collection-&gt;toJson();
+
+echo $result;
+
+// {"name":"Ahmed","age":15}</code></pre>
+</div>
+
+<h4>slice</h4>
+
+<p>
+    Returns a portion of the collection starting from the specified position.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    'apple',
+    'banana',
+    'orange',
+    'grape'
+]);
+
+$result = $collection-&gt;slice(1, 2);
+
+print_r($result-&gt;all());
+
+/*
+Array
+(
+    [1] =&gt; banana
+    [2] =&gt; orange
+)
+*/</code></pre>
+</div>
+
+<h4>range</h4>
+
+<p>
+    Creates a new collection containing integer values between the specified start and end values.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection();
+
+$result = $collection-&gt;range(1, 5);
+
+print_r($result-&gt;all());
+
+/*
+Array
+(
+    [0] =&gt; 1
+    [1] =&gt; 2
+    [2] =&gt; 3
+    [3] =&gt; 4
+    [4] =&gt; 5
+)
+*/</code></pre>
+</div>
+
+<h4>times</h4>
+
+<p>
+    Creates a new collection containing a specific number of generated items.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection();
+
+$result = $collection-&gt;times(5, function ($index) {
+    return $index * 10;
+});
+
+print_r($result-&gt;all());
+
+/*
+Array
+(
+    [0] =&gt; 0
+    [1] =&gt; 10
+    [2] =&gt; 20
+    [3] =&gt; 30
+    [4] =&gt; 40
+)
+*/</code></pre>
+</div>
+
+<h4>isEmpty</h4>
+
+<p>
+    Checks whether the collection contains no items.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([]);
+
+$result = $collection-&gt;isEmpty();
+
+var_dump($result);
+
+// bool(true)</code></pre>
+</div>
+
+<h4>isNotEmpty</h4>
+
+<p>
+    Checks whether the collection contains one or more items.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    'apple'
+]);
+
+$result = $collection-&gt;isNotEmpty();
+
+var_dump($result);
+
+// bool(true)</code></pre>
+</div>
+
+<h4>avg</h4>
+
+<p>
+    Calculates and returns the average value of all items in the collection.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    10,
+    20,
+    30
+]);
+
+$result = $collection-&gt;avg();
+
+var_dump($result);
+
+// float(20)</code></pre>
+</div>
+
+<h4>min</h4>
+
+<p>
+    Returns the smallest value stored in the collection.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    30,
+    10,
+    20
+]);
+
+$result = $collection-&gt;min();
+
+var_dump($result);
+
+// int(10)</code></pre>
+</div>
+
+<h4>max</h4>
+
+<p>
+    Returns the largest value stored in the collection.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    30,
+    10,
+    20
+]);
+
+$result = $collection-&gt;max();
+
+var_dump($result);
+
+// int(30)</code></pre>
+</div>
+
+<h4>sum</h4>
+
+<p>
+    Calculates the total sum of all values inside the collection.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    10,
+    20,
+    30
+]);
+
+$result = $collection-&gt;sum();
+
+var_dump($result);
+
+// int(60)</code></pre>
+</div>
+
+<h4>random</h4>
+
+<p>
+    Returns one or more randomly selected items from the collection.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    'apple',
+    'banana',
+    'orange',
+    'grape'
+]);
+
+$result = $collection-&gt;random(2);
+
+print_r($result);
+
+/*
+Example output:
+
+Array
+(
+    [0] =&gt; banana
+    [1] =&gt; grape
+)
+*/</code></pre>
+</div>
+
+<h4>chunk</h4>
+
+<p>
+    Creates a new collection by dividing items into smaller groups of a specified size.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    1,
+    2,
+    3,
+    4,
+    5
+]);
+
+$result = $collection-&gt;chunk(2);
+
+foreach ($result-&gt;all() as $chunk) {
+    print_r($chunk);
+}
+
+/*
+Array
+(
+    [0] =&gt; 1
+    [1] =&gt; 2
+)
+
+Array
+(
+    [0] =&gt; 3
+    [1] =&gt; 4
+)
+
+Array
+(
+    [0] =&gt; 5
+)
+*/</code></pre>
+</div>
+<h4>each</h4>
+
+<p>
+    Iterates over all items in the collection and executes the provided callback for each item.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    'apple',
+    'banana',
+    'orange'
+]);
+
+$collection-&gt;each(function ($item) {
+    echo strtoupper($item) . PHP_EOL;
+});
+
+/*
+APPLE
+BANANA
+ORANGE
+*/</code></pre>
+</div>
+
+<h4>groupBy</h4>
+
+<p>
+    Groups collection items based on a specific key.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    ['name' =&gt; 'Ahmed', 'country' =&gt; 'UAE'],
+    ['name' =&gt; 'John', 'country' =&gt; 'USA'],
+    ['name' =&gt; 'Ali', 'country' =&gt; 'UAE']
+]);
+
+$result = $collection-&gt;groupBy('country');
+
+print_r($result-&gt;all());
+
+/*
+Array
+(
+    [UAE] =&gt; Array
+    (
+        [0] =&gt; Array
+        (
+            [name] =&gt; Ahmed
+            [country] =&gt; UAE
+        )
+
+        [1] =&gt; Array
+        (
+            [name] =&gt; Ali
+            [country] =&gt; UAE
+        )
+    )
+
+    [USA] =&gt; Array
+    (
+        [0] =&gt; Array
+        (
+            [name] =&gt; John
+            [country] =&gt; USA
+        )
+    )
+)
+*/</code></pre>
+</div>
+
+<h4>pluck</h4>
+
+<p>
+    Extracts all values associated with a specific key from the collection items.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    ['name' =&gt; 'Ahmed', 'country' =&gt; 'UAE'],
+    ['name' =&gt; 'John', 'country' =&gt; 'USA'],
+    ['name' =&gt; 'Ali', 'country' =&gt; 'UAE']
+]);
+
+$result = $collection-&gt;pluck('name');
+
+print_r($result-&gt;all());
+
+/*
+Array
+(
+    [0] =&gt; Ahmed
+    [1] =&gt; John
+    [2] =&gt; Ali
+)
+*/</code></pre>
+</div>
+
+<h4>diff</h4>
+
+<p>
+    Returns the items that exist in the current collection but not in the given collection.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    'apple',
+    'banana',
+    'orange'
+]);
+
+$compare = new Collection([
+    'banana'
+]);
+
+$result = $collection-&gt;diff($compare);
+
+print_r($result-&gt;all());
+
+/*
+Array
+(
+    [0] =&gt; apple
+    [2] =&gt; orange
+)
+*/</code></pre>
+</div>
+
+<h4>reverse</h4>
+
+<p>
+    Returns a new collection with items in reversed order.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    'apple',
+    'banana',
+    'orange'
+]);
+
+$reverse = $collection-&gt;reverse();
+
+print_r($reverse-&gt;all());
+
+/*
+Array
+(
+    [2] =&gt; orange
+    [1] =&gt; banana
+    [0] =&gt; apple
+)
+*/</code></pre>
+</div>
+
+<h4>toString</h4>
+
+<p>
+    Returns the string representation of the collection.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    'apple',
+    'banana',
+    'orange'
+]);
+
+$result = $collection-&gt;toString();
+
+echo $result;
+
+// Collection(64): 00000000000000000000000000000000</code></pre>
+</div>
+
+<h4>make</h4>
+
+<p>
+    Creates a new collection instance using the static factory method.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = Collection::make([
+    'apple',
+    'banana',
+    'orange'
+]);
+
+print_r($collection-&gt;all());
+
+/*
+Array
+(
+    [0] =&gt; apple
+    [1] =&gt; banana
+    [2] =&gt; orange
+)
+*/</code></pre>
+</div>
+
+<h4>flatten</h4>
+
+<p>
+    Converts a multi-dimensional collection into a single-dimensional collection.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    [1, 2],
+    [3, 4],
+    [5, 6]
+]);
+
+$result = $collection-&gt;flatten();
+
+print_r($result-&gt;all());
+
+/*
+Array
+(
+    [0] =&gt; 1
+    [1] =&gt; 2
+    [2] =&gt; 3
+    [3] =&gt; 4
+    [4] =&gt; 5
+    [5] =&gt; 6
+)
+*/</code></pre>
+</div>
+
+<h4>pad</h4>
+
+<p>
+    Extends the collection by adding values until it reaches the requested size.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    'apple',
+    'banana'
+]);
+
+$result = $collection-&gt;pad(5, 'unknown');
+
+print_r($result-&gt;all());
+
+/*
+Array
+(
+    [0] =&gt; apple
+    [1] =&gt; banana
+    [2] =&gt; unknown
+    [3] =&gt; unknown
+    [4] =&gt; unknown
+)
+*/</code></pre>
+</div>
+
+<h4>zip</h4>
+
+<p>
+    Combines the collection items with another array by matching their indexes.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+$collection = new Collection([
+    'apple',
+    'banana',
+    'orange'
+]);
+
+$result = $collection-&gt;zip([
+    'red',
+    'yellow',
+    'orange'
+]);
+
+print_r($result-&gt;all());
+
+/*
+Array
+(
+    [0] =&gt; Array
+    (
+        [0] =&gt; apple
+        [1] =&gt; red
+    )
+
+    [1] =&gt; Array
+    (
+        [0] =&gt; banana
+        [1] =&gt; yellow
+    )
+
+    [2] =&gt; Array
+    (
+        [0] =&gt; orange
+        [1] =&gt; orange
+    )
+)
+*/</code></pre>
+</div>
