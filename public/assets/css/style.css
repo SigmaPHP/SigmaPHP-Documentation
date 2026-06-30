@@ -28,7 +28,14 @@ a:hover {
 }
 
 table {
+    border: 1px solid;
     margin-top: 20px;
+    border-collapse: collapse;
+}
+
+table tr td, table tr th {
+    padding: 5px;
+    text-align: center;
 }
 
 header {
