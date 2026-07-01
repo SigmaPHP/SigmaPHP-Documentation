@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
     headings.forEach((heading, index) => {
         // Create ID if missing
         if (!heading.id) {
-            heading.id = "section-" + (index + 1);
+            heading.id = heading.textContent.toLowerCase().replace(' ', '-');
         }
 
         // Create list item
