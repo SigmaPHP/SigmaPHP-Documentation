@@ -233,6 +233,12 @@ class PageSeeder extends Seeder
                 ],
 
                 [
+                    'category_id' => $this->getCategoryID('collections'),
+                    'content' => $this->getContent('misc/collections'),
+                    'tags' => 'sigmaphp,php framework,collections,arrays,OPP'
+                ],
+
+                [
                     'category_id' => $this->getCategoryID('cli'),
                     'content' => $this->getContent('misc/cli'),
                     'tags' => 'sigmaphp,php framework,cli,command line,console'

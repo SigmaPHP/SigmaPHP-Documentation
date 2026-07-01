@@ -73,6 +73,7 @@ class CategorySeeder extends Seeder
 
                 // Misc
                 ['name' => 'Helpers', 'version_id' => $version, 'parent_id' => ++$index],
+                ['name' => 'Collections', 'version_id' => $version, 'parent_id' => ++$index],
                 ['name' => 'CLI', 'version_id' => $version, 'parent_id' => $index],
             ]
         );
