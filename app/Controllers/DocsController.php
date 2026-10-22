@@ -65,12 +65,12 @@ class DocsController extends BaseController
         // organize categories into hierarchy
         $hierarchy = [];
 
-        foreach (array_filter($categories, function ($category) {
+        foreach ($categories->filter(function ($category) {
             return $category->parent_id == 0;
         }) as $parentCat) {
             $hierarchy[] = $parentCat;
 
-            foreach (array_filter($categories, function ($sub) use ($parentCat)
+            foreach ($categories->filter(function ($sub) use ($parentCat)
             {
                 return $sub->parent_id == $parentCat->id;
             }) as $subCategory) {
@@ -89,11 +89,11 @@ class DocsController extends BaseController
                 );
             }
 
-            $categoryIds = array_map(function ($cat) {
+            $categoryIds = $categories->map(function ($cat) {
                 return $cat->id;
-            }, $categories);
+            });
 
-            $categoryIds = rtrim(implode(',', $categoryIds), ',');
+            $categoryIds = rtrim(implode(',', $categoryIds->all()), ',');
             $keyword = $request->get('keyword');
 
             $statement = container('db')->query(<<<QUERY
@@ -121,16 +121,15 @@ class DocsController extends BaseController
             );
         }
 
-        $currentCategory = array_filter($categories,
-            function ($cat) use ($category) {
-                return $cat->urlName() == $category;
-            });
+        $currentCategory = $categories->filter(function ($cat) use ($category) {
+            return $cat->urlName() == $category;
+        });
 
         if (empty($currentCategory)) {
             return $this->error(404);
         }
 
-        $page = array_values($currentCategory)[0]->page() ?? null;
+        $page = array_values($currentCategory->all())[0]->page() ?? null;
 
         if (empty($page)) {
             return $this->error(404);

@@ -3,7 +3,4 @@
 
 require 'vendor/autoload.php';
 
-$console = new \SigmaPHP\Core\Console\ConsoleManager();
-
-// Run
-$console->execute($argv);
+\SigmaPHP\Core\App\Console::start();

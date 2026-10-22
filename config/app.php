@@ -40,6 +40,11 @@ return [
     'routes_path' => env('ROUTES_PATH', 'app/Routes'),
 
     /**
+     * Middlewares file path.
+     */
+    'middlewares_path' => env('COMMANDS_PATH', 'app/Middlewares'),
+
+    /**
      * Views files path.
      */
     'views_path' => env('VIEWS_PATH', 'app/Views'),
@@ -53,6 +58,16 @@ return [
      * Uploaded files path.
      */
     'upload_path' => env('UPLOADS_PATH', 'storage/uploads'),
+
+    /**
+     * Console commands file path.
+     */
+    'commands_path' => env('COMMANDS_PATH', 'app/Commands'),
+
+    /**
+     * Service Provider files path.
+     */
+    'providers_path' => env('PROVIDERS_PATH', 'app/Providers'),
 
     /**
      * HTTP method override.
