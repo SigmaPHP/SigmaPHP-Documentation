@@ -55,7 +55,7 @@ class DocsController extends BaseController
     {
         $versions = $this->versionModel->all();
         $currentVersion = $this->versionModel->findBy('name', $version);
-        //  dd($currentVersion);
+
         if (empty($currentVersion)) {
             return $this->error(404);
         }
@@ -129,7 +129,7 @@ class DocsController extends BaseController
             return $this->error(404);
         }
 
-        $page = array_values($currentCategory->all())[0]->page() ?? null;
+        $page = $currentCategory->first()->page() ?? null;
 
         if (empty($page)) {
             return $this->error(404);
@@ -140,6 +140,8 @@ class DocsController extends BaseController
         //     'docs/v0_1_x/misc/collections',
         //     compact('version', 'versions', 'hierarchy', 'page')
         // );
+
+        $versions = $versions->all();
 
         return $this->render(
             'docs',

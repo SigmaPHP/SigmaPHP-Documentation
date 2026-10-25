@@ -18,7 +18,7 @@ class Page extends BaseModel
             Category::class,
             'id',
             'category_id',
-        )[0] ?? null;
+        )->first();
     }
 
     /**

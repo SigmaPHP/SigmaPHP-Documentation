@@ -19,7 +19,7 @@ class Category extends BaseModel
             Version::class,
             'id',
             'version_id',
-        )[0] ?? null;
+        )->first();
     }
 
     /**
@@ -33,7 +33,7 @@ class Category extends BaseModel
             Page::class,
             'category_id',
             'id'
-        )[0] ?? null;
+        )->first();
     }
 
     /**
