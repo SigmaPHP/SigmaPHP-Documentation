@@ -32,6 +32,7 @@ class CategorySeeder extends Seeder
                 ['name' => 'Database', 'version_id' => $version, 'parent_id' => 0],
                 ['name' => 'ORM', 'version_id' => $version, 'parent_id' => 0],
                 ['name' => 'Dependency Injection', 'version_id' => $version, 'parent_id' => 0],
+                ['name' => 'Console', 'version_id' => $version, 'parent_id' => 0],
                 ['name' => 'Misc', 'version_id' => $version, 'parent_id' => 0],
 
                 // Getting Started
@@ -71,10 +72,14 @@ class CategorySeeder extends Seeder
                 // Dependency Injection
                 ['name' => 'Service Providers', 'version_id' => $version, 'parent_id' => ++$index],
 
+                // Console
+                ['name' => 'Available Utilities', 'version_id' => $version, 'parent_id' => ++$index],
+                ['name' => 'Create Commands', 'version_id' => $version, 'parent_id' => $index],
+
                 // Misc
                 ['name' => 'Helpers', 'version_id' => $version, 'parent_id' => ++$index],
                 ['name' => 'Collections', 'version_id' => $version, 'parent_id' => $index],
-                ['name' => 'CLI', 'version_id' => $version, 'parent_id' => $index],
+                ['name' => 'Filesystem', 'version_id' => $version, 'parent_id' => $index],
             ]
         );
     }

@@ -87,7 +87,7 @@ $timezone = config('app.name');
 </code></pre>
 </div>
 
-<h4>root_path()</h4>
+<h4>rootPath()</h4>
 
 <p>
     Generate an absolute path relative to the root directory of the application.
@@ -96,8 +96,34 @@ $timezone = config('app.name');
 <div class="code-card">
     <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
     <pre><code class="language-php">
-$logs = root_path('storage/logs');
+$logs = rootPath('storage/logs');
 </code></pre>
+</div>
+
+<h4>concatPath()</h4>
+
+<p>
+Concatenates multiple paths into a single path.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$path = concatPath(
+    '/var/www/project',
+    'storage',
+    'uploads',
+    'image.png'
+);
+</code></pre>
+</div>
+
+<div class="alert alert-info">
+    <div class="alert-content">
+        <p>
+            This method uses PHP's platform independent <code>DIRECTORY_SEPARATOR</code> constant to ensure the correct directory separator is used for the current operating system.
+        </p>
+    </div>
 </div>
 
 <h4>url()</h4>
