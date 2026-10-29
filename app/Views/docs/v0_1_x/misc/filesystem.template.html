@@ -1,0 +1,531 @@
+<p>
+    The Filesystem is a lightweight utility for common file and directory
+    operations, including creating, reading, writing, copying, moving, and
+    removing files. It provides a consistent API that keeps filesystem handling
+    simple, reusable, and readable.
+</p>
+
+<p>
+    One of the key features of the SigmaPHP Framework is its dependency injection
+    (DI) system. Services can be injected into controllers and other classes
+    through their constructors, allowing the framework to manage dependencies
+    without requiring classes to instantiate them manually.
+</p>
+
+<p>The following example demonstrates constructor-based dependency injection:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+namespace App\Controllers;
+
+use SigmaPHP\Filesystem\Filesystem;
+
+class UserController
+&#123;
+    protected $filesystem;
+
+    public function __construct(Filesystem $filesystem)
+    &#123;
+        $this->filesystem = $filesystem;
+    &#125;
+
+    public function index()
+    &#123;
+        $this->filesystem->read('/path/to/file');
+    &#125;
+&#125;
+    </code></pre>
+</div>
+
+<p>
+    Also, <code>Filesystem</code> class can be instantiated directly whenever
+    filesystem operations are required.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$filesystem = new Filesystem();
+    </code></pre>
+</div>
+
+<p>
+    Once the filesystem instance has been created, it can be used to perform
+    common file and directory operations.
+</p>
+
+<p>For example, create a file and write content to it:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$filesystem = new Filesystem();
+
+$filesystem->create(
+    '/var/www/project/example.txt',
+    0644
+);
+
+$filesystem->write(
+    '/var/www/project/example.txt',
+    'Hello, SigmaPHP!'
+);
+    </code></pre>
+</div>
+
+<p>The same instance can then be used to read the file:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+$content = $filesystem->read(
+    '/var/www/project/example.txt',
+    0,
+    1000
+);
+
+echo $content;
+    </code></pre>
+</div>
+
+<h4>Available Methods</h4>
+
+<h4>list()</h4>
+
+<p>
+    Lists files within a directory and its subdirectories. Options allow you
+    to include full paths, control whether file extensions are included, and
+    return files only.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$files = $filesystem->list(
+    '/var/www/project',
+    true,
+    true,
+    true
+);
+    </code></pre>
+</div>
+
+<p>
+    Returns an array of file paths or file names, depending on the supplied options.
+</p>
+
+<h4>exists()</h4>
+
+<p>Checks whether a file or directory exists at the specified path.</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+if ($filesystem->exists('/var/www/project/config.php')) &#123;
+    echo 'File exists.';
+&#125;
+    </code></pre>
+</div>
+
+<p>Returns <code>true</code> if the path exists; otherwise, returns <code>false</code>.</p>
+
+<h4>dirHas()</h4>
+
+<p>Checks whether a directory contains a specific file or subdirectory.</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+if ($filesystem->dirHas('/var/www/project', 'config.php')) &#123;
+    echo 'config.php exists.';
+&#125;
+    </code></pre>
+</div>
+
+<p>Returns <code>true</code> if the target exists inside the specified directory.</p>
+
+<h4>create()</h4>
+
+<p>Creates a new file with the specified permissions.</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$filesystem->create(
+    '/var/www/project/example.txt',
+    0644
+);
+    </code></pre>
+</div>
+
+<p>Returns <code>true</code> when the file is created successfully.</p>
+
+<h4>rename()</h4>
+
+<p>Renames a file or directory by changing its path.</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$filesystem->rename(
+    '/var/www/project/old.txt',
+    '/var/www/project/new.txt'
+);
+    </code></pre>
+</div>
+
+<p>Returns <code>true</code> when the operation succeeds.</p>
+
+<h4>copy()</h4>
+
+<p>Copies a file to another location.</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$filesystem->copy(
+    '/var/www/project/source.txt',
+    '/var/www/project/backup/source.txt'
+);
+    </code></pre>
+</div>
+
+<p>Returns <code>true</code> when the file is copied successfully.</p>
+
+<h4>move()</h4>
+
+<p>Moves a file to another location.</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$filesystem->move(
+    '/var/www/project/source.txt',
+    '/var/www/project/archive/source.txt'
+);
+    </code></pre>
+</div>
+
+<p>Returns <code>true</code> when the file is moved successfully.</p>
+
+<h4>remove()</h4>
+
+<p>Removes a file from the filesystem.</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$filesystem->remove(
+    '/var/www/project/example.txt'
+);
+    </code></pre>
+</div>
+
+<p>Returns <code>true</code> when the file is removed successfully.</p>
+
+<h4>write()</h4>
+
+<p>Writes content to a file. Existing content may be replaced.</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$filesystem->write(
+    '/var/www/project/example.txt',
+    'Hello, SigmaPHP!'
+);
+    </code></pre>
+</div>
+
+<p>Returns <code>true</code> when the content is written successfully.</p>
+
+<h4>append()</h4>
+
+<p>Appends content to the end of an existing file.</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$filesystem->append(
+    '/var/www/project/example.txt',
+    "\nAdditional content."
+);
+    </code></pre>
+</div>
+
+<p>Returns <code>true</code> when the content is appended successfully.</p>
+
+<h4>read()</h4>
+
+<p>Reads content from a file, starting at the specified offset and up to the requested length.</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$content = $filesystem->read(
+    '/var/www/project/example.txt',
+    0,
+    100
+);
+
+echo $content;
+    </code></pre>
+</div>
+
+<p>Returns the file content as a string.</p>
+
+<h4>createDir()</h4>
+
+<p>Creates a directory with the specified permissions. Parent directories can also be created recursively.</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$filesystem->createDir(
+    '/var/www/project/storage',
+    0755,
+    true
+);
+    </code></pre>
+</div>
+
+<p>Returns <code>true</code> when the directory is created successfully.</p>
+
+<h4>removeDir()</h4>
+
+<p>Removes a directory and its contents.</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$filesystem->removeDir(
+    '/var/www/project/storage/cache'
+);
+    </code></pre>
+</div>
+
+<p>Returns <code>true</code> when the directory and its contents are removed successfully.</p>
+
+<h4>isDir()</h4>
+
+<p>Checks whether a specified path points to a directory.</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$isDirectory = $filesystem->isDir(
+    '/var/www/project'
+);
+    </code></pre>
+</div>
+
+<p>Returns <code>true</code> if the path is a directory; otherwise, returns <code>false</code>.</p>
+
+<h4>symlink()</h4>
+
+<p>Creates a symbolic link to a file.</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$filesystem->symlink(
+    '/var/www/project/config.php',
+    '/var/www/project/config-link.php'
+);
+    </code></pre>
+</div>
+
+<p>Returns <code>true</code> if the symbolic link is created successfully; otherwise, returns <code>false</code>.</p>
+
+<h4>concatPath()</h4>
+
+<p>Combines multiple path segments into a single path string.</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$path = $filesystem->concatPath(
+    '/var/www/project',
+    'storage',
+    'logs',
+    'app.log'
+);
+    </code></pre>
+</div>
+
+<p>Returns the concatenated path as a string.</p>
+
+<h4>addExtension()</h4>
+
+<p>Adds an extension to a file name.</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$filename = $filesystem->addExtension(
+    'document',
+    'pdf'
+);
+
+// Result: document.pdf
+    </code></pre>
+</div>
+
+<p>Returns the file name with the specified extension.</p>
+
+<h4>removeExtension()</h4>
+
+<p>
+    Removes an extension from a file name. By default, only the last extension
+    is removed. You can specify a custom extension, including compound extensions.
+</p>
+
+<div class="alert alert-info">
+    <div class="alert-content">
+        <p>
+            For a file such as <code>script.min.js</code>,
+            the default behavior removes only <code>.js</code>. To remove the entire
+            <code>min.js</code> suffix, specify it explicitly.
+        </p>
+    </div>
+</div>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$filename = $filesystem->removeExtension(
+    'document.pdf'
+);
+
+// Result: document
+
+$filename = $filesystem->removeExtension(
+    'script.min.js'
+);
+
+// Result: script.min
+
+$filename = $filesystem->removeExtension(
+    'script.min.js',
+    'min.js'
+);
+
+// Result: script
+    </code></pre>
+</div>
+
+<p>
+    Returns the file name without the specified extension or, if no extension
+    is provided, without its last extension.
+</p>
+
+<h4>getFileName()</h4>
+
+<p>Extracts the file name from a path.</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$filename = $filesystem->getFileName(
+    '/var/www/project/config.php'
+);
+
+// Result: config.php
+    </code></pre>
+</div>
+
+<p>Returns the extracted file name as a string.</p>
+
+<h4>getPath()</h4>
+
+<p>Extracts the directory path from a full file path.</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$path = $filesystem->getPath(
+    '/var/www/project/document.pdf'
+);
+
+// Result: /var/www/project
+    </code></pre>
+</div>
+
+<p>Returns the directory path as a string.</p>
+
+<h4>changeMode()</h4>
+
+<p>Changes the permissions of a file or directory using an octal permission value.</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$filesystem->changeMode(
+    '/var/www/project/storage',
+    0755
+);
+    </code></pre>
+</div>
+
+<p>
+    Returns <code>true</code> if the permissions are changed successfully;
+    otherwise, returns <code>false</code>.
+</p>
+
+<p>
+    In this example, <code>0755</code> grants the owner read, write, and execute
+    permissions, while group members and other users receive read and execute
+    permissions.
+</p>
+
+<h4>changeGroup()</h4>
+
+<p>Changes the group ownership of a file or directory.</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$filesystem->changeGroup(
+    '/var/www/project/storage',
+    'www-data'
+);
+    </code></pre>
+</div>
+
+<p>Returns <code>true</code> if the group is changed successfully; otherwise, returns <code>false</code>.</p>
+
+<h4>changeOwner()</h4>
+
+<p>Changes the owner of a file or directory.</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$filesystem->changeOwner(
+    '/var/www/project/storage',
+    'www-data'
+);
+    </code></pre>
+</div>
+
+<p>Returns <code>true</code> if the owner is changed successfully; otherwise, returns <code>false</code>.</p>
+
+<div class="alert alert-warning">
+    <div class="alert-content">
+        <p>
+            Changing file permissions, group ownership, or file
+            ownership depends on the operating system and the privileges of the executing
+            user. These operations may fail if the process does not have sufficient
+            permissions.
+        </p>
+    </div>
+</div>
