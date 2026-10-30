@@ -184,7 +184,47 @@
     <li><strong>port</strong> — database service port (default 3306).</li>
 </ul>
 
+<h3>Service Providers</h3>
 
+<p>
+    The service providers configuration file is responsible for registering
+    all service providers used by your application, including the built-in
+    SigmaPHP framework providers and your own custom providers.
+</p>
+
+<p>
+    The SigmaPHP CLI provides utilities to register and manage service
+    providers, so you don't need to update this file manually.
+</p>
+
+<p>
+    The configuration is organized into two sections:
+</p>
+
+<ul>
+    <li>
+        <strong>Core Service Providers:</strong>
+        Contains the default service providers responsible for registering
+        the framework's core services.
+    </li>
+    <li>
+        <strong>User Defined Service Providers:</strong>
+        Where you register your own application service providers.
+    </li>
+</ul>
+
+<p>
+    You are not limited to the default configuration. For advanced
+    customization, you can modify, replace, or even remove providers
+    according to your application's requirements.
+</p>
+
+<p>
+    This is one of the things that makes SigmaPHP different:
+    <strong>Zero magic, everything is controllable.</strong>
+    You stay in control of how your application is configured and how
+    its services are registered.
+</p>
 <h3>Environment Files (.env)</h3>
 
 <p>
