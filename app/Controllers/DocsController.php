@@ -136,10 +136,10 @@ class DocsController extends BaseController
         }
 
         // !! For Testing Only !!
-        $page->content = $this->renderView(
-            'docs/v0_1_x/console/available_utilities',
-            compact('version', 'versions', 'hierarchy', 'page')
-        );
+        // $page->content = $this->renderView(
+        //     'docs/v0_1_x/console/command_features',
+        //     compact('version', 'versions', 'hierarchy', 'page')
+        // );
 
         $versions = $versions->all();
 

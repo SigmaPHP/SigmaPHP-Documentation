@@ -18,7 +18,12 @@
     All CLI utilities follow the same general syntax:
 </p>
 
-<pre><code class="language-bash">sigma-cli [COMMAND] [OPTIONS] [--] [ARGUMENTS]</code></pre>
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli [COMMAND] [OPTIONS] [--] [ARGUMENTS]
+</code></pre>
+</div>
 
 <p>
     Replace <code>[COMMAND]</code> with the desired utility, and provide any
@@ -54,7 +59,8 @@
 <h3>Available Commands</h3>
 
 <p>
-    SigmaPHP provides the following built-in commands:
+    SigmaPHP CLI organizes its built-in commands into three categories,
+    providing utilities for framework management, application development, and database operations:
 </p>
 
 <p>
@@ -120,28 +126,14 @@
 <h4>create:model {model name}</h4>
 
 <p>
-    Create a new model class. This command also automatically generates
-    a corresponding migration file for the model.
+    Create a new model class. Use the <code>-m, --with-migration</code> option
+    to generate a corresponding migration file for the model.
 </p>
 
 <div class="code-card">
     <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
     <pre><code class="language-bash">
-./bin/sigma-cli create:model User
-</code></pre>
-</div>
-
-<h4>create:provider {service provider name}</h4>
-
-<p>
-    Generate a new service provider used to register dependencies and services
-    inside the container.
-</p>
-
-<div class="code-card">
-    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
-    <pre><code class="language-bash">
-./bin/sigma-cli create:provider AppServiceProvider
+./bin/sigma-cli create:model User --with-migration
 </code></pre>
 </div>
 
@@ -158,16 +150,17 @@
 </code></pre>
 </div>
 
-<h4>create:uploads</h4>
+<h4>create:provider {service provider name}</h4>
 
 <p>
-    Create the uploads directory used to store uploaded files.
+    Generate a new service provider used to register dependencies and services
+    inside the container.
 </p>
 
 <div class="code-card">
     <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
     <pre><code class="language-bash">
-./bin/sigma-cli create:uploads
+./bin/sigma-cli create:provider AppServiceProvider
 </code></pre>
 </div>
 
@@ -193,6 +186,76 @@
     and table data:
 </p>
 
+<h4>migrate</h4>
+
+<p>
+    Run the application's pending database migrations. Use the
+    <code>-f, --file &lt;string&gt;</code> option to run a specific migration file.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli migrate
+./bin/sigma-cli migrate --file CreateUsersTable
+</code></pre>
+</div>
+
+<h4>seed {seeder name}</h4>
+
+<p>
+    Run one or more database seeders. Use the
+    <code>-f, --file &lt;string&gt;</code> option to run a specific seeder file.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli seed UserSeeder
+./bin/sigma-cli seed --file UserSeeder
+</code></pre>
+</div>
+
+<h4>rollback</h4>
+
+<p>
+    Rollback database migrations. By default, the command rolls back all migrations
+    to the beginning. To rollback to a specific date, use the <code>-d</code> or
+    <code>--date</code> option.
+</p>
+
+<p>
+    The date must follow the <code>YYYY-M-D</code> format, for example,
+    <code>2023-1-20</code>.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+# Rollback all migrations
+./bin/sigma-cli rollback
+
+# Rollback to a specific date
+./bin/sigma-cli rollback --date=2023-1-20
+
+# Using the shorthand option
+./bin/sigma-cli rollback -d=2023-1-20
+</code></pre>
+</div>
+
+<h4>truncate</h4>
+
+<p>
+    Delete all data from every table in the database without removing the table structures.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli truncate
+</code></pre>
+</div>
+
 <h4>drop</h4>
 
 <p>
@@ -216,58 +279,6 @@
     <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
     <pre><code class="language-bash">
 ./bin/sigma-cli fresh
-</code></pre>
-</div>
-
-<h4>migrate</h4>
-
-<p>
-    Run the application's pending database migrations.
-</p>
-
-<div class="code-card">
-    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
-    <pre><code class="language-bash">
-./bin/sigma-cli migrate
-</code></pre>
-</div>
-
-<h4>rollback {date}</h4>
-
-<p>
-    Rollback the latest migration or rollback to a specific migration date.
-</p>
-
-<div class="code-card">
-    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
-    <pre><code class="language-bash">
-./bin/sigma-cli rollback
-</code></pre>
-</div>
-
-<h4>seed {seeder name}</h4>
-
-<p>
-    Run one or more database seeders.
-</p>
-
-<div class="code-card">
-    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
-    <pre><code class="language-bash">
-./bin/sigma-cli seed UserSeeder
-</code></pre>
-</div>
-
-<h4>truncate</h4>
-
-<p>
-    Delete all data from every table in the database without removing the table structures.
-</p>
-
-<div class="code-card">
-    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
-    <pre><code class="language-bash">
-./bin/sigma-cli truncate
 </code></pre>
 </div>
 
@@ -304,6 +315,20 @@
     <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
     <pre><code class="language-bash">
 ./bin/sigma-cli create:secret
+</code></pre>
+</div>
+
+<h4>create:uploads</h4>
+
+<p>
+    Creates the <code>uploads</code> directory used to store uploaded files and generates a
+    symbolic link to it inside the <code>public</code> directory, making uploaded files accessible through the web.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli create:uploads
 </code></pre>
 </div>
 
@@ -366,9 +391,6 @@
 
 <ul>
     <li>
-        <code>--config</code> — Specify the configuration file path.
-    </li>
-    <li>
         <code>-h, --help</code> — Display the help menu.
     </li>
     <li>
@@ -385,6 +407,18 @@
     </li>
 </ul>
 
+<div class="alert alert-info">
+    <div class="alert-content">
+        <p>
+            You might notice a global option called <code>--config</code> listed in the help menu, which allows specifying a configuration file path.
+        </p>
+
+        <p>
+            This option is used exclusively by database commands for internal purposes and can be safely ignored during normal application development.
+        </p>
+    </div>
+</div>
+
 <h3>Getting Command Help</h3>
 
 <p>
@@ -397,14 +431,24 @@
     <code>--help</code> to its name:
 </p>
 
-<pre><code class="language-bash">sigma-cli [COMMAND] --help</code></pre>
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli [COMMAND] --help
+</code></pre>
+</div>
 
 <p>
     For example, to display the available options and usage information
     for the migration command:
 </p>
 
-<pre><code class="language-bash">sigma-cli migrate --help</code></pre>
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli migrate --help
+</code></pre>
+</div>
 
 <p>
     This makes it easy to explore the available utilities and understand

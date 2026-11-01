@@ -1,0 +1,1033 @@
+<h3>Colors</h3>
+
+<p>
+    The <code>SigmaPHP-Console</code> library provides built-in color and text formatting
+    support through ANSI escape sequences. You can apply colors directly to terminal
+    output when writing messages from your console commands, making it easier to
+    distinguish messages and improve readability.
+</p>
+
+<h4>Foreground Colors</h4>
+
+<p>
+    The library supports the following ANSI-16 foreground colors, which can be
+    specified using their corresponding string names:
+</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Color</th>
+            <th>ANSI Code</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td><code>default</code></td><td>39</td></tr>
+        <tr><td><code>black</code></td><td>30</td></tr>
+        <tr><td><code>red</code></td><td>31</td></tr>
+        <tr><td><code>green</code></td><td>32</td></tr>
+        <tr><td><code>yellow</code></td><td>33</td></tr>
+        <tr><td><code>blue</code></td><td>34</td></tr>
+        <tr><td><code>magenta</code></td><td>35</td></tr>
+        <tr><td><code>cyan</code></td><td>36</td></tr>
+        <tr><td><code>light_gray</code></td><td>37</td></tr>
+        <tr><td><code>dark_gray</code></td><td>90</td></tr>
+        <tr><td><code>light_red</code></td><td>91</td></tr>
+        <tr><td><code>light_green</code></td><td>92</td></tr>
+        <tr><td><code>light_yellow</code></td><td>93</td></tr>
+        <tr><td><code>light_blue</code></td><td>94</td></tr>
+        <tr><td><code>light_magenta</code></td><td>95</td></tr>
+        <tr><td><code>light_cyan</code></td><td>96</td></tr>
+        <tr><td><code>white</code></td><td>97</td></tr>
+    </tbody>
+</table>
+
+<h4>Background Colors</h4>
+
+<p>
+    The library also supports ANSI-16 background colors. These can be applied
+    using the <code>bg</code> formatting option when writing command output.
+</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Color</th>
+            <th>ANSI Code</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td><code>default</code></td><td>49</td></tr>
+        <tr><td><code>black</code></td><td>40</td></tr>
+        <tr><td><code>red</code></td><td>41</td></tr>
+        <tr><td><code>green</code></td><td>42</td></tr>
+        <tr><td><code>yellow</code></td><td>43</td></tr>
+        <tr><td><code>blue</code></td><td>44</td></tr>
+        <tr><td><code>magenta</code></td><td>45</td></tr>
+        <tr><td><code>cyan</code></td><td>46</td></tr>
+        <tr><td><code>light_gray</code></td><td>47</td></tr>
+        <tr><td><code>dark_gray</code></td><td>100</td></tr>
+        <tr><td><code>light_red</code></td><td>101</td></tr>
+        <tr><td><code>light_green</code></td><td>102</td></tr>
+        <tr><td><code>light_yellow</code></td><td>103</td></tr>
+        <tr><td><code>light_blue</code></td><td>104</td></tr>
+        <tr><td><code>light_magenta</code></td><td>105</td></tr>
+        <tr><td><code>light_cyan</code></td><td>106</td></tr>
+        <tr><td><code>white</code></td><td>107</td></tr>
+    </tbody>
+</table>
+
+<h4>ANSI-256 Colors</h4>
+
+<p>
+    In addition to the standard ANSI-16 palette, <code>SigmaPHP-Console</code>
+    supports ANSI-256 colors, providing access to an extended range of terminal
+    colors.
+</p>
+
+<p>
+    Unlike ANSI-16 colors, ANSI-256 colors are specified using integer values
+    instead of string names. For example, you can use <code>180</code> to set
+    an ANSI-256 background color.
+</p>
+
+<h4>Using Colors in a Command</h4>
+
+<p>
+    You can apply colors and text formatting directly when writing terminal
+    output using the <code>write()</code>, <code>writeln()</code>, and
+    <code>writeErr()</code> methods.
+</p>
+
+<p>
+    Formatting options are passed as a semicolon-separated string, allowing
+    you to combine foreground colors, background colors, and text styles
+    in a single declaration.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$this->write('Hello World', 'fg=red;bg=180;bold');
+    </code></pre>
+</div>
+
+<p>The formatting options in this example are:</p>
+
+<ul>
+    <li><code>fg=red</code> sets the foreground text color to red.</li>
+    <li><code>bg=180</code> sets the background to ANSI-256 color 180.</li>
+    <li><code>bold</code> applies bold formatting to the text.</li>
+</ul>
+
+<p>
+    Multiple formatting options can be combined using semicolons,
+    giving you complete control over how terminal messages are displayed.
+</p>
+
+<h3>Text Formatting</h3>
+
+<p>
+    The <code>SigmaPHP-Console</code> library supports text formatting through
+    ANSI escape sequences. You can combine different text styles with foreground
+    and background colors to customize terminal output and make command messages
+    more readable and expressive.
+</p>
+
+<h4>Available Text Styles</h4>
+
+<p>
+    The following text formatting styles are supported:
+</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Style</th>
+            <th>ANSI Code</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>bold</code></td>
+            <td>1</td>
+            <td>Displays text in bold.</td>
+        </tr>
+        <tr>
+            <td><code>dim</code></td>
+            <td>2</td>
+            <td>Displays text with reduced intensity.</td>
+        </tr>
+        <tr>
+            <td><code>underline</code></td>
+            <td>4</td>
+            <td>Underlines the text.</td>
+        </tr>
+        <tr>
+            <td><code>blink</code></td>
+            <td>5</td>
+            <td>Makes the text blink when supported by the terminal.</td>
+        </tr>
+        <tr>
+            <td><code>reverse</code></td>
+            <td>7</td>
+            <td>Reverses the foreground and background colors.</td>
+        </tr>
+        <tr>
+            <td><code>hidden</code></td>
+            <td>8</td>
+            <td>Hides the text when supported by the terminal.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h4>Using Text Formatting in a Command</h4>
+
+<p>
+    Text styles can be applied directly to command output using the
+    <code>write()</code> method. Simply pass the desired formatting style
+    as the second argument.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$this->write('Hello World', 'bold');
+    </code></pre>
+</div>
+
+<p>
+    You can also combine multiple formatting styles by separating them
+    with semicolons.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$this->write('Important Message', 'bold;underline');
+    </code></pre>
+</div>
+
+<h4>Combining Text Styles and Colors</h4>
+
+<p>
+    Text formatting can be combined with foreground and background colors
+    in the same declaration. This allows you to create distinctive output
+    for different types of command messages.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$this->write('Warning', 'fg=yellow;bold');
+
+$this->write('Error', 'fg=red;bold;underline');
+
+$this->write('Success', 'fg=green;bold');
+    </code></pre>
+</div>
+
+<p>
+    Background colors can also be included alongside text styles and
+    foreground colors:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$this->write('Important', 'fg=white;bg=red;bold');
+    </code></pre>
+</div>
+
+<p>
+    For more flexibility, you can also use ANSI-256 colors when specifying
+    foreground or background colors. Unlike ANSI-16 colors, ANSI-256 colors
+    are specified using integer values instead of color names.
+</p>
+
+<p>
+    The following example combines an ANSI-256 background color with
+    foreground coloring and bold formatting:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$this->write('Highlighted', 'fg=white;bg=180;bold');
+    </code></pre>
+</div>
+
+<p>
+    By combining text styles and colors, you can produce clear, expressive,
+    and well-organized terminal output while keeping formatting declarations
+    simple and close to the messages they affect.
+</p>
+
+<h3>Boxes</h3>
+
+<p>
+    The <code>Box</code> class provides a simple way to display text inside
+    a bordered box in the terminal. It is useful for highlighting messages,
+    presenting important information, or visually separating sections of
+    command output.
+</p>
+
+<h4>Creating a Box</h4>
+
+<p>
+    The <code>create()</code> method accepts the text to display, an optional
+    formatting style, and an optional border character.
+</p>
+
+<p><strong>Parameters:</strong></p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>$text</code></td>
+            <td><code>string</code></td>
+            <td>Required</td>
+            <td>The text to display inside the box.</td>
+        </tr>
+        <tr>
+            <td><code>$style</code></td>
+            <td><code>string</code></td>
+            <td><code>''</code></td>
+            <td>Formatting styles and colors to apply to the box.</td>
+        </tr>
+        <tr>
+            <td><code>$border</code></td>
+            <td><code>string</code></td>
+            <td><code>'*'</code></td>
+            <td>The character used to draw the box border.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h4>Using a Box in a Command</h4>
+
+<p>
+    The <code>Box</code> class is accessible directly from a command through
+    the <code>$this->box</code> property. You can use it to display a
+    message inside a bordered box with a single method call.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$this->box->create("Hello, World!");
+    </code></pre>
+</div>
+
+<p>This produces the following terminal output:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">***********************************
+*                                 *
+*         Hello, World!           *
+*                                 *
+***********************************
+</code></pre>
+</div>
+
+<h4>Custom Borders</h4>
+
+<p>
+    You can customize the appearance of the box by providing a different
+    border character as the third argument.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$this->box->create("Hello, World!", '', '#');
+    </code></pre>
+</div>
+
+<p>
+    The following example uses <code>#</code> instead of the default
+    <code>*</code> character:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">###################################
+#                                 #
+#         Hello, World!           #
+#                                 #
+###################################
+</code></pre>
+</div>
+
+<h4>Styling the Box</h4>
+
+<p>
+    The <code>$style</code> parameter allows you to apply colors and text
+    formatting to the box. You can combine multiple formatting options
+    using semicolons.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$this->box->create("Hello, World!", 'fg=green;bold');
+    </code></pre>
+</div>
+
+<p>
+    This example applies green foreground coloring and bold formatting
+    to the box output.
+</p>
+
+<h3>Tables</h3>
+
+<p>
+    The <code>Table</code> class provides a convenient way to display
+    structured data in formatted terminal tables. It is useful for
+    presenting lists, records, and other tabular information in a
+    clear and organized layout.
+</p>
+
+<h4>Creating a Table</h4>
+
+<p>
+    The <code>create()</code> method accepts an array of column headers,
+    an array containing the table rows, and an optional formatting style.
+</p>
+
+<p><strong>Parameters:</strong></p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>$header</code></td>
+            <td><code>array&lt;string&gt;</code></td>
+            <td>Required</td>
+            <td>An array containing the table column headers.</td>
+        </tr>
+        <tr>
+            <td><code>$data</code></td>
+            <td><code>array&lt;array&lt;string&gt;&gt;</code></td>
+            <td>Required</td>
+            <td>An array containing the table rows and their values.</td>
+        </tr>
+        <tr>
+            <td><code>$style</code></td>
+            <td><code>string</code></td>
+            <td><code>''</code></td>
+            <td>Formatting styles and colors to apply to the table.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h4>Using a Table in a Command</h4>
+
+<p>
+    The <code>Table</code> class is accessible directly from a command
+    through the <code>$this->table</code> property. Pass the column
+    headers as the first argument and the table rows as the second.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$this->table->create(
+    ['Name', 'Age', 'City'],
+    [
+        ['John', '25', 'Dubai'],
+        ['Sarah', '30', 'New York'],
+        ['Mike', '28', 'Tokyo'],
+    ]
+);
+    </code></pre>
+</div>
+
+<p>This produces a formatted table similar to the following:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">--------------------------
+| Name  | Age | City     |
+--------------------------
+| John  | 25  | Dubai    |
+| Sarah | 30  | New York |
+| Mike  | 28  | Tokyo    |
+--------------------------</code></pre>
+</div>
+
+<h4>Styling the Table</h4>
+
+<p>
+    The optional <code>$style</code> parameter allows you to customize
+    the table output using foreground colors, background colors, and
+    text formatting options.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$this->table->create(
+    [...],
+    'fg=blue;bg=green'
+);
+    </code></pre>
+</div>
+
+<p>
+    Multiple formatting options can be combined using semicolons,
+    allowing you to customize the appearance of your terminal tables
+    consistently with the rest of your command output.
+</p>
+
+<h3>Questions</h3>
+
+<p>
+    The <code>Question</code> service provides a convenient way to interact
+    with users through questions and prompts directly within console commands.
+    It supports confirmations, text input, predefined choices, and hidden
+    input for sensitive information.
+</p>
+
+<p>
+    The question service is accessible directly through the command's
+    <code>$this->question</code> property.
+</p>
+
+<h4>Available Methods</h4>
+
+<p>The following methods are available:</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Method</th>
+            <th>Parameters</th>
+            <th>Return Type</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>confirmation()</code></td>
+            <td><code>$message</code></td>
+            <td><code>bool</code></td>
+            <td>Asks the user to confirm an action.</td>
+        </tr>
+        <tr>
+            <td><code>ask()</code></td>
+            <td><code>$question</code></td>
+            <td><code>string</code></td>
+            <td>Prompts the user for text input.</td>
+        </tr>
+        <tr>
+            <td><code>choice()</code></td>
+            <td><code>$question</code>, <code>$options</code></td>
+            <td><code>string</code></td>
+            <td>Allows the user to select an option from a list.</td>
+        </tr>
+        <tr>
+            <td><code>secret()</code></td>
+            <td><code>$question</code></td>
+            <td><code>string</code></td>
+            <td>Prompts the user for hidden input.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h4>Confirmation</h4>
+
+<p>
+    The <code>confirmation()</code> method asks the user to confirm an action
+    and returns a boolean indicating whether the action was confirmed.
+</p>
+
+<p>
+    The method accepts the following case-insensitive responses:
+</p>
+
+<ul>
+    <li><code>yes</code> or <code>no</code></li>
+    <li><code>y</code> or <code>n</code></li>
+</ul>
+
+<p>
+    Both uppercase and lowercase inputs are accepted, including
+    <code>YES</code>, <code>Yes</code>, <code>Y</code>, <code>NO</code>,
+    and <code>n</code>.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$input = $this->question->confirmation("Please confirm?");
+    </code></pre>
+</div>
+
+<p>The method returns:</p>
+
+<ul>
+    <li><code>true</code> when the user confirms the action.</li>
+    <li><code>false</code> when the user declines.</li>
+</ul>
+
+<h4>Asking a Question</h4>
+
+<p>
+    The <code>ask()</code> method prompts the user for text input and
+    returns the entered value as a string. It is useful for collecting
+    names, descriptions, or other information during command execution.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$input = $this->question->ask("What's your name?");
+    </code></pre>
+</div>
+
+<h4>Choice</h4>
+
+<p>
+    The <code>choice()</code> method allows the user to select a value
+    from a predefined list of available options.
+</p>
+
+<p>
+    It accepts the question as its first argument and an array of
+    string options as its second argument. The selected value is
+    returned as a string.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$input = $this->question->choice(
+    "What's your favorite color?",
+    ['red', 'blue', 'green']
+);
+    </code></pre>
+</div>
+
+<h4>Secret Input</h4>
+
+<p>
+    The <code>secret()</code> method prompts the user for sensitive
+    information without displaying the entered characters in the terminal.
+    This is particularly useful for collecting passwords, tokens, or
+    other confidential values.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$input = $this->question->secret("Enter your password:");
+    </code></pre>
+</div>
+
+<h3>Progress Bar</h3>
+
+<p>
+    The <code>ProgressBar</code> utility provides a convenient way to
+    visualize the progress of long-running operations in the console.
+    It displays completed and remaining steps using a customizable
+    progress indicator.
+</p>
+
+<p>
+    You can customize its appearance using different border characters,
+    progress symbols, colors, and text formatting styles.
+</p>
+
+<h4>Creating a Progress Bar</h4>
+
+<p>
+    Create a progress bar inside a command using the
+    <code>createProgressBar()</code> method.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$progressBar = $this->createProgressBar();
+    </code></pre>
+</div>
+
+<p>The method accepts the following parameters:</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>$leftBorder</code></td>
+            <td><code>string</code></td>
+            <td><code>[</code></td>
+            <td>The character or text used for the left border.</td>
+        </tr>
+        <tr>
+            <td><code>$rightBorder</code></td>
+            <td><code>string</code></td>
+            <td><code>]</code></td>
+            <td>The character or text used for the right border.</td>
+        </tr>
+        <tr>
+            <td><code>$inProgressSymbol</code></td>
+            <td><code>string</code></td>
+            <td><code>-</code></td>
+            <td>The symbol used to represent incomplete progress.</td>
+        </tr>
+        <tr>
+            <td><code>$completeSymbol</code></td>
+            <td><code>string</code></td>
+            <td><code>=</code></td>
+            <td>The symbol used to represent completed progress.</td>
+        </tr>
+        <tr>
+            <td><code>$style</code></td>
+            <td><code>string</code></td>
+            <td><code>''</code></td>
+            <td>Formatting styles and colors to apply to the progress bar.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h4>Using a Progress Bar</h4>
+
+<p>
+    Once created, the progress bar can be used to track the execution
+    of an operation. Start it by specifying the total number of steps,
+    update it as work is completed, and call <code>end()</code> when
+    the operation finishes.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$progressBar = $this->createProgressBar();
+
+$items = 100;
+
+$progressBar->start($items);
+
+for ($i = 0; $i < $items; $i++) {
+    // Process the item.
+
+    $progressBar->update(1);
+}
+
+$progressBar->end();
+    </code></pre>
+</div>
+
+<h4>Starting a Progress Bar</h4>
+
+<p>
+    Use the <code>start()</code> method to initialize the progress bar.
+    It accepts the total number of steps and an optional starting position.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$items = 10;
+
+$progressBar->start($items);
+    </code></pre>
+</div>
+
+<p>The method accepts the following parameters:</p>
+
+<ul>
+    <li>
+        <code>$total</code> defines the total number of steps required
+        to complete the progress bar.
+    </li>
+    <li>
+        <code>$position</code> specifies the initial progress position
+        and defaults to <code>0</code>.
+    </li>
+</ul>
+
+<h4>Updating the Progress</h4>
+
+<p>
+    Use the <code>update()</code> method to advance the progress bar
+    as individual tasks or processing steps are completed.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+for ($i = 0; $i < $items; $i++) {
+    $progressBar->update(1);
+}
+    </code></pre>
+</div>
+
+<p>
+    The <code>$steps</code> parameter specifies how many steps to
+    advance the progress bar. You can provide a value greater than
+    <code>1</code> when multiple steps are completed at once.
+</p>
+
+<h4>Ending a Progress Bar</h4>
+
+<p>
+    Once the operation is complete, call the <code>end()</code> method
+    to finalize the progress bar and complete its terminal output.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$progressBar->end();
+    </code></pre>
+</div>
+
+<h4>Customizing the Progress Bar</h4>
+
+<p>
+    You can customize the progress bar's appearance when creating it
+    by providing custom border characters, progress symbols, and
+    formatting styles.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$progressBar = $this->createProgressBar(
+    '&lt;',
+    '&gt;',
+    '.',
+    '#',
+    'fg=light_green'
+);
+    </code></pre>
+</div>
+
+<p>
+    This allows you to adapt the progress indicator to match the
+    visual style of your command output.
+</p>
+
+<h3>Loading Spinner</h3>
+
+<p>
+    The <code>LoadingSpinner</code> utility provides an animated
+    indicator for long-running operations where displaying a numerical
+    progress percentage is not necessary.
+</p>
+
+<p>
+    Unlike a progress bar, a loading spinner continuously displays
+    an animation while an operation is running, providing visual
+    feedback that the command is still processing.
+</p>
+
+<h4>Creating a Loading Spinner</h4>
+
+<p>
+    Create a loading spinner inside a command using the
+    <code>createLoadingSpinner()</code> method.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$spinner = $this->createLoadingSpinner();
+    </code></pre>
+</div>
+
+<p>
+    The method accepts an optional animation pattern and formatting style.
+</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>$pattern</code></td>
+            <td><code>string</code></td>
+            <td><code>frames</code></td>
+            <td>The animation pattern used by the spinner.</td>
+        </tr>
+        <tr>
+            <td><code>$style</code></td>
+            <td><code>string</code></td>
+            <td><code>''</code></td>
+            <td>Formatting styles and colors to apply to the spinner.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h4>Spinner Patterns</h4>
+
+<p>
+    <code>SigmaPHP-Console</code> provides several built-in animation
+    patterns that can be selected when creating a loading spinner.
+</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Pattern</th>
+            <th>Animation</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>arc</code></td>
+            <td><code>◜ ◝ ◞ ◟</code></td>
+        </tr>
+        <tr>
+            <td><code>frames</code></td>
+            <td><code>| / - \</code></td>
+        </tr>
+        <tr>
+            <td><code>dots</code></td>
+            <td><code>. .. ...</code></td>
+        </tr>
+        <tr>
+            <td><code>sweep</code></td>
+            <td><code>*---- -*--- --*-- ---*- ----*</code></td>
+        </tr>
+        <tr>
+            <td><code>pipes</code></td>
+            <td><code>┤ ┘ ┴ └ ├ ┌ ┬ ┐</code></td>
+        </tr>
+        <tr>
+            <td><code>braille</code></td>
+            <td><code>⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏</code></td>
+        </tr>
+        <tr>
+            <td><code>brackets</code></td>
+            <td><code>[ ] [=] [==] [===] [ ==] [ =] [ ]</code></td>
+        </tr>
+    </tbody>
+</table>
+
+<p>
+    The default animation pattern is <code>frames</code>. You can
+    select a different pattern by passing its name to the creation method.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$spinner = $this->createLoadingSpinner('dots');
+    </code></pre>
+</div>
+
+<h4>Running a Loading Spinner</h4>
+
+<p>
+    Use the <code>run()</code> method to execute an operation while
+    displaying the loading animation. The method accepts a callback
+    containing the operation to perform.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$spinner = $this->createLoadingSpinner('dots');
+
+$spinner->run(function () {
+    // Perform a long-running operation.
+});
+    </code></pre>
+</div>
+
+<p>
+    The callback executes while the spinner is running. Once the
+    callback completes, the spinner stops and its output is finalized.
+</p>
+
+<p>The <code>run()</code> method accepts the following parameter:</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>$callback</code></td>
+            <td><code>callable</code></td>
+            <td>The operation to execute while the spinner is running.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h4>Custom Spinner Style</h4>
+
+<p>
+    You can customize the spinner's appearance by providing a formatting
+    style when creating it. The style supports the same foreground colors,
+    background colors, and text formatting options available throughout
+    the console library.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$spinner = $this->createLoadingSpinner(
+    'dots',
+    'fg=white;bg=red;bold'
+);
+    </code></pre>
+</div>
+
+<h4>Platform Support</h4>
+
+<p>
+    The loading spinner currently relies on the PHP <code>pcntl</code>
+    extension to run its animation while the callback is executing.
+    Consequently, this feature is supported on UNIX-like operating
+    systems only.
+</p>
+
+<p>
+    Windows is currently not supported because the <code>pcntl</code>
+    extension is unavailable on that platform.
+</p>
+
+<p>
+    An alternative implementation using the PHP <code>parallel</code>
+    extension may be considered in the future. However, at the time
+    of writing, the extension is not considered mature enough to
+    replace the current implementation.
+</p>
