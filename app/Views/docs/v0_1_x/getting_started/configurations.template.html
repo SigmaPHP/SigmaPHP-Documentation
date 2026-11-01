@@ -6,10 +6,10 @@
 </p>
 
 <p>
-    The framework ships with two main configuration categories: application
-    configuration and database configuration. You are also free to create
-    your own configuration files and access them using SigmaPHP's dot
-    notation helper.
+    The framework ships with 3 main configuration categories: application
+    configuration, database configuration and service providers configuration.
+    You are also free to create your own configuration files and access them using
+    SigmaPHP's dot notation helper.
 </p>
 
 <p>
@@ -24,6 +24,7 @@
 <ul>
     <li><strong>App Config</strong> — defines core application behavior and paths.</li>
     <li><strong>Database Config</strong> — controls migrations, models, and connections.</li>
+    <li><strong>Service Providers Config</strong> — manages the registration of service providers.</li>
     <li><strong>Custom Configs</strong> — create your own files inside <code>config/</code>.</li>
     <li><strong>Dot Notation</strong> — access values like <code>config('app.name')</code>.</li>
     <li><strong>Helpers</strong> — use <code>config()</code> and <code>env()</code> anywhere.</li>
@@ -31,7 +32,7 @@
 </ul>
 
 
-<h3>Application Configuration</h3>
+<h3>Application Configuration (<code>config/app.php</code>)</h3>
 
 <p>
     The application configuration defines global settings such as project
@@ -139,7 +140,7 @@
 </p>
 
 
-<h3>Database Configuration</h3>
+<h3>Database Configuration (<code>config/database.php</code>)</h3>
 
 <p>
     Database configuration controls migrations, seeders, models, and
@@ -184,7 +185,7 @@
     <li><strong>port</strong> — database service port (default 3306).</li>
 </ul>
 
-<h3>Service Providers</h3>
+<h3>Service Providers (<code>config/providers.php</code>)</h3>
 
 <p>
     The service providers configuration file is responsible for registering
