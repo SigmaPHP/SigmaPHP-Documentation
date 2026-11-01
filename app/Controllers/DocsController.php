@@ -137,7 +137,7 @@ class DocsController extends BaseController
 
         // !! For Testing Only !!
         $page->content = $this->renderView(
-            'docs/v0_1_x/getting_started/configurations',
+            'docs/v0_1_x/dependency_injection/service_providers',
             compact('version', 'versions', 'hierarchy', 'page')
         );
 

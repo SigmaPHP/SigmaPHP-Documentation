@@ -108,12 +108,27 @@ class UserController
 
 <p>
     Service Providers are the main place where services are registered inside the container.
-    They allow you to organize your application's dependencies in a clear and structured way.
+    They allow you to organize your application's dependencies in a clear and structured way,
+    keeping service registration organized and maintainable.
 </p>
 
 <p>
-    Each provider must implement the <code>ServiceProviderInterface</code>.
-    This interface requires two methods to be implemented.
+    By default, SigmaPHP registers all service providers through the
+    <code>config/providers.php</code> configuration file. This file contains both
+    the framework's built-in system providers and your application's custom providers,
+    making it the central place for managing the services available to your application.
+</p>
+
+<p>
+    The providers configuration is essential to the framework's initialization process.
+    The Kernel relies on this file to load and register the required providers;
+    without it, the framework cannot boot properly.
+</p>
+
+<p>
+    Each provider must implement the <code>ServiceProviderInterface</code>,
+    which defines the contract that every provider must follow. This interface
+    requires two methods to be implemented.
 </p>
 
 <h3>Creating a Service Provider</h3>
@@ -126,12 +141,69 @@ class UserController
     <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
     <pre><code class="language-bash">
 ./bin/sigma-cli create:service-provider AppServiceProvider
+
 </code></pre>
 </div>
 
 <p>
-    This command will create a new provider class inside your application's providers directory.
+    This command will create a new provider class inside your application's providers
+    directory and automatically register it in <code>config/providers.php</code>,
+    under the <strong>User Defined Service Providers</strong> section. This means
+    you don't need to manually update the providers configuration whenever you
+    create a new provider.
 </p>
+
+<p>
+    The providers configuration separates framework-level providers from
+    application-level providers, keeping their registration clear and organized.
+    For example:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+&lt;?php
+
+// this file contains the service providers registration for the
+// SigmaPHP framework.
+
+return [
+    /**
+     * Core Service Providers.
+     */
+    \SigmaPHP\Core\Providers\ConfigServiceProvider::class,
+    \SigmaPHP\Core\Providers\RouterServiceProvider::class,
+    \SigmaPHP\Core\Providers\ViewServiceProvider::class,
+    \SigmaPHP\Core\Providers\DBServiceProvider::class,
+    \SigmaPHP\Core\Providers\HTTPServiceProvider::class,
+    \SigmaPHP\Core\Providers\FilesystemServiceProvider::class,
+
+    /**
+     * User Defined Service Providers.
+     */
+    \App\Providers\AppServiceProvider::class,
+    // Newly created providers are automatically registered here.
+];
+
+</code></pre>
+
+<p>
+    By default, user-defined service providers are stored in
+    <code>app/Providers</code>. You can find and customize this location through
+    the <code>providers_path</code> setting in <code>config/app.php</code>.
+    This allows you to organize your providers according to your application's
+    structure without modifying the framework's internal implementation.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+/**
+ * Service Provider files path.
+ */
+'providers_path' =&gt; env('PROVIDERS_PATH', 'app/Providers'),
+
+</code></pre>
 
 <h3>Using Service Providers</h3>
 
@@ -141,14 +213,14 @@ class UserController
 
 <ul>
     <li>
-        <strong>register(Container $container): void</strong><br>
+        <strong><code>register(Container $container): void</code></strong><br>
         The register method has access to the current instance of the container. It is used to
         define and register dependencies that do not perform any operations or depend on other
         services during initialization.
     </li>
 
     <li>
-        <strong>boot(Container $container): void</strong><br>
+        <strong><code>boot(Container $container): void</code></strong><br>
         The boot method is similar to the register method, but it is executed only after all
         services have been registered in the container. This makes it the ideal place to perform
         operations that rely on other services.
