@@ -73,9 +73,9 @@ class CategorySeeder extends Seeder
                 ['name' => 'Service Providers', 'version_id' => $version, 'parent_id' => ++$index],
 
                 // Console
-                ['name' => 'Creating Commands', 'version_id' => $version, 'parent_id' => $index],
+                ['name' => 'Creating Commands', 'version_id' => $version, 'parent_id' => ++$index],
                 ['name' => 'Command Features', 'version_id' => $version, 'parent_id' => $index],
-                ['name' => 'Available Utilities', 'version_id' => $version, 'parent_id' => ++$index],
+                ['name' => 'Available Utilities', 'version_id' => $version, 'parent_id' => $index],
 
                 // Misc
                 ['name' => 'Helpers', 'version_id' => $version, 'parent_id' => ++$index],

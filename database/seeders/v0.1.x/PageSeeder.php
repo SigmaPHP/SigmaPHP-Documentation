@@ -224,6 +224,24 @@ class PageSeeder extends Seeder
                     'tags' => 'sigmaphp,php framework,dependency injection,service providers,container'
                 ],
 
+                // Console
+                [
+                    'category_id' => $this->getCategoryID('creating_commands'),
+                    'content' => $this->getContent('console/creating_commands'),
+                    'tags' => 'sigmaphp,php framework,dependency injection,service providers,container'
+                ],
+
+                [
+                    'category_id' => $this->getCategoryID('command_features'),
+                    'content' => $this->getContent('console/command_features'),
+                    'tags' => 'sigmaphp,php framework,dependency injection,service providers,container'
+                ],
+
+                [
+                    'category_id' => $this->getCategoryID('available_utilities'),
+                    'content' => $this->getContent('console/available_utilities'),
+                    'tags' => 'sigmaphp,php framework,dependency injection,service providers,container'
+                ],
 
                 // Misc
                 [
@@ -239,9 +257,9 @@ class PageSeeder extends Seeder
                 ],
 
                 [
-                    'category_id' => $this->getCategoryID('cli'),
-                    'content' => $this->getContent('misc/cli'),
-                    'tags' => 'sigmaphp,php framework,cli,command line,console'
+                    'category_id' => $this->getCategoryID('filesystem'),
+                    'content' => $this->getContent('misc/filesystem'),
+                    'tags' => 'sigmaphp,php framework,filesystem'
                 ],
             ]
         );
