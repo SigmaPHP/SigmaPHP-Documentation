@@ -1,0 +1,972 @@
+<p>
+    The Console component is a lightweight and powerful PHP library for building modern
+    command-line applications with minimal effort. It provides everything you need to
+    create structured CLI applications, including commands, arguments, options, aliases,
+    input validation, interactive input, formatted output, tables, progress bars,
+    loading spinners, colors, and more.
+</p>
+
+<p>
+    Its simple API and sensible defaults allow you to focus on your application's
+    functionality instead of dealing with the complexity of CLI input and output handling.
+</p>
+
+<h3>Creating a Command</h3>
+
+<p>
+    SigmaPHP provides a CLI utility for generating new commands. You can create a command
+    using the <code>create:command</code> command followed by the desired class name.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+./bin/sigma-cli create:command ValidateOrders
+
+</code></pre>
+
+<p>
+    This command automatically generates a new command class inside your application's
+    configured commands directory.
+</p>
+
+<p>
+    By default, commands are stored in <code>app/Commands</code>. You can customize
+    this location through the <code>commands_path</code> setting in
+    <code>config/app.php</code>.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">/**
+ * Console commands file path.
+ */
+'commands_path' =&gt; env('COMMANDS_PATH', 'app/Commands'),</code></pre>
+</div>
+
+<p>
+    This allows you to organize your command classes according to your application's
+    structure without modifying the framework's internal implementation.
+</p>
+
+<h3>Command Structure</h3>
+
+<p>
+    A <code>Command</code> represents an executable action within the
+    The <code>Console</code> component application. Commands are responsible for defining
+    the arguments and options they accept, processing user input, executing application
+    logic, and communicating with the user through the console.
+</p>
+
+<p>
+    A command is typically created by extending the <code>SigmaPHP\Console\Command</code>
+    abstract class and implementing the required command lifecycle methods.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">&lt;?php
+
+namespace App\Commands;
+
+use SigmaPHP\Console\Command;
+
+class HelloCommand extends Command
+&#123;
+    public function init()
+    &#123;
+        $this-&gt;setName('hello');
+        $this-&gt;setDescription('Print a greeting.');
+    &#125;
+
+    public function execute()
+    &#123;
+        $this-&gt;writeln('Hello World!');
+    &#125;
+&#125;</code></pre>
+</div>
+
+<h4>Initialization</h4>
+
+<p>
+    The <code>init()</code> method is used to configure the command. This is where
+    command metadata, arguments, options, and aliases can be defined.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">public function init()
+&#123;
+    $this-&gt;setName('hello');
+    $this-&gt;setDescription('Print a greeting.');
+
+    $this-&gt;addArgument(
+        'name',
+        'Name of the person to greet.',
+        DataType::STRING
+    );
+&#125;</code></pre>
+</div>
+
+<h4>Execution</h4>
+
+<p>
+    The <code>execute()</code> method contains the actual command logic.
+    It is called when the command is executed by the application.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">public function execute()
+&#123;
+    $this-&gt;writeln('Hello World!');
+&#125;</code></pre>
+</div>
+
+<h3>Arguments</h3>
+
+<p>
+    Arguments represent positional values provided to a command.
+</p>
+
+<p>
+    Arguments are <strong>required by default</strong>. If a command defines an
+    argument and the user does not provide it, The <code>Console</code> component
+    will throw an exception during input processing.
+</p>
+
+<p>For example:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+./bin/sigma-cli hello Mohamed
+    </code></pre>
+</div>
+
+<p>
+    Here, <code>Mohamed</code> is the value of the <code>name</code> argument.
+</p>
+
+<p>
+    Arguments and options can be provided in any order. Their position relative
+    to each other is irrelevant.
+</p>
+
+<p>For example, the following commands are equivalent:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+./bin/sigma-cli hello Mohamed --verbose
+    </code></pre>
+</div>
+
+<P>and</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+./bin/sigma-cli hello --verbose Mohamed
+    </code></pre>
+</div>
+
+<p>
+    The command parser identifies arguments and options independently, so options
+    do not have to appear before or after arguments.
+</p>
+
+<h4>Adding an Argument</h4>
+
+<p>Use <code>addArgument()</code> to define an argument:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">$this-&gt;addArgument(
+    'name',
+    'Name of the person to greet.',
+    DataType::STRING
+);</code></pre>
+</div>
+
+<p>The method accepts the following parameters:</p>
+
+<ul>
+    <li><code>$name</code> — Argument name.</li>
+    <li><code>$description</code> — Description displayed in the help menu.</li>
+    <li><code>$dataType</code> — Expected data type of the argument.</li>
+</ul>
+
+<h4>Getting an Argument</h4>
+
+<p>
+    Use <code>getArgument()</code> to retrieve the value provided by the user:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$name = $this-&gt;getArgument('name');
+    </code></pre>
+</div>
+
+<p>For example:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">public function execute()
+&#123;
+    $name = $this-&gt;getArgument('name');
+
+    $this-&gt;writeln("Hello &#123;$name&#125;!");
+&#125;</code></pre>
+</div>
+
+<h4>Checking an Argument</h4>
+
+<p>
+    <code>hasArgument()</code> checks whether an argument was provided in the
+    command input. It does not check whether the argument has been defined
+    in the command.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">if ($this-&gt;hasArgument('name')) &#123;
+    $this-&gt;writeln('A name was provided.');
+&#125;</code></pre>
+</div>
+
+<h4>Removing an Argument</h4>
+
+<p>
+    An argument can be removed from the command definition using
+    <code>removeArgument()</code>.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$this-&gt;removeArgument('name');
+    </code></pre>
+</div>
+
+<h3>Options</h3>
+
+<p>
+    Options are named values or flags that can be provided to a command.
+</p>
+
+<p>
+    Unlike arguments, options are <strong>optional</strong>. A command can be
+    executed without providing any of its defined options.
+</p>
+
+<p>For example:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+./bin/sigma-cli hello
+    </code></pre>
+</div>
+
+<p>The same command can optionally receive an option:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+./bin/sigma-cli hello --name Mohamed
+    </code></pre>
+</div>
+
+<p>
+    Options and arguments can appear in any order. Their position relative
+    to each other is irrelevant.
+</p>
+
+<p>For example, both of the following are valid:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+./bin/sigma-cli hello Mohamed --verbose
+    </code></pre>
+</div>
+
+<p>and</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+./bin/sigma-cli hello --verbose Mohamed
+    </code></pre>
+</div>
+
+<h4>Option Parameter Types</h4>
+
+<p>
+    Each option can define whether it accepts a parameter.
+    The <code>Console</code> component supports three parameter types:
+</p>
+
+<ul>
+    <li>
+        <code>PARAMETER_REQUIRED</code> — The option must be followed by a parameter value.
+    </li>
+    <li>
+        <code>PARAMETER_OPTIONAL</code> — The option may be followed by a parameter value.
+    </li>
+    <li>
+        <code>PARAMETER_NONE</code> — The option does not accept a parameter and acts as a boolean flag.
+    </li>
+</ul>
+
+<p>The constants are defined as follows:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">Option::PARAMETER_REQUIRED
+
+Option::PARAMETER_OPTIONAL
+
+Option::PARAMETER_NONE</code></pre>
+</div>
+
+<h4>Required Parameter</h4>
+
+<p>
+    An option with a required parameter must receive a value.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">$this-&gt;addOption(
+    'connect',
+    'c',
+    'Connect to the specified host.',
+    Option::PARAMETER_REQUIRED,
+    DataType::STRING,
+    null
+);</code></pre>
+</div>
+
+<p>It can be used with the following formats:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+--connect localhost
+--connect=localhost
+-c localhost
+-clocalhost
+    </code></pre>
+</div>
+
+<h4>Optional Parameter</h4>
+
+<p>
+    An option with an optional parameter may be used with or without a value.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">$this-&gt;addOption(
+    'verbose',
+    'v',
+    'Show detailed information.',
+    Option::PARAMETER_OPTIONAL,
+    DataType::STRING,
+    null
+);</code></pre>
+</div>
+
+<h4>No Parameter</h4>
+
+<p>
+    An option with no parameter does not accept a value and acts as a boolean flag.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">$this-&gt;addOption(
+    'interactive',
+    'i',
+    'Enable interactive mode.',
+    Option::PARAMETER_NONE,
+    DataType::BOOL,
+    false
+);</code></pre>
+</div>
+
+<p>It can be used simply as:</p>
+
+<pre><code class="language-bash">--interactive
+-i</code></pre>
+
+<h4>Adding an Option</h4>
+
+<p>Use <code>addOption()</code> to define an option:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">$this-&gt;addOption(
+    'name',
+    'n',
+    'Name of the person to greet.',
+    Option::PARAMETER_REQUIRED,
+    DataType::STRING,
+    null
+);</code></pre>
+</div>
+
+<p>The method accepts the following parameters:</p>
+
+<ul>
+    <li><code>$name</code> — Long option name.</li>
+    <li><code>$shortcut</code> — Short option name.</li>
+    <li><code>$description</code> — Description displayed in the help menu.</li>
+    <li><code>$parameterOptionality</code> — Defines whether the option requires a parameter.</li>
+    <li><code>$dataType</code> — Expected data type of the option value.</li>
+    <li><code>$defaultValue</code> — Value used when the option is not provided.</li>
+</ul>
+
+<h4>Supported Option Patterns</h4>
+
+<p>
+    The <code>Console</code> component supports several common option formats:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+-i
+--interactive
+--connect xyz
+--connect=xyz
+-c=xyz
+-cxyz
+-ic
+    </code></pre>
+</div>
+
+<p>
+    These patterns support long and short options, options with parameters,
+    and combined short options.
+</p>
+
+<p>
+    For example, <code>-i</code> represents a short boolean option, while
+    <code>--interactive</code> represents its long form.
+</p>
+
+<p>
+    An option that accepts a parameter can use either a space or an equals sign:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+--connect xyz
+--connect=xyz
+    </code></pre>
+</div>
+
+<p>Short options can also use the same forms:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+-c=xyz
+-cxyz
+    </code></pre>
+</div>
+
+<p>Multiple short boolean options can be combined:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+-ic
+    </code></pre>
+</div>
+
+<p>
+    This is equivalent to providing both <code>-i</code> and <code>-c</code>
+    as separate short options when both options are defined as flags.
+</p>
+
+<h4>Getting an Option</h4>
+
+<p>
+    Use <code>getOption()</code> to retrieve the value provided by the user:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$name = $this-&gt;getOption('name');
+    </code></pre>
+</div>
+
+<h4>Checking an Option</h4>
+
+<p>
+    <code>hasOption()</code> checks whether an option was provided in the command
+    input. It does not check whether the option has been defined in the command.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">if ($this-&gt;hasOption('verbose')) &#123;
+    $this-&gt;writeln('Verbose mode enabled.');
+&#125;
+    </code></pre>
+</div>
+
+<h4>Removing an Option</h4>
+
+<p>
+    An option can be removed from the command definition using
+    <code>removeOption()</code>.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$this-&gt;removeOption('verbose');
+    </code></pre>
+</div>
+
+<h3>Data Types</h3>
+
+<p>
+    Arguments and options can define an expected data type.
+    The <code>Console</code> component provides four built-in data types.
+</p>
+
+<ul>
+    <li><code>DataType::STRING</code> — A string value.</li>
+    <li><code>DataType::NUMBER</code> — A numeric value, including integers and floating-point numbers.</li>
+    <li><code>DataType::LIST</code> — A list of values.</li>
+    <li><code>DataType::BOOL</code> — A boolean flag that does not accept a parameter.</li>
+</ul>
+
+<h4>String</h4>
+
+<p>
+    <code>DataType::STRING</code> is used for textual values.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">$this-&gt;addArgument(
+    'name',
+    'Name of the user.',
+    DataType::STRING
+);</code></pre>
+</div>
+
+<p>For example:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli user Ahmed
+    </code></pre>
+</div>
+
+<h4>Number</h4>
+
+<p>
+    <code>DataType::NUMBER</code> is used for numeric values and supports both
+    integers and floating-point numbers.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">$this-&gt;addArgument(
+    'amount',
+    'Amount to process.',
+    DataType::NUMBER
+);</code></pre>
+</div>
+
+<p>Examples include:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli process 100
+    </code></pre>
+</div>
+
+<p>And:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli process 10.5
+    </code></pre>
+</div>
+
+<h4>List</h4>
+
+<p>
+    <code>DataType::LIST</code> is used when an input contains multiple values.
+    A list is represented as an array:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+['ahmed', 'omar']
+    </code></pre>
+</div>
+
+<p>
+    For example, a list option can be used to provide multiple values to a command.
+</p>
+
+<h4>Boolean</h4>
+
+<p>
+    <code>DataType::BOOL</code> represents a boolean option and does not accept
+    a parameter.
+</p>
+
+<p>For example:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+--interactive
+    </code></pre>
+</div>
+
+<p>Or:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+-i
+    </code></pre>
+</div>
+
+<p>
+    A boolean option is enabled by providing the option itself.
+</p>
+
+<h3>Arguments and Options State</h3>
+
+<p>
+    The command provides methods for determining whether arguments or options
+    were provided by the user.
+</p>
+
+<p>
+    It is important to distinguish these methods from methods that inspect the
+    command definition.
+</p>
+
+<p>
+    <code>hasArgument()</code> and <code>hasOption()</code> check the current
+    command input. They determine whether the user actually supplied the
+    corresponding argument or option; they do not determine whether an argument
+    or option has been registered in the command.
+</p>
+
+<h4>Checking Arguments</h4>
+
+<p>
+    Use <code>argumentsAreEmpty()</code> to check whether no arguments were provided:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">if ($this-&gt;argumentsAreEmpty()) &#123;
+    $this-&gt;writeln('No arguments provided.');
+&#125;</code></pre>
+</div>
+
+<h4>Checking Options</h4>
+
+<p>
+    Use <code>optionsAreEmpty()</code> to check whether no options were provided:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">if ($this-&gt;optionsAreEmpty()) &#123;
+    $this-&gt;writeln('No options provided.');
+&#125;</code></pre>
+</div>
+
+<h4>Checking All Input</h4>
+
+<p>
+    Use <code>isEmpty()</code> to determine whether neither arguments nor options
+    were provided:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">if ($this-&gt;isEmpty()) &#123;
+    $this-&gt;writeln('No input provided.');
+&#125;</code></pre>
+</div>
+
+<p>
+    These methods are useful when a command supports different execution modes
+    depending on the input provided by the user.
+</p>
+
+<h3>Global Options</h3>
+
+<p>
+    By default, every command inherits the application's global options,
+    with the exception of the <code>version</code> option.
+</p>
+
+<p>
+    This means that options such as <code>--help</code>, <code>--quiet</code>,
+    <code>--silent</code>, and <code>--verbose</code> are automatically available
+    to commands without having to define them again.
+</p>
+
+<p>
+    For example, a command can use the application's <code>--verbose</code>
+    option directly:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli hello --verbose
+    </code></pre>
+</div>
+
+<p>
+    Commands can also customize their inherited global options. An inherited
+    option can be removed when it is not applicable to a particular command,
+    or its configuration can be updated when different behavior is required.
+</p>
+
+<p>For example, a command can remove an inherited option:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$this-&gt;removeOption('verbose');
+    </code></pre>
+</div>
+
+<p>
+    A command can also define or update an option according to its own requirements:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">$this-&gt;addOption(
+    'verbose',
+    'v',
+    'Show detailed command information.',
+    Option::PARAMETER_NONE,
+    DataType::BOOL,
+    false
+);</code></pre>
+</div>
+
+<p>
+    The inherited global options therefore provide a common set of application-wide
+    functionality while still allowing individual commands to customize the
+    options available to them.
+</p>
+
+<p>
+    The <code>version</code> option is excluded from command inheritance because
+    it is an application-level option and is handled by the application itself.
+</p>
+
+<h3>Command Aliases</h3>
+
+<p>
+    A command can have one or more aliases. Aliases allow users to execute the
+    same command using different names.
+</p>
+
+<p>Use <code>setAliases()</code> to define aliases:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">$this-&gt;setAliases([
+    'greet',
+    'hi'
+]);</code></pre>
+</div>
+
+<p>
+    The command can then be invoked using any of its registered names.
+</p>
+
+<p>
+    Use <code>getAliases()</code> to retrieve the configured aliases:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$aliases = $this-&gt;getAliases();
+    </code></pre>
+</div>
+
+<h3>Help Method</h3>
+
+<p>
+    The <code>help()</code> method provides the command's help handler:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$this-&gt;help();
+    </code></pre>
+</div>
+
+<p>
+    The help output can include the command description, arguments, options,
+    aliases, and other information defined by the command.
+</p>
+
+<p>
+    Commands can use this method when custom logic needs to explicitly display
+    their help information. The method can also be overridden by child commands
+    when custom help behavior is required.
+</p>
+
+<h3>Input and Output</h3>
+
+<p>
+    Commands provide a set of methods for interacting with the standard CLI
+    streams through the command's IO handler.
+</p>
+
+<h4>Writing to Standard Output</h4>
+
+<p>
+    Use <code>write()</code> to write text without automatically adding a new line:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$this-&gt;write('Processing...');
+    </code></pre>
+</div>
+
+<p>Use <code>writeln()</code> when a new line should be added:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$this-&gt;writeln('Processing complete.');
+    </code></pre>
+</div>
+
+<p>Both methods accept an optional style:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$this-&gt;writeln('Processing complete.', 'fg=green;bold');
+    </code></pre>
+</div>
+
+<h4>Writing to Standard Error</h4>
+
+<p>
+    Use <code>writeErr()</code> to write directly to the standard error stream:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$this-&gt;writeErr('Something went wrong.');
+    </code></pre>
+</div>
+
+<p>
+    This is useful for errors and diagnostic messages that should be separated
+    from normal command output.
+</p>
+
+<h4>Reading Input</h4>
+
+<p>
+    Use <code>read()</code> to read input from the standard input stream:
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">$name = $this-&gt;read();
+
+$this-&gt;writeln("Hello &#123;$name&#125;!");
+    </code></pre>
+</div>
+
+<p>
+    The command's IO handler uses the application's configured input stream,
+    making interactive input testable with custom streams.
+</p>
+
+<h3>Message Helpers</h3>
+
+<p>
+    Commands provide several methods for displaying commonly used message types.
+    These helpers offer a consistent way to communicate information and operation
+    results without requiring every command to manually configure its output formatting.
+</p>
+
+<h4>Info</h4>
+
+<p>Use <code>info()</code> for informational messages:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$this-&gt;info('Starting the operation...');
+    </code></pre>
+</div>
+
+<h4>Success</h4>
+
+<p>Use <code>success()</code> for successful operations:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$this-&gt;success('Operation completed successfully.');
+    </code></pre>
+</div>
+
+<h4>Warning</h4>
+
+<p>Use <code>warning()</code> for warning messages:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$this-&gt;warning('The configuration file was not found.');
+    </code></pre>
+</div>
+
+<h4>Error</h4>
+
+<p>Use <code>error()</code> for error messages:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-php">
+$this-&gt;error('Unable to connect to the database.');
+    </code></pre>
+</div>

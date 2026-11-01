@@ -1,12 +1,28 @@
 <p>
-    SigmaPHP includes a built-in Command Line Interface (CLI) that helps automate many common
-    development tasks such as generating application components, running migrations, seeding
-    databases, and managing caches.
+    SigmaPHP provides a built-in command-line interface (CLI) that simplifies
+    common development and application management tasks. It offers a collection
+    of utilities for generating application components, managing database
+    migrations and seeders, maintaining cached views, inspecting routes,
+    running tests, and starting the application.
 </p>
 
 <p>
-    The CLI tool helps speed up development by reducing repetitive tasks and ensuring that
-    files follow the framework's recommended structure.
+    The CLI follows a consistent command structure, with support for global
+    options that allow you to customize configuration paths, control output
+    verbosity, display help information, and inspect the application version.
+</p>
+
+<h3>Usage</h3>
+
+<p>
+    All CLI utilities follow the same general syntax:
+</p>
+
+<pre><code class="language-bash">sigma-cli [COMMAND] [OPTIONS] [--] [ARGUMENTS]</code></pre>
+
+<p>
+    Replace <code>[COMMAND]</code> with the desired utility, and provide any
+    supported options or arguments required by that command.
 </p>
 
 <p>
@@ -17,7 +33,7 @@
 <div class="code-card">
     <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
     <pre><code class="language-bash">
-./bin/sigma-cli help
+./bin/sigma-cli --help
 </code></pre>
 </div>
 
@@ -31,22 +47,34 @@
 <div class="code-card">
     <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
     <pre><code class="language-bash">
-.\bin\sigma-cli.bat help
+.\bin\sigma-cli.bat --help
 </code></pre>
 </div>
 
-<h4>Available Commands</h4>
-
-<h4>clear:cache</h4>
+<h3>Available Commands</h3>
 
 <p>
-    Clear the cached compiled views.
+    SigmaPHP provides the following built-in commands:
+</p>
+
+<p>
+    <b>Application Components</b>
+</p>
+
+<p>
+    These commands help you generate the core components of your application:
+</p>
+
+<h4>create:command {command name}</h4>
+
+<p>
+    Generate a new console command class.
 </p>
 
 <div class="code-card">
     <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
     <pre><code class="language-bash">
-./bin/sigma-cli clear:cache
+./bin/sigma-cli create:command ValidateOrders
 </code></pre>
 </div>
 
@@ -92,7 +120,7 @@
 <h4>create:model {model name}</h4>
 
 <p>
-    Create a new model class. This command will also automatically generate
+    Create a new model class. This command also automatically generates
     a corresponding migration file for the model.
 </p>
 
@@ -114,21 +142,6 @@
     <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
     <pre><code class="language-bash">
 ./bin/sigma-cli create:provider AppServiceProvider
-</code></pre>
-</div>
-
-
-<h4>create:secret</h4>
-
-<p>
-    Generate a new application secret key and automatically save it into the
-    <code>.env</code> file.
-</p>
-
-<div class="code-card">
-    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
-    <pre><code class="language-bash">
-./bin/sigma-cli create:secret
 </code></pre>
 </div>
 
@@ -171,6 +184,15 @@
 </code></pre>
 </div>
 
+<p>
+    <b>Database Management</b>
+</p>
+
+<p>
+    Use the following commands to manage database migrations, seeders,
+    and table data:
+</p>
+
 <h4>drop</h4>
 
 <p>
@@ -197,23 +219,10 @@
 </code></pre>
 </div>
 
-<h4>help</h4>
+<h4>migrate</h4>
 
 <p>
-    Display all available CLI commands.
-</p>
-
-<div class="code-card">
-    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
-    <pre><code class="language-bash">
-./bin/sigma-cli help
-</code></pre>
-</div>
-
-<h4>migrate {migration name}</h4>
-
-<p>
-    Run one or multiple migration files.
+    Run the application's pending database migrations.
 </p>
 
 <div class="code-card">
@@ -236,20 +245,6 @@
 </code></pre>
 </div>
 
-<h4>run {port}</h4>
-
-<p>
-    Run the application using PHP's built-in development server. By default,
-    it runs on port <code>8888</code>, but you can specify a custom port if needed.
-</p>
-
-<div class="code-card">
-    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
-    <pre><code class="language-bash">
-./bin/sigma-cli run
-</code></pre>
-</div>
-
 <h4>seed {seeder name}</h4>
 
 <p>
@@ -260,6 +255,91 @@
     <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
     <pre><code class="language-bash">
 ./bin/sigma-cli seed UserSeeder
+</code></pre>
+</div>
+
+<h4>truncate</h4>
+
+<p>
+    Delete all data from every table in the database without removing the table structures.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli truncate
+</code></pre>
+</div>
+
+<p>
+    <b>Application Utilities</b>
+</p>
+
+<p>
+    Additional commands are available for common application maintenance
+    and development tasks:
+</p>
+
+<h4>clear:cache</h4>
+
+<p>
+    Clear the application's compiled view cache.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli clear:cache
+</code></pre>
+</div>
+
+<h4>create:secret</h4>
+
+<p>
+    Generate a new application secret key and automatically save it into the
+    <code>.env</code> file.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli create:secret
+</code></pre>
+</div>
+
+<h4>list:routes</h4>
+
+<p>
+    Display the routes registered in the application.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli list:routes
+</code></pre>
+</div>
+
+<h4>run {port}</h4>
+
+<p>
+    Run the application using PHP's built-in development server. By default,
+    the server listens on port <code>8888</code>. You can specify a custom port when needed.
+</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli run
+</code></pre>
+</div>
+
+<p>To use a custom port:</p>
+
+<div class="code-card">
+    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
+    <pre><code class="language-bash">
+./bin/sigma-cli run 8080
 </code></pre>
 </div>
 
@@ -276,28 +356,57 @@
 </code></pre>
 </div>
 
-<h4>truncate</h4>
+<h3>Global Options</h3>
 
 <p>
-    Delete all data from every table in the database without removing the table structure.
+    SigmaPHP CLI provides a set of global options that can be used to control
+    command execution and customize the CLI behavior. These options are available
+    across the application's commands.
 </p>
 
-<div class="code-card">
-    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
-    <pre><code class="language-bash">
-./bin/sigma-cli truncate
-</code></pre>
-</div>
+<ul>
+    <li>
+        <code>--config</code> — Specify the configuration file path.
+    </li>
+    <li>
+        <code>-h, --help</code> — Display the help menu.
+    </li>
+    <li>
+        <code>-q, --quiet</code> — Suppress normal output and display errors only.
+    </li>
+    <li>
+        <code>-s, --silent</code> — Suppress all output, including errors.
+    </li>
+    <li>
+        <code>-v, --verbose</code> — Display detailed debug information.
+    </li>
+    <li>
+        <code>-V, --version</code> — Display the application's version.
+    </li>
+</ul>
 
-<h4>version</h4>
+<h3>Getting Command Help</h3>
 
 <p>
-    Display the current version of the SigmaPHP framework.
+    Every command provides its own help information, allowing you to inspect
+    its available options, arguments, and usage details.
 </p>
 
-<div class="code-card">
-    <button class="copy-btn" title="copy"><i class="bi bi-copy"></i></button>
-    <pre><code class="language-bash">
-./bin/sigma-cli version
-</code></pre>
-</div>
+<p>
+    To display the help information for a specific command, append
+    <code>--help</code> to its name:
+</p>
+
+<pre><code class="language-bash">sigma-cli [COMMAND] --help</code></pre>
+
+<p>
+    For example, to display the available options and usage information
+    for the migration command:
+</p>
+
+<pre><code class="language-bash">sigma-cli migrate --help</code></pre>
+
+<p>
+    This makes it easy to explore the available utilities and understand
+    how to use each command without having to consult its implementation.
+</p>
